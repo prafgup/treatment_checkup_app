@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/material.dart' as prefix0;
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:treatment_checkup_app/models/exercise.dart';
-import 'file:///C:/Users/ankit/Desktop/DEP/New%20folder/treatment_checkup_app/lib/screens/ExerciseScreens/video_player.dart';
+import 'video_player.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
 class ActivityTimer extends StatelessWidget {

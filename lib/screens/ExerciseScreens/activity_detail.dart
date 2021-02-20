@@ -1,6 +1,6 @@
 import 'package:treatment_checkup_app/widgets/next_step.dart';
 import 'package:treatment_checkup_app/models/exercise.dart';
-import 'file:///C:/Users/ankit/Desktop/DEP/New%20folder/treatment_checkup_app/lib/screens/ExerciseScreens/activity_timer.dart';
+import 'activity_timer.dart';
 import 'package:flutter/material.dart';
 
 class ActivityDetail extends StatelessWidget {
