@@ -3,9 +3,10 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:treatment_checkup_app/screens/otpVerify/otpEnter.dart';
-import 'package:treatment_checkup_app/screens/personalTrainerApp/homePagePersonalTrainer.dart';
+//import 'package:treatment_checkup_app/screens/personalTrainerApp/homePagePersonalTrainer.dart';
 import 'package:treatment_checkup_app/screens/splashScreen/splashScreen.dart';
 import 'package:treatment_checkup_app/screens/trainingCenters/pricingRevenue/pricingAndRevenue.dart';
+import 'package:treatment_checkup_app/screens/ExerciseScreens/weekly_layout.dart';
 import 'package:treatment_checkup_app/screens/welcomeBoarding/welcomeBoarding.dart';
 import 'package:states_rebuilder/states_rebuilder.dart';
 import 'package:treatment_checkup_app/services/auth/FirebaseUser.dart';
@@ -49,7 +50,7 @@ class _TreatmentPartnerState extends State<TreatmentPartner> {
     }
     if((userService.userType ==0) && (firebaseCheckService.user != null)){
 
-      Navigator.of(context).pushReplacement(new MaterialPageRoute(builder: (context)=> PersonalTrainerHomeInjector()));
+      Navigator.of(context).pushReplacement(new MaterialPageRoute(builder: (context)=> DetailsScreen()));
 
     }
     //Navigator.of(context).pushReplacement(new MaterialPageRoute(builder: (context)=> PricingAndRevenueCenterInjector()));  //TODO

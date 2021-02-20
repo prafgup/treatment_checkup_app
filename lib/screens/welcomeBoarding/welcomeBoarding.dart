@@ -17,9 +17,8 @@ class _WelcomeBoardingState extends State<WelcomeBoarding> {
   bool _autoValidate = false;
 
   List<String> boardingAS = [
-    'Personal Trainer',
-    'Dieticians'
-    'Center',
+    'Patient',
+    'Doctor',
   ];
 
   String mobNumber = "";
@@ -97,7 +96,7 @@ class _WelcomeBoardingState extends State<WelcomeBoarding> {
                 flex: 9,
                 child: Center(
                   child: Container(
-                    height: 76,
+                    height: 147,
                     width: 147,
                     child: TreatmentIconLogo(),
                   ),
@@ -120,7 +119,7 @@ class _WelcomeBoardingState extends State<WelcomeBoarding> {
                               ),
                             children: <TextSpan>[
                               TextSpan(
-                                text: "HELLO WORLD",
+                                text: "Exercise Tracker",
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   color: Color.fromRGBO(108, 71, 145, 1)
