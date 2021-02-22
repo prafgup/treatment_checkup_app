@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/material.dart' as prefix0;
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:treatment_checkup_app/models/exercise.dart';
+import 'package:treatment_checkup_app/widgets/game_screen/game_screen.dart';
+
 import 'video_player.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
@@ -207,20 +209,30 @@ class Portrait extends StatelessWidget {
                       size: 35.0,
                     ),
                   ),
-                  Container(
-                    width: size.width - 130.0,
-                    height: 55.0,
-                    decoration: BoxDecoration(
-                      color: Color.fromRGBO(232, 242, 248, 1.0),
-                      borderRadius: BorderRadius.circular(15.0),
-                    ),
-                    child: Center(
-                      child: Text(
-                        'Next',
-                        style: TextStyle(
-                          color: Color.fromRGBO(82, 126, 255, 1.0),
-                          fontSize: 18.0,
-                          fontWeight: FontWeight.w900,
+                  GestureDetector(
+                    onTap: (){
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) {
+                          return GameScreen();
+                        }),
+                      );
+                    },
+                    child: Container(
+                      width: size.width - 130.0,
+                      height: 55.0,
+                      decoration: BoxDecoration(
+                        color: Color.fromRGBO(232, 242, 248, 1.0),
+                        borderRadius: BorderRadius.circular(15.0),
+                      ),
+                      child: Center(
+                        child: Text(
+                          'Next',
+                          style: TextStyle(
+                            color: Color.fromRGBO(82, 126, 255, 1.0),
+                            fontSize: 18.0,
+                            fontWeight: FontWeight.w900,
+                          ),
                         ),
                       ),
                     ),

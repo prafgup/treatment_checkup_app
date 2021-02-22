@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:treatment_checkup_app/constants.dart';
-import 'file:///C:/Users/ankit/Desktop/DEP/New%20folder/treatment_checkup_app/lib/screens/ExerciseScreens/daily_layout.dart';
+import 'package:treatment_checkup_app/screens/ExerciseScreens/daily_layout.dart';
 import 'package:treatment_checkup_app/widgets/bottom_nav_bar.dart';
 import 'package:treatment_checkup_app/widgets/search_bar.dart';
 import 'package:treatment_checkup_app/widgets/session_card.dart';
