@@ -87,7 +87,7 @@ flags:YoutubePlayerFlags(
                           Padding(
                             padding: const EdgeInsets.only(bottom: 15.0),
                             child: Text(
-                              'Plank',
+                              '',
                               style: TextStyle(
                                 fontSize: 28.0,
                                 fontWeight: FontWeight.w900,
@@ -98,7 +98,7 @@ flags:YoutubePlayerFlags(
                           Padding(
                             padding: const EdgeInsets.only(bottom: 20.0),
                             child: Text(
-                              'Next: Push-ups',
+                              'Follow the video in real time',
                               style: TextStyle(
                                 fontSize: 20.0,
                                 fontWeight: FontWeight.w900,

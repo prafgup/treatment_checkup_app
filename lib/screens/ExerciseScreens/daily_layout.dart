@@ -18,27 +18,32 @@ class _DailyScreenState extends State<DailyScreen> {
   final List<Exercise> exercises = [
     Exercise(
       image: 'assets/images/image001.jpg',
-      title: 'Easy Start',
+      title: 'Ankle toe movement',
       time: '5 min',
       difficult: 'Low',
-      reps: '5',
-      url: 'https://www.youtube.com/watch?v=nskYndiHaA8&ab_channel=HALIDONMUSIC',
-      text_instruct:'Keep your back straight and repeat the exercise 5 times ',
+      reps: '25',
+      url: 'https://www.youtube.com/watch?v=O1jfSo66z44&ab_channel=goodexerciseguide',
+      text_instruct:'Do this exercise regularly to reduce swelling. Follow the Video in real-time and repeat what she does on the screen',
     ),
     Exercise(
-      image: 'assets/images/image002.jpg',
-      title: 'Medium Start',
+      image: 'assets/images/image004.jpg',
+      title: 'Isometric Quads',
       time: '10 min',
       difficult: 'Medium',
-      reps: '5',
+      reps: '10',
+      url: 'https://www.youtube.com/watch?v=O1jfSo66z44&ab_channel=goodexerciseguide',
+      text_instruct:'Do this exercise regularly to reduce swelling. Follow the Video in real-time and repeat what she does on the screen',
     ),
     Exercise(
       image: 'assets/images/image003.jpg',
-      title: 'Pro Start',
-      time: '25 min',
-      difficult: 'High',
-      reps: '5',
-    )
+      title: 'Quadriceps Sets',
+      time: '10 min',
+      difficult: 'Medium',
+      reps: '20',
+      url: 'https://www.youtube.com/watch?v=O1jfSo66z44&ab_channel=goodexerciseguide',
+      text_instruct:'Do this exercise regularly to reduce swelling. Follow the Video in real-time and repeat what she does on the screen',
+    ),
+
   ];
   @override
   Widget build(BuildContext context) {
@@ -91,55 +96,35 @@ class _DailyScreenState extends State<DailyScreen> {
                       child:RadialProgress(
                         width: size.width * 0.4,
                         height: size.width * 0.4,
-                        progress: 0.6,
+                        progress: 0.6,type: 1.0,
                       ),
                     ),
-
-                    Wrap(
-                      spacing: 20,
-                      runSpacing: 20,
-                      children: <Widget>[
-                        SeassionCard(
-                          seassionNum: 1,
-                          isDone: true,
-                          type: 1,
-                          press: () {
+                    SizedBox(
+                      height: size.height*0.5,
+                      child: GridView.count(
+                        // Create a grid with 2 columns. If you change the scrollDirection to
+                        // horizontal, this produces 2 rows.
+                        crossAxisCount: 2,mainAxisSpacing: 10.0,childAspectRatio:3 ,
+                        shrinkWrap: true,
+                        // Generate 100 widgets that display their index in the List.
+                        children: List.generate(7, (index) {
+                          return SeassionCard(seassionNum:index+1, isDone:index<2?true:false,type: 1,press: () {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
                                 builder: (_) {
                                   return ActivityDetail(
-                                    exercise: exercises[0],
+                                    exercises: exercises,
                                     tag: 'imageHeader$count',
                                   );
                                 },
                               ),
                             );
-
-                          },
-                        ),
-                        SeassionCard(type: 1,
-                          seassionNum: 2,
-                          press: () {},
-                        ),
-                        SeassionCard(type: 1,
-                          seassionNum: 3,
-                          press: () {},
-                        ),
-                        SeassionCard(type: 1,
-                          seassionNum: 4,
-                          press: () {},
-                        ),
-                        SeassionCard(type: 1,
-                          seassionNum: 5,
-                          press: () {},
-                        ),
-                        SeassionCard(type: 1,
-                          seassionNum: 6,
-                          press: () {},
-                        ),
-                      ],
+                          }, );
+                        }),
+                      ),
                     ),
+
 
                   ],
                 ),

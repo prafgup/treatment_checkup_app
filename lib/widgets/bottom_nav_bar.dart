@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:treatment_checkup_app/constants.dart';
+import 'package:treatment_checkup_app/screens/personalTrainerApp/account/AccountHome.dart';
+
 
 class BottomNavBar extends StatelessWidget {
   const BottomNavBar({
@@ -28,6 +30,15 @@ class BottomNavBar extends StatelessWidget {
           BottomNavItem(
             title: "Settings",
             svgScr: "assets/icons/Settings.svg",
+            press: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) {
+                  return AccountHome();
+                }),
+              );
+
+            },
           ),
         ],
       ),
@@ -58,6 +69,7 @@ class BottomNavItem extends StatelessWidget {
           SvgPicture.asset(
             svgScr,
             color: isActive ? kActiveIconColor : kTextColor,
+            fit: BoxFit.contain,
           ),
           Text(
             title,

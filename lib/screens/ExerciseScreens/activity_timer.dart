@@ -2,18 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter/material.dart' as prefix0;
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:treatment_checkup_app/models/exercise.dart';
+import 'package:treatment_checkup_app/screens/ExerciseScreens/daily_layout.dart';
 import 'package:treatment_checkup_app/widgets/game_screen/game_screen.dart';
 
 import 'video_player.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
 class ActivityTimer extends StatelessWidget {
-  final Exercise exercise;
+  final List<Exercise> exercises;
+  final int index;
   final String image =
-      'https://i0.wp.com/fitnessrunning.net/wp-content/uploads/2016/10/woman-doing-plank.jpg';
+    'https://www.verywellhealth.com/thmb/Jz6oLND-JaSfigh7oNu8ylHl-HY=/1500x1000/filters:no_upscale():max_bytes(150000):strip_icc()/Verywell-01-2696480-Dorisflexion-598ca2a40d327a0010eb724e.gif';
   final String tag = 'imageHeader';
   ActivityTimer({
-    @required this.exercise,
+    @required this.exercises,
+    @required this.index
   });
 
   @override
@@ -23,8 +26,8 @@ class ActivityTimer extends StatelessWidget {
         child: OrientationBuilder(builder: (context, orientation) {
           return (MediaQuery.of(context).orientation ==
               prefix0.Orientation.portrait)
-              ? Portrait(image: this.image, tag: this.tag,exercise: this.exercise,)
-              : Landscape(image: this.image, tag: this.tag,exercise: this.exercise);
+              ? Portrait(image: this.image, tag: this.tag,exercises: this.exercises,index:this.index)
+              : Landscape(image: this.exercises[this.index].image, tag: this.tag,exercises: this.exercises,index:this.index);
         }),
       ),
     );
@@ -34,8 +37,9 @@ class ActivityTimer extends StatelessWidget {
 class Portrait extends StatelessWidget {
   final FlutterTts textsespeech =FlutterTts();
   final String image, tag;
- final Exercise exercise;
-  Portrait({@required this.image, @required this.tag, @required this.exercise,});
+ final List<Exercise> exercises;
+ final int index;
+  Portrait({@required this.image, @required this.tag, @required this.exercises,@required this.index});
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +51,7 @@ class Portrait extends StatelessWidget {
       await textsespeech.setSpeechRate(0.7);
       await textsespeech.setPitch(1);
 
-     await textsespeech.speak(this.exercise.text_instruct);
+     await textsespeech.speak(this.exercises[this.index].text_instruct);
     }
     var size = MediaQuery.of(context).size;
     return Column(
@@ -105,7 +109,7 @@ class Portrait extends StatelessWidget {
                     onTap: () {  Navigator.push(
                       context,
                       MaterialPageRoute(builder: (_) {
-                        return VideoPlayer(exercise: this.exercise,);
+                        return VideoPlayer(exercise: this.exercises[this.index],);
                       }),
                     );
                     },
@@ -146,7 +150,7 @@ class Portrait extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.only(bottom: 15.0),
                     child: Text(
-                      'Plank',
+                      this.exercises[this.index].title,
                       style: TextStyle(
                         fontSize: 28.0,
                         fontWeight: FontWeight.w900,
@@ -157,7 +161,7 @@ class Portrait extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.only(bottom: 20.0),
                     child: Text(
-                      'Next: Push-ups',
+                  this.index!=exercises.length-1? 'Next:'+ this.exercises[this.index+1].title:' Next : Questionnaire ',
                       style: TextStyle(
                         fontSize: 20.0,
                         fontWeight: FontWeight.w900,
@@ -174,7 +178,7 @@ class Portrait extends StatelessWidget {
                       lineWidth: 16.0,
                       percent: 1.00,
                       center: new Text(
-                        'X5',
+                       'X'+ this.exercises[this.index].reps,
                         style: TextStyle(
                           fontSize: 45.0,
                           fontWeight: FontWeight.w900,
@@ -195,18 +199,28 @@ class Portrait extends StatelessWidget {
               ),
               Row(
                 children: <Widget>[
-                  Container(
-                    width: 80.0,
-                    height: 55.0,
-                    margin: EdgeInsets.only(right: 10.0),
-                    decoration: BoxDecoration(
-                      color: Color.fromRGBO(232, 242, 248, 1.0),
-                      borderRadius: BorderRadius.circular(15.0),
-                    ),
-                    child: Icon(
-                      Icons.pause,
-                      color: Color.fromRGBO(82, 126, 255, 1.0),
-                      size: 35.0,
+                  GestureDetector(
+                    onTap: (){
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) {
+                          return this.index!=0?ActivityTimer(exercises: this.exercises, index: this.index-1):DailyScreen();
+                        }),
+                      );
+                    },
+                    child: Container(
+                      width: 80.0,
+                      height: 55.0,
+                      margin: EdgeInsets.only(right: 10.0),
+                      decoration: BoxDecoration(
+                        color: Color.fromRGBO(232, 242, 248, 1.0),
+                        borderRadius: BorderRadius.circular(15.0),
+                      ),
+                      child: Icon(
+                        Icons.arrow_back_rounded,
+                        color: Color.fromRGBO(82, 126, 255, 1.0),
+                        size: 35.0,
+                      ),
                     ),
                   ),
                   GestureDetector(
@@ -214,7 +228,7 @@ class Portrait extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (_) {
-                          return GameScreen();
+                          return this.index!=exercises.length-1?ActivityTimer(exercises: this.exercises, index: this.index+1):GameScreen();
                         }),
                       );
                     },
@@ -249,8 +263,8 @@ class Portrait extends StatelessWidget {
 
 class Landscape extends StatelessWidget {
   final String image, tag;
-final Exercise exercise;
-  Landscape({@required this.image, @required this.tag,@required this.exercise});
+final List<Exercise> exercises; final int index;
+  Landscape({@required this.image, @required this.tag,@required this.exercises,@required this.index});
 
   @override
   Widget build(BuildContext context) {

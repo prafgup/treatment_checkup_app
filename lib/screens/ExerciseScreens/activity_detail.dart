@@ -5,10 +5,10 @@ import 'package:flutter/material.dart';
 
 class ActivityDetail extends StatelessWidget {
   final String tag;
-  final Exercise exercise;
+  final List<Exercise> exercises;
 
   ActivityDetail({
-    @required this.exercise,
+    @required this.exercises,
     @required this.tag,
   });
 
@@ -28,7 +28,7 @@ class ActivityDetail extends StatelessWidget {
                     width: MediaQuery.of(context).size.width,
                     height: 270,
                     child: Image.asset(
-                      this.exercise.image,
+                      'assets/images/image001.jpg',//TODO
                       fit: BoxFit.fitHeight,
                     ),
                   ),
@@ -65,7 +65,7 @@ class ActivityDetail extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(
-                        this.exercise.title,
+                        "Day 1",//TODO
                         style: TextStyle(
                           fontSize: 22.0,
                           color: Colors.blueGrey,
@@ -95,7 +95,7 @@ class ActivityDetail extends StatelessWidget {
                                         color: Colors.blueGrey[300]),
                                   ),
                                   Text(
-                                    '${this.exercise.time}',
+                                    '30 min',//TODO
                                     style: TextStyle(
                                         fontSize: 18.0,
                                         color: Colors.lightBlue,
@@ -119,7 +119,7 @@ class ActivityDetail extends StatelessWidget {
                                     ),
                                   ),
                                   Text(
-                                    this.exercise.difficult,
+                                    "Beginner",//TODO
                                     style: TextStyle(
                                       fontSize: 18.0,
                                       color: Colors.lightBlue,
@@ -132,27 +132,14 @@ class ActivityDetail extends StatelessWidget {
                           ],
                         ),
                       ),
-                      Container(
-                        margin: EdgeInsets.only(top: 15.0),
-                        child: Column(
-                          children: <Widget>[
-                            NextStep(
-                              image: 'assets/images/image005.jpg',
-                              title: 'Plank',
-                              seconds: 50,
-                            ),
-                            NextStep(
-                              image: 'assets/images/image006.jpg',
-                              title: 'Push-ups',
-                              seconds: 50,
-                            ),
-                            NextStep(
-                              image: 'assets/images/image007.jpg',
-                              title: 'Lateral Raise',
-                              seconds: 50,
-                            ),
-                          ],
-                        ),
+                      Column(
+                        children: [
+                          ListView.builder(shrinkWrap: true,
+                              itemCount: exercises.length,
+                              itemBuilder: (context,index){
+                                return NextStep(image: exercises[index].image, title: exercises[index].title, seconds: exercises[index].time);
+                              }),
+                        ],
                       ),
                     ],
                   ),
@@ -190,7 +177,7 @@ class ActivityDetail extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (_) {
-              return ActivityTimer(exercise: this.exercise,);
+              return ActivityTimer(exercises: this.exercises,index: 0,);
             }),
           );
         },

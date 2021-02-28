@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:treatment_checkup_app/constants.dart';
@@ -64,46 +65,26 @@ class DetailsScreen extends StatelessWidget {
                         progress: 0.3,
                       ),
                     ),
-                    Wrap(
-                      spacing: 20,
-                      runSpacing: 20,
-                      children: <Widget>[
-                        SeassionCard(
-                          seassionNum: 1,
-                          isDone: true,
-                          type: 0,
+                    SizedBox(
+                      height: size.height*0.5,
+                      child: GridView.count(
+                      // Create a grid with 2 columns. If you change the scrollDirection to
+                      // horizontal, this produces 2 rows.
+                      crossAxisCount: 1,mainAxisSpacing: 10.0,childAspectRatio:5 ,
+                      shrinkWrap: true,
+                      // Generate 100 widgets that display their index in the List.
+                      children: List.generate(10, (index) {
+                        return SeassionCard(seassionNum:index+1, isDone:index<5?true:false,press: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) {
+                              return DailyScreen();
+                            }),
+                          );
 
-                          press: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) {
-                                return DailyScreen();
-                              }),
-                            );
-
-                          },
-                        ),
-                        SeassionCard(type: 0,
-                          seassionNum: 2,
-                          press: () {},
-                        ),
-                        SeassionCard(type: 0,
-                          seassionNum: 3,
-                          press: () {},
-                        ),
-                        SeassionCard(type: 0,
-                          seassionNum: 4,
-                          press: () {},
-                        ),
-                        SeassionCard(type: 0,
-                          seassionNum: 5,
-                          press: () {},
-                        ),
-                        SeassionCard(type: 0,
-                          seassionNum: 6,
-                          press: () {},
-                        ),
-                      ],
+                        }, );
+                      }),
+                      ),
                     ),
 
                   ],

@@ -3,7 +3,7 @@ import 'package:treatment_checkup_app/constants.dart';
 
 
 
-
+//type denotes day or week 1 for day and 0 for week
 
 
 
@@ -26,8 +26,10 @@ class SeassionCard extends StatelessWidget {
       return ClipRRect(
         borderRadius: BorderRadius.circular(13),
         child: Container(
+
           width: constraint.maxWidth / 2 -
-              10, // constraint.maxWidth provide us the available with for this widget
+              10,
+           // constraint.maxWidth provide us the available with for this widget
           // padding: EdgeInsets.all(16),
           decoration: BoxDecoration(
             color: Colors.white,

@@ -4,9 +4,9 @@ import 'package:vector_math/vector_math_64.dart' as math;
 
 
 class RadialProgress extends StatelessWidget {
-  final double height, width, progress;
+  final double height, width, progress,type;
 
-  const RadialProgress({Key key, this.height, this.width, this.progress}) : super(key: key);
+  const RadialProgress({Key key, this.height, this.width, this.progress,this.type}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +32,7 @@ class RadialProgress extends StatelessWidget {
                 ),
                 TextSpan(text: "\n"),
                 TextSpan(
-                  text: "Weeks left",
+                  text: type==1.0?"Days left":"Weeks left",
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w500,

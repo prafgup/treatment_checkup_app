@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class NextStep extends StatelessWidget {
   final String image, title;
-  final int seconds;
+  final String seconds;
 
   NextStep({
     @required this.image,
