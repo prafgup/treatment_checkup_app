@@ -18,7 +18,7 @@ class _WelcomeBoardingState extends State<WelcomeBoarding> {
 
   List<String> boardingAS = [
     'Patient',
-    'Doctor',
+    'Relative',
   ];
 
   String mobNumber = "";
