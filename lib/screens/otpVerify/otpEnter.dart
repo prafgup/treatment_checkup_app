@@ -10,6 +10,7 @@ import 'package:treatment_checkup_app/screens/ExerciseScreens/weekly_layout.dart
 import 'package:treatment_checkup_app/services/auth/FirebaseUser.dart';
 import 'package:treatment_checkup_app/services/auth/UserTypeService.dart';
 import 'package:treatment_checkup_app/widgets/buttons.dart';
+import 'package:treatment_checkup_app/screens/registerUsers/registerPatient.dart';
 
 class OtpVerification extends StatefulWidget {
 
@@ -50,11 +51,21 @@ class _OtpVerificationState extends State<OtpVerification> {
     );
   }
 
-  void successPushPage(){
+  void successPushPage(int statusCode){
 
-    print("Pushing");
-      if(widget.userType == 0){
+      print("Pushing with status code " + statusCode.toString());
+
+      if(statusCode == 250){
+        Navigator.of(context).pushReplacement(new MaterialPageRoute(builder: (context)=> RegisterPatientRelative()));
+      }
+      else if(widget.userType == 0 && statusCode == 200){ // patient
         Navigator.of(context).pushReplacement(new MaterialPageRoute(builder: (context)=> DetailsScreen()));
+      }
+      else if(widget.userType == 1 && statusCode == 200){ // relative
+        Navigator.of(context).pushReplacement(new MaterialPageRoute(builder: (context)=> DetailsScreen())); //todo
+      }
+      else{
+        print("Some error");
       }
 
   }
@@ -70,9 +81,11 @@ class _OtpVerificationState extends State<OtpVerification> {
     final FirebaseUser user =
         (await _auth.signInWithCredential(credential)).user;
     final FirebaseUser currentUser = await _auth.currentUser();
+    print(user.uid);
     assert(user.uid == currentUser.uid);
-    await userService.setRole(user);
-    successPushPage();
+    print("trying");
+    int statusCode = await userService.setRole(user,widget.mobileNumber.trim());
+    successPushPage(statusCode);
 
   }
 
@@ -120,6 +133,7 @@ class _OtpVerificationState extends State<OtpVerification> {
     setState(() {
       isLoading = true;
     });
+    int statusCode = 400;
 
     FirebaseAuth.instance.signInWithCredential(authCredential).then((authResult) async {
 
@@ -132,7 +146,8 @@ class _OtpVerificationState extends State<OtpVerification> {
       print(authResult.user.uid);
       final snackBar = SnackBar(content: Text("Success!!! UUID is: " + authResult.user.uid));
 
-      await userService.setRole(authResult.user);
+      print("trying");
+      statusCode = await userService.setRole(authResult.user,widget.mobileNumber.trim());
 
       //Scaffold.of(context).showSnackBar(snackBar);
       //key.currentState.showSnackBar(snackBar);
@@ -142,7 +157,7 @@ class _OtpVerificationState extends State<OtpVerification> {
         isLoading = false;
       });
     }).then((_){
-      successPushPage();
+      successPushPage(statusCode);
     });
 
     setState(() {
@@ -339,7 +354,7 @@ class _OtpVerificationState extends State<OtpVerification> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: <Widget>[
                               Text(
-                                "Enter the OTP below in canse we fail to detect \nthe SMS automatically",
+                                "Enter the OTP below in case we fail to detect \nthe SMS automatically",
                                 style: TextStyle(
                                     color: Colors.black.withOpacity(0.7),
                                     fontSize: 12

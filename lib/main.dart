@@ -13,7 +13,7 @@ import 'package:states_rebuilder/states_rebuilder.dart';
 import 'package:treatment_checkup_app/services/auth/FirebaseUser.dart';
 import 'package:treatment_checkup_app/services/auth/UserTypeService.dart';
 import 'package:google_map_location_picker/google_map_location_picker.dart';
-
+import 'package:treatment_checkup_app/screens/registerUsers/registerPatient.dart';
 main() {
   runApp(
       RestartWidget(
@@ -46,24 +46,32 @@ class _TreatmentPartnerState extends State<TreatmentPartner> {
 
     print("inside " + userService.userType.toString() +"   "+ firebaseCheckService.user.toString());
 
-    if((userService.userType == -1) || (firebaseCheckService.user == null)){
-      Navigator.of(context).pushReplacement(new MaterialPageRoute(builder: (context)=> WelcomeBoarding()));
+    if((userService.userType == -1) || (firebaseCheckService.user == null) || ((userService.userRegistered == -1)) || ((userService.jwtToken == ""))){
+    //Navigator.of(context).pushReplacement(new MaterialPageRoute(builder: (context)=> RegisterPatientRelative()));
+    Navigator.of(context).pushReplacement(new MaterialPageRoute(builder: (context)=> WelcomeBoarding()));
     }
-    if((userService.userType ==0) && (firebaseCheckService.user != null)){
 
-      Navigator.of(context).pushReplacement(new MaterialPageRoute(builder: (context)=> RequestsScreenR()));
 
+    else if((userService.userType ==0) && (firebaseCheckService.user != null)){  // patient
+      Navigator.of(context).pushReplacement(new MaterialPageRoute(builder: (context)=> DetailsScreen()));
     }
-    //Navigator.of(context).pushReplacement(new MaterialPageRoute(builder: (context)=> PricingAndRevenueCenterInjector()));  //TODO
-//    print("ppp");
-//    Navigator.of(context).pushReplacement(new MaterialPageRoute(builder: (context)=> WelcomeBoarding())); //TODO
-//    print("doesnt push");
+    else if((userService.userType ==1) && (firebaseCheckService.user != null)){   // relative
+      Navigator.of(context).pushReplacement(new MaterialPageRoute(builder: (context)=> DetailsScreen())); //todo
+    }
+    else{
+      print("Push Failed");
+    }
+
+
   }
   
   @override
   void initState() {
     userService.checkUserType();
+    userService.checkUserRegistered();
+    userService.checkJWTToken();
     firebaseCheckService.checkLogin();
+
     Timer(Duration(seconds: 3), _checkAppType);  //TODO
     super.initState();
   }
