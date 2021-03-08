@@ -97,6 +97,15 @@ class _RekuestsCardRelativeState extends State<RekuestsCardRelative> {
                              widget.request.status=="No Action"? Row(
                                 children: [
                                   GestureDetector(
+                                    onTap: (){showDialog(context: context,
+                                        builder: (BuildContext context){
+                                          return CustomDialogBox(
+                                            title: "Do you wish to proceed?",
+                                            descriptions: "If you press Yes, exercise will be marked done and cannot be changed later!",
+                                            text: "Yes",
+                                          );
+                                        }
+                                    );},
                                     child: Container(
 
                                       height: 42,
@@ -115,6 +124,15 @@ class _RekuestsCardRelativeState extends State<RekuestsCardRelative> {
                                     ),
                                   ),SizedBox(width: 20),
                                   GestureDetector(
+                                    onTap: (){showDialog(context: context,
+                                        builder: (BuildContext context){
+                                          return CustomDialogBox(
+                                            title: "Do you wish to proceed?",
+                                            descriptions: "If you press Yes, exercise will be marked not done and cannot be changed later!",
+                                            text: "Yes",
+                                          );
+                                        }
+                                    );},
                                     child: Container(
                                       height: 42,
                                       width: 60,
@@ -176,5 +194,87 @@ class _RekuestsCardRelativeState extends State<RekuestsCardRelative> {
         ),
       );
     });
+  }
+}
+
+
+
+
+//custom dialoge box.
+
+
+
+
+class CustomDialogBox extends StatefulWidget {
+  final String title, descriptions, text;
+  final Image img;
+
+  const CustomDialogBox({Key key, this.title, this.descriptions, this.text, this.img}) : super(key: key);
+
+  @override
+  _CustomDialogBoxState createState() => _CustomDialogBoxState();
+}
+
+class _CustomDialogBoxState extends State<CustomDialogBox> {
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20.0),
+      ),
+      elevation: 0,
+      backgroundColor: Colors.transparent,
+      child: contentBox(context),
+    );
+  }
+  contentBox(context){
+    return Stack(
+      children: <Widget>[
+        Container(
+          padding: EdgeInsets.all(20.0),
+         // margin: EdgeInsets.only(top: Constants.avatarRadius),
+          decoration: BoxDecoration(
+              shape: BoxShape.rectangle,
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(20.0),
+              boxShadow: [
+                BoxShadow(color: Colors.grey,offset: Offset(0,10),
+                    blurRadius: 10
+                ),
+              ]
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Text(widget.title,style: TextStyle(fontSize: 22,fontWeight: FontWeight.w600),),
+              SizedBox(height: 15,),
+              Text(widget.descriptions,style: TextStyle(fontSize: 14),textAlign: TextAlign.center,),
+              SizedBox(height: 22,),
+              Align(
+                alignment: Alignment.bottomRight,
+                child: FlatButton(
+                    onPressed: (){
+                      Navigator.of(context).pop();
+                    },
+                    child: Text(widget.text,style: TextStyle(fontSize: 18),)),
+              ),
+            ],
+          ),
+        ),
+        // Positioned(
+        //   left: 20.0,
+        //   right: 20.0,
+        //   child: CircleAvatar(
+        //     backgroundColor: Colors.transparent,
+        //     radius: 45,
+        //     child: ClipRRect(
+        //         borderRadius: BorderRadius.all(Radius.circular(45.0)),
+        //         child: Icons.check_circle_rounded
+        //         //Image.asset("assets/model.jpeg")
+        //     ),
+        //   ),
+        // ),
+      ],
+    );
   }
 }

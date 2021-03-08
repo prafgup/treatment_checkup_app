@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:treatment_checkup_app/constants.dart';
+import 'package:treatment_checkup_app/screens/ExerciseScreens/patient_profile.dart';
 import 'package:treatment_checkup_app/screens/ExerciseScreens/weekly_layout.dart';
 import 'package:treatment_checkup_app/screens/Requests_screen/patients_request_screen.dart';
 import 'package:treatment_checkup_app/screens/personalTrainerApp/account/AccountHome.dart';
@@ -55,7 +56,7 @@ class BottomNavBar extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) {
-                  return AccountHome();
+                  return ProfilePageP();
                 }),
               );
 

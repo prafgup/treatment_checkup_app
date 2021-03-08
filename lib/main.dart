@@ -56,7 +56,7 @@ class _TreatmentPartnerState extends State<TreatmentPartner> {
       Navigator.of(context).pushReplacement(new MaterialPageRoute(builder: (context)=> DetailsScreen()));
     }
     else if((userService.userType ==1) && (firebaseCheckService.user != null)){   // relative
-      Navigator.of(context).pushReplacement(new MaterialPageRoute(builder: (context)=> DetailsScreen())); //todo
+      Navigator.of(context).pushReplacement(new MaterialPageRoute(builder: (context)=> RequestsScreenR())); //todo
     }
     else{
       print("Push Failed");
