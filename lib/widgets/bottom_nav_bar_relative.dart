@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:treatment_checkup_app/constants.dart';
 import 'package:treatment_checkup_app/screens/ExerciseScreens/weekly_layout.dart';
+import 'package:treatment_checkup_app/screens/Relative/relative_home.dart';
 import 'package:treatment_checkup_app/screens/Requests_screen/patients_request_screen.dart';
 import 'package:treatment_checkup_app/screens/personalTrainerApp/account/AccountHome.dart';
 
 
-class BottomNavBar extends StatelessWidget {
-  const BottomNavBar({
+class BottomNavBarR extends StatelessWidget {
+  const BottomNavBarR({
     Key key,
   }) : super(key: key);
 
@@ -22,27 +23,27 @@ class BottomNavBar extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           BottomNavItem(
-            title: "Requests",
+            title: "Patients",
             svgScr: "assets/icons/calendar.svg",
             press: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) {
-                  return RequestsScreenP();
+                  return RequestsScreenR();
                 }),
               );
 
             },
           ),
           BottomNavItem(
-            title: "All Exercises",
+            title: "All Requests",
             svgScr: "assets/icons/gym.svg",
             isActive: true,
             press: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) {
-                  return DetailsScreen();
+                  return RequestsScreenR();
                 }),
               );
 

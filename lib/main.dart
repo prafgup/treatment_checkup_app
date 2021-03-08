@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
+import 'package:treatment_checkup_app/screens/Relative/relative_home.dart';
 import 'package:treatment_checkup_app/screens/otpVerify/otpEnter.dart';
 //import 'package:treatment_checkup_app/screens/personalTrainerApp/homePagePersonalTrainer.dart';
 import 'package:treatment_checkup_app/screens/splashScreen/splashScreen.dart';
@@ -50,7 +51,7 @@ class _TreatmentPartnerState extends State<TreatmentPartner> {
     }
     if((userService.userType ==0) && (firebaseCheckService.user != null)){
 
-      Navigator.of(context).pushReplacement(new MaterialPageRoute(builder: (context)=> DetailsScreen()));
+      Navigator.of(context).pushReplacement(new MaterialPageRoute(builder: (context)=> RequestsScreenR()));
 
     }
     //Navigator.of(context).pushReplacement(new MaterialPageRoute(builder: (context)=> PricingAndRevenueCenterInjector()));  //TODO
