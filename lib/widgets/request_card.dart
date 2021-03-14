@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:treatment_checkup_app/constants.dart';
 import 'package:treatment_checkup_app/models/requests.dart';
+import 'package:treatment_checkup_app/screens/Relative/relative_home.dart';
 
 
 class RekuestCard extends StatefulWidget {
@@ -45,7 +46,8 @@ class _RekuestCardState extends State<RekuestCard> {
           child: Material(
             color: Colors.transparent,
             child: InkWell(
-              onTap: widget.press,
+              onTap: (){ Navigator.of(context).pushReplacement(new MaterialPageRoute(builder: (context)=> RequestsScreenR()));
+              },
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Row(

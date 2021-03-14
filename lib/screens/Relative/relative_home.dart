@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:treatment_checkup_app/constants.dart';
+import 'package:treatment_checkup_app/models/exercise.dart';
 import 'package:treatment_checkup_app/models/requests_relative.dart';
 import 'package:treatment_checkup_app/screens/ExerciseScreens/daily_layout.dart';
 import 'package:treatment_checkup_app/widgets/bottom_nav_bar.dart';
@@ -19,7 +20,36 @@ import 'package:treatment_checkup_app/models/requests.dart';
 //TODO GET API DATA
 
 
+final List<Exercise> exercises = [
+  Exercise(
+    image: 'assets/images/image001.jpg',
+    title: 'Ankle toe movement',
+    time: '5 min',
+    difficult: 'Low',
+    reps: '25',
+    url: 'https://www.youtube.com/watch?v=O1jfSo66z44&ab_channel=goodexerciseguide',
+    text_instruct:'Do this exercise regularly to reduce swelling. Follow the Video in real-time and repeat what she does on the screen',
+  ),
+  Exercise(
+    image: 'assets/images/image004.jpg',
+    title: 'Isometric Quads',
+    time: '10 min',
+    difficult: 'Medium',
+    reps: '10',
+    url: 'https://www.youtube.com/watch?v=O1jfSo66z44&ab_channel=goodexerciseguide',
+    text_instruct:'Do this exercise regularly to reduce swelling. Follow the Video in real-time and repeat what she does on the screen',
+  ),
+  Exercise(
+    image: 'assets/images/image003.jpg',
+    title: 'Quadriceps Sets',
+    time: '10 min',
+    difficult: 'Medium',
+    reps: '20',
+    url: 'https://www.youtube.com/watch?v=O1jfSo66z44&ab_channel=goodexerciseguide',
+    text_instruct:'Do this exercise regularly to reduce swelling. Follow the Video in real-time and repeat what she does on the screen',
+  ),
 
+];
 
 //type denotes day or week 1 for day and 0 for week
 
@@ -115,7 +145,7 @@ class RequestsScreenR extends StatelessWidget {
                           ),
                           // Generate 100 widgets that display their index in the List.
                           itemBuilder: (ctx, index) {
-                            return RekuestsCardRelative(request: requests[index],press: () {
+                            return RekuestsCardRelative(exercises: exercises,request: requests[index],press: () {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(builder: (context) {

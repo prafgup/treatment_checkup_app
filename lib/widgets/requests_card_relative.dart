@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:treatment_checkup_app/constants.dart';
+import 'package:treatment_checkup_app/models/exercise.dart';
 import 'package:treatment_checkup_app/models/requests_relative.dart';
+import 'package:treatment_checkup_app/screens/Relative/relative_home.dart';
 
 
 class RekuestsCardRelative extends StatefulWidget {
 
   final Function press;
-
+  final List<Exercise> exercises;
   final RequestRelative request;
   const RekuestsCardRelative({
     Key key,
+    this.exercises,
     this.request,
     this.press,
   }) : super(key: key);
@@ -19,6 +22,7 @@ class RekuestsCardRelative extends StatefulWidget {
 }
 
 class _RekuestsCardRelativeState extends State<RekuestsCardRelative> {
+ 
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraint) {
@@ -100,9 +104,10 @@ class _RekuestsCardRelativeState extends State<RekuestsCardRelative> {
                                     onTap: (){showDialog(context: context,
                                         builder: (BuildContext context){
                                           return CustomDialogBox(
-                                            title: "Do you wish to proceed?",
-                                            descriptions: "If you press Yes, exercise will be marked done and cannot be changed later!",
-                                            text: "Yes",
+                                            title: "Please select all completed exercises:",
+                                         //   descriptions: "If you press Yes, exercise will be marked done and cannot be changed later!",
+                                            text: "Proceed",
+                                              exercises:widget.exercises
                                           );
                                         }
                                     );},
@@ -127,9 +132,10 @@ class _RekuestsCardRelativeState extends State<RekuestsCardRelative> {
                                     onTap: (){showDialog(context: context,
                                         builder: (BuildContext context){
                                           return CustomDialogBox(
-                                            title: "Do you wish to proceed?",
-                                            descriptions: "If you press Yes, exercise will be marked not done and cannot be changed later!",
+                                            title: "Do you wish to reject the request?",
+                                           // descriptions: "If you press Yes, exercise will be marked not done and cannot be changed later!",
                                             text: "Yes",
+
                                           );
                                         }
                                     );},
@@ -206,18 +212,20 @@ class _RekuestsCardRelativeState extends State<RekuestsCardRelative> {
 
 
 class CustomDialogBox extends StatefulWidget {
-  final String title, descriptions, text;
+  final String title,  text;
   final Image img;
-
-  const CustomDialogBox({Key key, this.title, this.descriptions, this.text, this.img}) : super(key: key);
+ final List<Exercise> exercises;
+  const CustomDialogBox({Key key, this.title,  this.text, this.img, this.exercises}) : super(key: key);
 
   @override
   _CustomDialogBoxState createState() => _CustomDialogBoxState();
 }
 
 class _CustomDialogBoxState extends State<CustomDialogBox> {
+  List<String> selectedList = [];
   @override
   Widget build(BuildContext context) {
+
     return Dialog(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20.0),
@@ -248,7 +256,55 @@ class _CustomDialogBoxState extends State<CustomDialogBox> {
             children: <Widget>[
               Text(widget.title,style: TextStyle(fontSize: 22,fontWeight: FontWeight.w600),),
               SizedBox(height: 15,),
-              Text(widget.descriptions,style: TextStyle(fontSize: 14),textAlign: TextAlign.center,),
+              if(widget.exercises != null)CheckboxListTile(
+                 title: Text("Select All"),
+                 secondary:Icon(Icons.select_all),
+                 activeColor: Colors.green,
+                 checkColor: Colors.purple,
+
+                 value: selectedList.length==exercises.length, onChanged:
+                 (bool value){
+               setState(() {
+                 if(value){
+    for (int b = 0; b < exercises.length; b++) {
+                if (!selectedList.contains(exercises[b].title))   selectedList.add(exercises[b].title);}
+                 }
+                 else{
+                   selectedList.clear();
+    // for (int b = 0; b < exercises.length; b++) {
+    // selectedList.add(exercises[b].title);}
+    }
+                 }
+    );
+             }),
+
+
+              if(widget.exercises != null)ListView.builder(
+                 shrinkWrap:  true ,
+                 itemCount: widget.exercises.length,
+
+                itemBuilder:     (context,index){
+                  List<bool> _checked=List<bool>.filled(widget.exercises.length,false,growable:false);
+                  return CheckboxListTile(
+                    title: Text(exercises[index].title),
+                      secondary:Image( image: AssetImage(exercises[index].image),width: 50.0,height: 50.0,),
+                      activeColor: Colors.green,
+                      checkColor: Colors.purple,
+
+
+                      onChanged:  (bool value){
+                        setState(() {
+                          if(value){
+                            selectedList.add(exercises[index].title);
+                          }else{
+                            selectedList.remove(exercises[index].title);
+                          }
+                        });
+                      },
+                    value: selectedList.contains(exercises[index].title),
+                  );
+                }
+             ),
               SizedBox(height: 22,),
               Align(
                 alignment: Alignment.bottomRight,

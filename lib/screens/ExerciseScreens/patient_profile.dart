@@ -345,12 +345,40 @@ class MapScreenState extends State<ProfilePageP>
                                   new Flexible(
                                     child: new TextField(
                                       decoration: const InputDecoration(
-                                        hintText: "Enter Your Address",
+                                        hintText: "Enter House no and street information",
                                       ),
                                       enabled: !_status,
                                       autofocus: !_status,
 
                                     ),
+                                  ),
+                                ],
+                              )),
+                          Padding(
+                              padding: EdgeInsets.only(
+                                  left: 25.0, right: 25.0, top: 2.0),
+                              child: new Row(
+                                mainAxisSize: MainAxisSize.max,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: <Widget>[
+                                  Flexible(
+                                    child: Padding(
+                                      padding: EdgeInsets.only(right: 10.0),
+                                      child: new TextField(
+                                        decoration: const InputDecoration(
+                                            hintText: "Enter Pincode"),
+                                        enabled: !_status,
+                                      ),
+                                    ),
+                                    flex: 2,
+                                  ),
+                                  Flexible(
+                                    child: new TextField(
+                                      decoration: const InputDecoration(
+                                          hintText: "Enter City"),
+                                      enabled: !_status,
+                                    ),
+                                    flex: 2,
                                   ),
                                 ],
                               )),
