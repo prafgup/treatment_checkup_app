@@ -206,6 +206,7 @@ class UserTypeService{
 
     if(myProfileUpdated != null){
       print("exists");
+      print(myProfileUpdated.toJson());
       return MyProfileUpdated.fromJson(myProfileUpdated.toJson());
     }
     await checkUserType();
@@ -233,7 +234,7 @@ class UserTypeService{
       Map<String, dynamic> myObj = json.decode(response.body);
       myProfileUpdated = myObj['profile'] != null
           ? new MyProfileUpdated.fromJson(myObj['profile'])
-          : null;
+          : new MyProfileUpdated.fromJson({});
 
       print(myProfileUpdated.toJson());
     }else {
@@ -249,10 +250,6 @@ class UserTypeService{
 
   Future<MyProfileUpdated> updateMyProfileData(MyProfileUpdated updateQueryProfile)async{
 
-
-    if(myProfileUpdated != null){
-      print("exists");
-    }
     await checkUserType();
     if(userType==-1) throw Error();
     await checkJWTToken();
@@ -280,7 +277,7 @@ class UserTypeService{
       Map<String, dynamic> myObj = json.decode(response.body);
       myProfileUpdated = myObj['myProfileUpdated'] != null
           ? new MyProfileUpdated.fromJson(myObj['myProfileUpdated'])
-          : null;
+          : new MyProfileUpdated.fromJson({});
 
       print(myProfileUpdated.toJson());
     }else {

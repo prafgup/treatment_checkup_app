@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_cupertino_date_picker/flutter_cupertino_date_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:treatment_checkup_app/services/auth/FirebaseUser.dart';
 import '../../services/auth/UserTypeService.dart';
 class ProfilePageP extends StatefulWidget {
@@ -39,7 +41,7 @@ class MapScreenState extends State<ProfilePageP>
     _userNameFirst.text  = myProfileUpdated.firstName;
     _userNameSecond.text = myProfileUpdated.lastName;
     _emailId.text = myProfileUpdated.emailId;
-    _dob.text = myProfileUpdated.dob;
+    _dob.text = DateFormat.yMMMd().format(DateTime.parse(myProfileUpdated.dob));
     _address.text = myProfileUpdated.homeAddress;
     _pinCode.text = myProfileUpdated.lastName;
     _city.text = myProfileUpdated.lastName;
@@ -59,7 +61,8 @@ class MapScreenState extends State<ProfilePageP>
     myProfileUpdated.firstName = _userNameFirst.text  ;
     myProfileUpdated.lastName = _userNameSecond.text ;
     myProfileUpdated.emailId = _emailId.text ;
-    myProfileUpdated.dob = _dob.text ;
+    print(_dob.text);
+    myProfileUpdated.dob = DateFormat("MMM dd, yyyy").parseUTC(_dob.text).toIso8601String() ;
     myProfileUpdated.homeAddress = _address.text ;
 //    myProfileUpdated.lastName = _pinCode.text ;
 //    myProfileUpdated.lastName = _city.text ;
@@ -299,11 +302,34 @@ class MapScreenState extends State<ProfilePageP>
                                     mainAxisSize: MainAxisSize.max,
                                     children: <Widget>[
                                       new Flexible(
-                                        child: new TextField(
-                                          controller : _dob,
-                                          decoration: const InputDecoration(
-                                              hintText: "Enter Date of Birth"),
-                                          enabled: !_status,
+                                        child: InkWell(
+                                          onTap: (){
+                                            if(!_status){
+                                              DatePicker.showDatePicker(context,
+                                                  onConfirm: (dateTime, List<int> index) {
+                                                    print(dateTime.toIso8601String());
+                                                  setState(() {
+                                                    _dob.text = DateFormat.yMMMd().format(dateTime);
+                                                    print("changed to " + _dob.text);
+                                                  });
+                                                  },
+                                                  onClose: () => print("----- onClose -----"),
+                                                  onCancel: () => print('onCancel'),
+                                                  onChange: (dateTime, List<int> index) {
+                                                    setState(() {
+                                                      print('onChange');
+                                                    });
+                                                  },
+                                                  maxDateTime: DateTime.now()
+                                              );
+                                            }
+
+                                          },
+                                          child: new TextField(
+                                            controller : _dob,
+                                            decoration: const InputDecoration(hintText: "Enter Date of Birth"),
+                                            enabled: false,
+                                          ),
                                         ),
                                       ),
                                     ],
@@ -464,6 +490,7 @@ class MapScreenState extends State<ProfilePageP>
                         });
                       }
                       catch(e){
+                        print(e);
                         print("failed to update");
                       }
 
