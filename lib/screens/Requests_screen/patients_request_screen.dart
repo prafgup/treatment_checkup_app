@@ -39,7 +39,7 @@ final List<Request> requests= [
   ),
   Request(
     Relative_name: 'Anshul',
-    status: 'Rejected',
+    status: 'Accepted',
     date: '7th march',
     image: 'Low',
     url: 'https://www.youtube.com/watch?v=O1jfSo66z44&ab_channel=goodexerciseguide',

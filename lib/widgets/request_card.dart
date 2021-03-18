@@ -62,7 +62,7 @@ class _RekuestCardState extends State<RekuestCard> {
                       ),
                       child: Icon(
                         Icons.check_circle_outline_outlined,
-                        color: widget.request.status=="Accepted" ? Colors.green :widget.request.status=="Rejected"? Colors.red:Colors.yellow,
+                        color: widget.request.status=="Accepted" ? Colors.green :Colors.yellow,
                       ),
                     ),
                     SizedBox(width: 10),
@@ -90,8 +90,8 @@ class _RekuestCardState extends State<RekuestCard> {
                                     //border: Border.all(color: kBlueColor),
                                   ),
                                   child: Icon(
-                                    widget.request.status=="Accepted" ? Icons.mark_chat_read :widget.request.status=="Rejected"? Icons.mark_chat_read:Icons.mark_chat_unread,
-                                    color: widget.request.status=="Accepted" ? Colors.green :widget.request.status=="Rejected"? Colors.red:Colors.yellow,
+                                    widget.request.status=="Accepted" ? Icons.mark_chat_read :Icons.mark_chat_unread,
+                                    color: widget.request.status=="Accepted" ? Colors.green :Colors.yellow,
                                   ),
                                 ),//SizedBox(width: 20),
                                 Text(
