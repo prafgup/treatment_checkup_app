@@ -41,7 +41,7 @@ class MapScreenState extends State<ProfilePageP>
     _userNameFirst.text  = myProfileUpdated.firstName;
     _userNameSecond.text = myProfileUpdated.lastName;
     _emailId.text = myProfileUpdated.emailId;
-    _dob.text = DateFormat.yMMMd().format(DateTime.parse(myProfileUpdated.dob));
+    _dob.text = myProfileUpdated.dob.length == 0 ? "" : DateFormat.yMMMd().format(DateTime.parse(myProfileUpdated.dob));
     _address.text = myProfileUpdated.homeAddress;
     _pinCode.text = myProfileUpdated.lastName;
     _city.text = myProfileUpdated.lastName;
@@ -62,7 +62,7 @@ class MapScreenState extends State<ProfilePageP>
     myProfileUpdated.lastName = _userNameSecond.text ;
     myProfileUpdated.emailId = _emailId.text ;
     print(_dob.text);
-    myProfileUpdated.dob = DateFormat("MMM dd, yyyy").parseUTC(_dob.text).toIso8601String() ;
+    myProfileUpdated.dob = _dob.text.length == 0 ? "" : DateFormat("MMM dd, yyyy").parseUTC(_dob.text).toIso8601String() ;
     myProfileUpdated.homeAddress = _address.text ;
 //    myProfileUpdated.lastName = _pinCode.text ;
 //    myProfileUpdated.lastName = _city.text ;
