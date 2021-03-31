@@ -23,16 +23,22 @@ class UserTypeService{
   String jwtToken = "";
   int userRegistered = -1;
   MyProfileUpdated myProfileUpdated;
+  FriendRequest myFriendRequests;
 
 
   static String baseUrl = "https://treatment-application-dep.herokuapp.com";
-
+//do not change order of the lists as indexing is used below to access: if want to add then add at end of list in api lists.
    List<String> loginAPI = [
      baseUrl+"/api/v1/users/login",
    ];
   List<String> registerAPI = [
     baseUrl+"/api/v1/register/patient",
     baseUrl+"/api/v1/register/relative",
+  ];
+  List<String> RelativeAPI=[
+    baseUrl+"/api/v1/relative/getRequests",
+    baseUrl+"/api/v1/relative/getFriendRequests",
+    baseUrl+"/api/v1/relative/update_friend_requests"
   ];
 
   Future<void> setUserRegistered(int status)async{
@@ -93,7 +99,7 @@ class UserTypeService{
       "user_type" : (userType == 0) ? "p" : "r",
       "auth_token" : authId
     };
-    print("sending req");
+    print("sending set role req");
     var response;
     try{
       response = await http.post(
@@ -137,7 +143,7 @@ class UserTypeService{
     Map<String, String> requestHeaders = {
       'x-access-token': jwtToken
     };
-    print("sending req");
+    print("sending reg p req");
     var response;
     try{
       response = await http.post(
@@ -170,12 +176,13 @@ class UserTypeService{
 
     Map<String, String> requestBody = {
       "first_name" : firstName,
-      "last_name" : lastName
+      "last_name" : lastName,
+      "mobile_number" :"8109601234"
     };
     Map<String, String> requestHeaders = {
       'x-access-token': jwtToken
     };
-    print("sending req");
+    print("sending reg r req");
     var response;
     try{
       response = await http.post(
@@ -214,7 +221,7 @@ class UserTypeService{
     await checkJWTToken();
 
 
-    print("sending req");
+    print("sending get profile req");
     var response;
     Map<String, String> requestHeaders = {
       "Content-Type": "application/json",
@@ -255,7 +262,7 @@ class UserTypeService{
     await checkJWTToken();
 
 
-    print("sending req");
+    print("sending update pro data req");
     var response;
     Map<String, String> requestHeaders = {
       'x-access-token': jwtToken
@@ -292,7 +299,128 @@ class UserTypeService{
 
   }
 
+  Future<int> UpdateFriendRequest(String user_id, String status) async {
+    await checkUserType();
+    if(userType==-1) throw Error();
+    await checkJWTToken();
+    var response;
+    Map<String, String> requestHeaders = {
+      'x-access-token': jwtToken
+    };
+    Map<String, String> requestBody = {
+      'user_id': user_id,
+      'status':status
+    };
+    try{
+      response = await http.post(
+          "https://treatment-application-dep.herokuapp.com/api/v1/relative/update_friend_requests" ,
+          headers: requestHeaders,
+          body:requestBody
+      );
+    }
+    catch(e){
+      print(e);
+    }
+    if(response.statusCode == 200){
+      print("Update request successfull");
+return 1;
+    }else {
+      print("Error in response");
+      print(response.body);
+      return 0;
 
+      throw new Error();
+
+    }
+
+
+
+  }
+  Future<String> GetRelativeExerciseRequests()async{
+    await checkUserType();
+    if(userType==-1) throw Error();
+
+    await checkJWTToken();
+
+    Map<String, String> requestBody = {
+      "x-access-token" : jwtToken,
+    };
+    Map<String, String> requestHeaders = {
+      'x-access-token': jwtToken
+    };
+    var response;
+    try{
+      response = await http.get(
+          RelativeAPI[0],
+          headers: requestHeaders
+      );
+    }
+    catch(e){
+      print(e);
+    }
+    if(response.statusCode == 400){
+      print("Error in response");
+      print(response.body);
+      throw new Error();
+    }
+    print("relative exercise requests response");
+    print(response.body);
+    print(response.statusCode);
+    return response.body.toString();
+
+
+
+  }
+  Future<FriendRequest> GetFriendRequests()async{
+    print(jwtToken);
+
+    // if(myFriendRequests != null){
+    //   print("exists");
+    //   print(myFriendRequests.toJson());
+    //   return FriendRequest.fromJson(myFriendRequests.toJson());
+    // }
+    await checkUserType();
+    if(userType==-1) throw Error();
+    await checkJWTToken();
+
+
+    print("sending get fr req");
+    //print(jwtToken);
+    var response;
+    Map<String, String> requestHeaders = {
+      "Content-Type": "application/json",
+      'x-access-token': jwtToken
+    };
+    try{
+      response = await http.get(
+          RelativeAPI[1] ,
+          headers: requestHeaders
+      );
+    }
+    catch(e){
+      print(e);
+    }
+    if(response.statusCode == 200){
+      print("Got Friend Requests");
+      //print(response.body);
+      //return FriendRequest.fromJson(jsonDecode(response.body));
+      Map<String, dynamic> myObj = json.decode(response.body);
+      //print("Obj"+ myObj.toString());
+      myFriendRequests = new FriendRequest.fromJson(myObj);
+
+     // print("after got requests");
+      //print(myFriendRequests.toJson());
+     return myFriendRequests;
+    }else {
+      print("Error in response");
+      print(response.body);
+      throw new Error();
+    }
+    // print(response.body);
+    // print(response.statusCode);
+    // return FriendRequest.fromJson(myFriendRequests.toJson());
+
+  }
 }
 
 class MyProfileUpdated {
@@ -342,4 +470,80 @@ class MyProfileUpdated {
     data['modified_date'] = this.modifiedDate == null ? "" : this.modifiedDate;
     return data;
   }
+
+  }
+
+class FriendRequest {
+  String my_number;
+List<FRequestModel> Req_list=[];
+
+
+  FriendRequest(
+      { this.my_number,
+   this.Req_list});
+
+  FriendRequest.fromJson(Map<String, dynamic> json) {
+   // print("above my number");
+    my_number = json['myNumber'] == null ? "" : json['myNumber'];
+
+    for(int i=0;i<json['patients'].length;i++)
+    Req_list.add(
+        FRequestModel.fromJson(json['patients'][i]));
+
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, String> data = new Map<String, String>();
+    data['my_number'] = this.my_number == null ? "" : this.my_number;
+    data['patients'] = this.Req_list == null ? "" : this.Req_list.map((i) => i.toJson()).toList();
+
+    return data;
+  }
+}
+
+class FRequestModel {
+  String first_name;
+  String last_name;
+  String profile_pic;
+  String user_id;
+  String relative_1;
+  String relative_2;
+  String relative_1_status;
+  String relative_2_status;
+
+
+  FRequestModel({
+    this.first_name,
+    this.last_name,
+    this.profile_pic,
+    this.user_id,
+    this.relative_1,
+    this.relative_2,
+    this.relative_1_status,
+    this.relative_2_status});
+
+  FRequestModel.fromJson(Map<String, dynamic> json) {
+    user_id = json['user_id'] == null ? "" : json['user_id'];
+    first_name = json['first_name'] == null ? "" : json['first_name'];
+    last_name = json['last_name'] == null ? "" : json['last_name'];
+    profile_pic = json['profile_pic'] == null ? "" : json['profile_pic'];
+    relative_1 = json['relative_1'] == null ? "" : json['relative_1'];
+    relative_2 = json['relative_2'] == null ? "" : json['relative_2'];
+    relative_1_status = json['relative_1_status'] == null ? "" : json['relative_1_status'];
+    relative_2_status = json['relative_2_status'] == null ? "" : json['relative_2_status'];
+   // print("hello");
+    //print(user_id+first_name+relative_1+relative_2_status);
+  }
+  Map<String, dynamic> toJson() {
+    final Map<String, String> data = new Map<String, String>();
+    data['user_id'] = user_id == null ? "" : user_id;
+    data['first_name'] = first_name == null ? "" : first_name;
+    data['last_name'] = last_name == null ? "" : last_name;
+    data['profile_pic'] = profile_pic == null ? "" : profile_pic;
+    data['relative_1'] = relative_1 == null ? "" : relative_1;
+    data['relative_2'] = relative_2 == null ? "" : relative_2;
+    data['relative_1_status']=relative_1_status == null ? "" : relative_1_status;
+    data['relative_2_status']=relative_2_status == null ? "" : relative_2_status;
+    return data;
+}
 }

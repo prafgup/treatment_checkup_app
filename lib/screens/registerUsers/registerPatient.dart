@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:treatment_checkup_app/screens/Relative/relative_home.dart';
 import 'dart:math' as math;
 import 'package:treatment_checkup_app/widgets/IconImages.dart';
 import 'package:treatment_checkup_app/services/auth/UserTypeService.dart';
@@ -44,7 +45,7 @@ class _RegisterPatientRelativeState extends State<RegisterPatientRelative> {
       Navigator.of(context).pushReplacement(new MaterialPageRoute(builder: (context)=> DetailsScreen()));
     }
     else if(userService.userType == 1 && statusCode == 200){ // relative
-      Navigator.of(context).pushReplacement(new MaterialPageRoute(builder: (context)=> DetailsScreen())); //todo
+      Navigator.of(context).pushReplacement(new MaterialPageRoute(builder: (context)=> RequestsScreenR())); //todo
     }
     else{
       print("Some error");

@@ -2,16 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:treatment_checkup_app/constants.dart';
 import 'package:treatment_checkup_app/screens/ExerciseScreens/weekly_layout.dart';
+import 'package:treatment_checkup_app/screens/Relative/friend_request_screen.dart';
 import 'package:treatment_checkup_app/screens/Relative/relative_home.dart';
 import 'package:treatment_checkup_app/screens/Requests_screen/patients_request_screen.dart';
 import 'package:treatment_checkup_app/screens/personalTrainerApp/account/AccountHome.dart';
+import 'package:treatment_checkup_app/screens/ExerciseScreens/patient_profile.dart';
 
-
-class BottomNavBarR extends StatelessWidget {
+class BottomNavBarR extends StatefulWidget {
+  final List<bool> active_icon;
   const BottomNavBarR({
     Key key,
+   this.active_icon,
   }) : super(key: key);
 
+  @override
+  _BottomNavBarRState createState() => _BottomNavBarRState();
+}
+
+class _BottomNavBarRState extends State<BottomNavBarR> {
   @override
   Widget build(BuildContext context) {
 
@@ -25,11 +33,12 @@ class BottomNavBarR extends StatelessWidget {
           BottomNavItem(
             title: "Patients",
             svgScr: "assets/icons/calendar.svg",
+            isActive: widget.active_icon[0],
             press: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) {
-                  return RequestsScreenR();
+                  return FriendRequestScreenR();
                 }),
               );
 
@@ -38,7 +47,7 @@ class BottomNavBarR extends StatelessWidget {
           BottomNavItem(
             title: "All Requests",
             svgScr: "assets/icons/gym.svg",
-            isActive: true,
+            isActive: widget.active_icon[1],
             press: () {
               Navigator.push(
                 context,
@@ -51,12 +60,13 @@ class BottomNavBarR extends StatelessWidget {
           ),
           BottomNavItem(
             title: "Settings",
+            isActive: widget.active_icon[2],
             svgScr: "assets/icons/Settings.svg",
             press: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) {
-                  return AccountHome();
+                  return ProfilePageP();
                 }),
               );
 

@@ -3,7 +3,7 @@ import 'package:treatment_checkup_app/constants.dart';
 import 'package:treatment_checkup_app/models/requests.dart';
 import 'package:treatment_checkup_app/screens/Relative/relative_home.dart';
 
-
+//this is patient side request page
 class RekuestCard extends StatefulWidget {
 
   final Function press;
@@ -46,7 +46,7 @@ class _RekuestCardState extends State<RekuestCard> {
           child: Material(
             color: Colors.transparent,
             child: InkWell(
-              onTap: (){ Navigator.of(context).pushReplacement(new MaterialPageRoute(builder: (context)=> RequestsScreenR()));
+              onTap: (){ //Navigator.of(context).pushReplacement(new MaterialPageRoute(builder: (context)=> RequestsScreenR()));
               },
               child: Padding(
                 padding: const EdgeInsets.all(16.0),

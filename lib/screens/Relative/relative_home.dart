@@ -5,10 +5,11 @@ import 'package:treatment_checkup_app/constants.dart';
 import 'package:treatment_checkup_app/models/exercise.dart';
 import 'package:treatment_checkup_app/models/requests_relative.dart';
 import 'package:treatment_checkup_app/screens/ExerciseScreens/daily_layout.dart';
+import 'package:treatment_checkup_app/services/auth/UserTypeService.dart';
 import 'package:treatment_checkup_app/widgets/bottom_nav_bar.dart';
-import 'package:treatment_checkup_app/widgets/bottom_nav_bar_relative.dart';
+import 'file:///C:/Users/ankit/Desktop/DEP/New%20folder/treatment_checkup_app/lib/widgets/Relative/bottom_nav_bar_relative.dart';
 import 'package:treatment_checkup_app/widgets/request_card.dart';
-import 'package:treatment_checkup_app/widgets/requests_card_relative.dart';
+import 'file:///C:/Users/ankit/Desktop/DEP/New%20folder/treatment_checkup_app/lib/widgets/Relative/requests_card_relative.dart';
 import 'package:treatment_checkup_app/widgets/search_bar.dart';
 import 'package:treatment_checkup_app/widgets/session_card.dart';
 import 'package:treatment_checkup_app/widgets/radial_progress.dart';
@@ -94,13 +95,43 @@ final List<RequestRelative> requests= [
 
 
 
+class RequestsScreenR extends StatefulWidget {
 
-class RequestsScreenR extends StatelessWidget {
+
+  @override
+  _RequestsScreenRState createState() => _RequestsScreenRState();
+}
+
+class _RequestsScreenRState extends State<RequestsScreenR> {
+
+  bool isLoading;
+  UserTypeService userService;
+  Future<void> _getRelativeExerciseRequests() async {
+    setState(() {
+      isLoading = true;
+    });
+    String response = await userService.GetRelativeExerciseRequests();
+    print("response => ${response}");
+    setState(() {
+      isLoading = false;
+    });
+  }
+  @override
+  void initState() {
+    super.initState();
+    isLoading = false;
+    userService = UserTypeService();
+    _getRelativeExerciseRequests().catchError((e){
+      setState(() {
+        isLoading = false;
+      });
+    });
+  }
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return Scaffold(
-      bottomNavigationBar: BottomNavBarR(),
+      bottomNavigationBar: BottomNavBarR(active_icon: [false,true,false],),
       body: Stack(
         children: <Widget>[
           Container(
@@ -138,7 +169,12 @@ class RequestsScreenR extends StatelessWidget {
                     SizedBox(
                       height: size.height*0.75,
 
-                      child: GridView.builder(
+                      child: isLoading == true? Container(
+                          color: Colors.black.withOpacity(0.5),
+                          height: MediaQuery.of(context).size.height,
+                          width: MediaQuery.of(context).size.width,
+                          child: Center(child: CircularProgressIndicator(),)):
+                      GridView.builder(
                           itemCount: requests.length,
                           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: 1,mainAxisSpacing: 10.0,childAspectRatio:4

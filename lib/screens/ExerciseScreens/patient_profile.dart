@@ -3,7 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_cupertino_date_picker/flutter_cupertino_date_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:treatment_checkup_app/services/auth/FirebaseUser.dart';
-import '../../services/auth/UserTypeService.dart';
+import '../../services/auth/UserTypeService.dart';import 'package:treatment_checkup_app/screens/Relative/relative_home.dart';
+import 'package:treatment_checkup_app/screens/ExerciseScreens/weekly_layout.dart';
 class ProfilePageP extends StatefulWidget {
   @override
   MapScreenState createState() => MapScreenState();
@@ -115,7 +116,41 @@ class MapScreenState extends State<ProfilePageP>
                                       ),
                                     ),
                                     Padding(
-                                      padding: EdgeInsets.only(left: 200,right: 0,top: 0,bottom: 0),
+                                      padding: EdgeInsets.only(left: 30,right: 0,top: 0,bottom: 0),
+                                      child: RaisedButton(
+                                        onPressed: () async {
+                                          // await ;
+
+                                            int x= await userService.userType;
+                                      if(x==0) {userService.setUserType(1);
+                                      Navigator.of(context).push(new MaterialPageRoute(builder: (context)=>RequestsScreenR()));
+
+                                      }
+                                      else {
+                                        userService.setUserType(0);
+                                        Navigator.of(context).push(new MaterialPageRoute(builder: (context)=> DetailsScreen()));
+
+                                      }
+                                        },
+                                        elevation: 5,
+                                        color: Color.fromRGBO(108, 71, 145, 1),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(18.0),
+
+                                        ),
+                                        child: Text(
+
+                                          userService.userType==0?"Switch to Relative":"Switch to Patient",
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w500
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.only(left: 20,right: 0,top: 0,bottom: 0),
                                       child: RaisedButton(
                                         onPressed: () async {
                                           await FirebaseSignInService().signOut(context);

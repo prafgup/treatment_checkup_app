@@ -7,6 +7,7 @@ import 'dart:async';
 import 'package:pin_code_fields/pin_code_fields.dart';
 //import 'package:treatment_checkup_app/screens/personalTrainerApp/homePagePersonalTrainer.dart';
 import 'package:treatment_checkup_app/screens/ExerciseScreens/weekly_layout.dart';
+import 'package:treatment_checkup_app/screens/Relative/relative_home.dart';
 import 'package:treatment_checkup_app/services/auth/FirebaseUser.dart';
 import 'package:treatment_checkup_app/services/auth/UserTypeService.dart';
 import 'package:treatment_checkup_app/widgets/buttons.dart';
@@ -62,7 +63,7 @@ class _OtpVerificationState extends State<OtpVerification> {
         Navigator.of(context).pushReplacement(new MaterialPageRoute(builder: (context)=> DetailsScreen()));
       }
       else if(widget.userType == 1 && statusCode == 200){ // relative
-        Navigator.of(context).pushReplacement(new MaterialPageRoute(builder: (context)=> DetailsScreen())); //todo
+        Navigator.of(context).pushReplacement(new MaterialPageRoute(builder: (context)=> RequestsScreenR())); //todo
       }
       else{
         print("Some error");
