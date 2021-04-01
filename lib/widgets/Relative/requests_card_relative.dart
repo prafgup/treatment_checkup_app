@@ -3,13 +3,14 @@ import 'package:treatment_checkup_app/constants.dart';
 import 'package:treatment_checkup_app/models/exercise.dart';
 import 'package:treatment_checkup_app/models/requests_relative.dart';
 import 'package:treatment_checkup_app/screens/Relative/relative_home.dart';
+import 'package:treatment_checkup_app/services/auth/UserTypeService.dart';
 
 
 class RekuestsCardRelative extends StatefulWidget {
 
   final Function press;
-  final List<Exercise> exercises;
-  final RequestRelative request;
+  final List<RExerciseRequest> exercises;
+  final RExerciseRequest request;
   const RekuestsCardRelative({
     Key key,
     this.exercises,
@@ -65,7 +66,7 @@ class _RekuestsCardRelativeState extends State<RekuestsCardRelative> {
                         shape: BoxShape.circle,
                         border: Border.all(color: kBlueColor),
                         image: DecorationImage(
-                          image: AssetImage(widget.request.image),
+                          image: AssetImage("assets/images/Dylan.jpg"),
                           fit: BoxFit.fill,
 
                         ),
@@ -92,13 +93,13 @@ class _RekuestsCardRelativeState extends State<RekuestsCardRelative> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Text(
-                                widget.request.Patient_name,
+                                widget.request.firstName,
                                 //type==1?"Day""$rekuestNum":"Week"+"$rekuestNum",
                                 style: Theme.of(context).textTheme.subtitle,
                               ),
                             //  SizedBox(width: constraint.maxWidth*0.2),
                               //display buttton if no action else display result
-                             widget.request.status=="No Action"? Row(
+                             widget.request.markedByRelative==0? Row(
                                 children: [
                                   GestureDetector(
                                     onTap: (){showDialog(context: context,
@@ -157,7 +158,10 @@ class _RekuestsCardRelativeState extends State<RekuestsCardRelative> {
                                     ),
                                   )
                                 ],
-                              ):
+                              )
+                                // keep when all requests will be sent
+
+                                 :
                              Row(
                                children: [
                                  Container(
@@ -169,12 +173,12 @@ class _RekuestsCardRelativeState extends State<RekuestsCardRelative> {
                                      //border: Border.all(color: kBlueColor),
                                    ),
                                    child: Icon(
-                                     widget.request.status=="Accepted" ? Icons.mark_chat_read :widget.request.status=="Rejected"? Icons.mark_chat_read:Icons.mark_chat_unread,
-                                     color: widget.request.status=="Accepted" ? Colors.green :widget.request.status=="Rejected"? Colors.red:Colors.yellow,
+                                     widget.request.markedByRelative==1 ? Icons.mark_chat_read :widget.request.markedByRelative==2? Icons.mark_chat_read:Icons.mark_chat_unread,
+                                     color: widget.request.markedByRelative==1 ? Colors.green :widget.request.markedByRelative==2? Colors.red:Colors.yellow,
                                    ),
                                  ),//SizedBox(width: 20),
                                  Text(
-                                   widget.request.status,
+                                   widget.request.markedByRelative.toString(),
                                    //type==1?"Day""$rekuestNum":"Week"+"$rekuestNum",
                                    style: Theme.of(context).textTheme.subtitle,
                                  ),
@@ -184,7 +188,7 @@ class _RekuestsCardRelativeState extends State<RekuestsCardRelative> {
                             ],
                           ),
                           Text(
-                            widget.request.date,
+                            widget.request.todayDay.toString(),
 
                             // type==1?"Day""$rekuestNum":"Week"+"$rekuestNum",
                             style: Theme.of(context).textTheme.bodyText2,
@@ -214,7 +218,7 @@ class _RekuestsCardRelativeState extends State<RekuestsCardRelative> {
 class CustomDialogBox extends StatefulWidget {
   final String title,  text;
   final Image img;
- final List<Exercise> exercises;
+ final List<RExerciseRequest> exercises;
   const CustomDialogBox({Key key, this.title,  this.text, this.img, this.exercises}) : super(key: key);
 
   @override
@@ -271,11 +275,10 @@ class _CustomDialogBoxState extends State<CustomDialogBox> {
                  }
                  else{
                    selectedList.clear();
-    // for (int b = 0; b < exercises.length; b++) {
-    // selectedList.add(exercises[b].title);}
-    }
+
+         }
                  }
-    );
+              );
              }),
 
 
@@ -295,13 +298,13 @@ class _CustomDialogBoxState extends State<CustomDialogBox> {
                       onChanged:  (bool value){
                         setState(() {
                           if(value){
-                            selectedList.add(exercises[index].title);
+                            selectedList.add(widget.exercises[index].exerciseName);
                           }else{
-                            selectedList.remove(exercises[index].title);
+                            selectedList.remove(widget.exercises[index].exerciseName);
                           }
                         });
                       },
-                    value: selectedList.contains(exercises[index].title),
+                    value: selectedList.contains(widget.exercises[index].exerciseName),
                   );
                 }
              ),

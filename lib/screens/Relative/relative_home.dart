@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -106,15 +107,22 @@ class _RequestsScreenRState extends State<RequestsScreenR> {
 
   bool isLoading;
   UserTypeService userService;
+  var grp_list;
   Future<void> _getRelativeExerciseRequests() async {
     setState(() {
       isLoading = true;
     });
-    String response = await userService.GetRelativeExerciseRequests();
-    print("response => ${response}");
+    List<RExerciseRequest> req_list = await userService.GetRelativeExerciseRequests();
+     grp_list=groupBy(req_list, (RExerciseRequest req) {
+      return '${req.todayDay}+${req.patientId}';
+    }).values.toList();
+
+    print(grp_list);
+
     setState(() {
       isLoading = false;
     });
+    return grp_list;
   }
   @override
   void initState() {
@@ -174,14 +182,22 @@ class _RequestsScreenRState extends State<RequestsScreenR> {
                           height: MediaQuery.of(context).size.height,
                           width: MediaQuery.of(context).size.width,
                           child: Center(child: CircularProgressIndicator(),)):
+                      FutureBuilder(future: _getRelativeExerciseRequests(),
+                          builder: (context, projectSnap) {
+                            if (projectSnap.connectionState == ConnectionState.none &&
+                                projectSnap.hasData == null) {
+                              //print('project snapshot data is: ${projectSnap.data}');
+                              return Container();
+                            }
+                            return
                       GridView.builder(
-                          itemCount: requests.length,
+                          itemCount: projectSnap.data.length,
                           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: 1,mainAxisSpacing: 10.0,childAspectRatio:4
                           ),
                           // Generate 100 widgets that display their index in the List.
                           itemBuilder: (ctx, index) {
-                            return RekuestsCardRelative(exercises: exercises,request: requests[index],press: () {
+                            return RekuestsCardRelative(exercises: projectSnap.data[index],request: projectSnap.data[index][0],press: () {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(builder: (context) {
@@ -190,7 +206,7 @@ class _RequestsScreenRState extends State<RequestsScreenR> {
                               );
 
                             }, );
-                          }),
+                          });})
                     ),
 
 

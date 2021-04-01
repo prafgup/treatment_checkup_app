@@ -336,41 +336,7 @@ return 1;
 
 
   }
-  Future<String> GetRelativeExerciseRequests()async{
-    await checkUserType();
-    if(userType==-1) throw Error();
 
-    await checkJWTToken();
-
-    Map<String, String> requestBody = {
-      "x-access-token" : jwtToken,
-    };
-    Map<String, String> requestHeaders = {
-      'x-access-token': jwtToken
-    };
-    var response;
-    try{
-      response = await http.get(
-          RelativeAPI[0],
-          headers: requestHeaders
-      );
-    }
-    catch(e){
-      print(e);
-    }
-    if(response.statusCode == 400){
-      print("Error in response");
-      print(response.body);
-      throw new Error();
-    }
-    print("relative exercise requests response");
-    print(response.body);
-    print(response.statusCode);
-    return response.body.toString();
-
-
-
-  }
   Future<FriendRequest> GetFriendRequests()async{
     print(jwtToken);
 
@@ -421,8 +387,54 @@ return 1;
     // return FriendRequest.fromJson(myFriendRequests.toJson());
 
   }
-}
 
+  Future<List<RExerciseRequest>> GetRelativeExerciseRequests()async{
+    await checkUserType();
+    if(userType==-1) throw Error();
+
+    await checkJWTToken();
+
+    Map<String, String> requestBody = {
+      "x-access-token" : jwtToken,
+    };
+    Map<String, String> requestHeaders = {
+      'x-access-token': jwtToken
+    };
+    var response;
+    try{
+      response = await http.get(
+          "https://treatment-application-dep.herokuapp.com/api/v1/relative/getRequests",
+          headers: requestHeaders
+      );
+
+    }
+    catch(e){
+      print(e);
+    }
+
+    if(response.statusCode == 200){
+      print("Got Ex Requests");
+
+      List<RExerciseRequest> reqs = (json.decode(response.body) as List)
+          .map((data) => RExerciseRequest.fromJson(data))
+          .toList();
+
+      return reqs;
+   }
+    else{
+
+      print("Error in response");
+      print(response.body);
+      throw new Error();
+    }
+    // print(response.body);
+    // print(response.statusCode);
+    // return response.body.toString();
+
+
+
+  }
+}
 class MyProfileUpdated {
   String userId;
   String firstName;
@@ -546,4 +558,46 @@ class FRequestModel {
     data['relative_2_status']=relative_2_status == null ? "" : relative_2_status;
     return data;
 }
+}
+
+//for receiveing data of relative home page requests
+class RExerciseRequest {
+  String firstName;
+  String lastName;
+  int todayDay;
+  String exerciseName;
+  String patientId;
+  int exerciseId;
+  int markedByRelative;
+
+  RExerciseRequest(
+      {this.firstName,
+        this.lastName,
+        this.todayDay,
+        this.exerciseName,
+        this.patientId,
+        this.exerciseId,
+        this.markedByRelative});
+
+  RExerciseRequest.fromJson(Map<String, dynamic> json) {
+    firstName = json['first_name'];
+    lastName = json['last_name'];
+    todayDay = json['today_day'];
+    exerciseName = json['exercise_name'];
+    patientId = json['patient_id'];
+    exerciseId = json['exercise_id'];
+    markedByRelative = json['marked_by_relative'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['first_name'] = this.firstName;
+    data['last_name'] = this.lastName;
+    data['today_day'] = this.todayDay;
+    data['exercise_name'] = this.exerciseName;
+    data['patient_id'] = this.patientId;
+    data['exercise_id'] = this.exerciseId;
+    data['marked_by_relative'] = this.markedByRelative;
+    return data;
+  }
 }
