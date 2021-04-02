@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:treatment_checkup_app/constants.dart';
-import 'package:treatment_checkup_app/models/requests.dart';
-import 'package:treatment_checkup_app/screens/Relative/relative_home.dart';
 
+import 'package:treatment_checkup_app/services/auth/UserTypeService.dart';
 //this is patient side request page
 class RekuestCard extends StatefulWidget {
 
   final Function press;
 
-  final Request request;
+  final List<PatientRequestModel> request;
   const RekuestCard({
     Key key,
     this.request,
@@ -62,7 +61,7 @@ class _RekuestCardState extends State<RekuestCard> {
                       ),
                       child: Icon(
                         Icons.check_circle_outline_outlined,
-                        color: widget.request.status=="Accepted" ? Colors.green :Colors.yellow,
+                        color: widget.request[0].markedByRelative!=0 ? Colors.green :Colors.yellow,
                       ),
                     ),
                     SizedBox(width: 10),
@@ -74,7 +73,8 @@ class _RekuestCardState extends State<RekuestCard> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Text(
-                              widget.request.Relative_name,
+                              "Sanyam",
+                              //widget.request.Relative_name,
                               //type==1?"Day""$rekuestNum":"Week"+"$rekuestNum",
                               style: Theme.of(context).textTheme.subtitle,
                             ),
@@ -90,12 +90,12 @@ class _RekuestCardState extends State<RekuestCard> {
                                     //border: Border.all(color: kBlueColor),
                                   ),
                                   child: Icon(
-                                    widget.request.status=="Accepted" ? Icons.mark_chat_read :Icons.mark_chat_unread,
-                                    color: widget.request.status=="Accepted" ? Colors.green :Colors.yellow,
+                                    widget.request[0].markedByRelative!=0 ? Icons.mark_chat_read :Icons.mark_chat_unread,
+                                    color: widget.request[0].markedByRelative!=0 ? Colors.green :Colors.yellow,
                                   ),
                                 ),//SizedBox(width: 20),
                                 Text(
-                                  widget.request.status,
+                                  widget.request[0].markedByRelative==0?"No action":"Marked",
                                   //type==1?"Day""$rekuestNum":"Week"+"$rekuestNum",
                                   style: Theme.of(context).textTheme.subtitle,
                                 ),
@@ -105,7 +105,7 @@ class _RekuestCardState extends State<RekuestCard> {
                           ],
                         ),
                         Text(
-                          widget.request.date,
+                          widget.request[0].todayDay.toString(),
 
                          // type==1?"Day""$rekuestNum":"Week"+"$rekuestNum",
                           style: Theme.of(context).textTheme.bodyText2,

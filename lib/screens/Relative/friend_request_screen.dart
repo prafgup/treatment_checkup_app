@@ -138,12 +138,12 @@ class _FriendRequestScreenRState extends State<FriendRequestScreenR> {
                             itemBuilder: (ctx, index) {
                               FRequestModel project = projectSnap.data[index];
                               return FriendRequestCardRelative(request: project,number:my_number,press: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (context) {
-                                    return FriendRequestScreenR();
-                                  }),
-                                );
+                                // Navigator.push(
+                                //   context,
+                                //   MaterialPageRoute(builder: (context) {
+                                //     return FriendRequestScreenR();
+                                //   }),
+                                // );
 
                               }, );
                             }

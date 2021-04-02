@@ -272,12 +272,12 @@ class _CustomDialogBox2State extends State<CustomDialogBox2> {
                  activeColor: Colors.green,
                  checkColor: Colors.purple,
 
-                 value: selectedList.length==exercises.length, onChanged:
+                 value: selectedList.length==widget.exercises.length, onChanged:
                  (bool value){
                setState(() {
                  if(value){
-    for (int b = 0; b < exercises.length; b++) {
-                if (!selectedList.contains(exercises[b].title))   selectedList.add(widget.exercises[b]);}
+    for (int b = 0; b < widget.exercises.length; b++) {
+                if (!selectedList.contains(widget.exercises[b]))   selectedList.add(widget.exercises[b]);}
                  }
                  else{
                    selectedList.clear();
@@ -295,8 +295,8 @@ class _CustomDialogBox2State extends State<CustomDialogBox2> {
                 itemBuilder:     (context,index){
                   List<bool> _checked=List<bool>.filled(widget.exercises.length,false,growable:false);
                   return CheckboxListTile(
-                    title: Text(exercises[index].title),
-                      secondary:Image( image: AssetImage(exercises[index].image),width: 50.0,height: 50.0,),
+                    title: Text(widget.exercises[index].exerciseName),
+                      secondary:Image( image: AssetImage("assets/images/image004.jpg"),width: 50.0,height: 50.0,),
                       activeColor: Colors.green,
                       checkColor: Colors.purple,
 

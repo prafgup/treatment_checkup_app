@@ -482,6 +482,52 @@ return 1;
 
 
   }
+  Future<List<PatientRequestModel>> GetPatientExerciseRequests()async{
+    await checkUserType();
+    // if(myExerciseRequests != null){
+    //   //print("exists");
+    //   return myExerciseRequests;
+    //   //print(myFriendRequests.toJson());
+    //   //return RExerciseRequest.fromJson(myExerciseRequests.toJson());
+    // }
+    if(userType==-1) throw Error();
+
+    await checkJWTToken();
+    Map<String, String> requestHeaders = {
+      'x-access-token': jwtToken
+    };
+    var response;
+    try{
+      response = await http.get(
+          "https://treatment-application-dep.herokuapp.com/api/v1/patient/get_request_status",
+          headers: requestHeaders
+      );
+
+    }
+    catch(e){
+      print(e);
+    }
+
+    if(response.statusCode == 200){
+      print("Got Ex Requests");
+
+      return (json.decode(response.body) as List)
+          .map((data) => PatientRequestModel.fromJson(data))
+          .toList();
+
+
+    }
+    else{
+
+      print("Error in response in patient ex request");
+      print(response.body);
+      throw new Error();
+    }
+
+
+
+
+  }
 
   Future<List<TreatmentDayData>> GetPatientWeekExerciseDetails()async{
     await checkUserType();
@@ -730,5 +776,34 @@ class TreatmentDayData {
     exerciseImgUrl = json['exercise_img_url']== null ? "" : json['exercise_img_url'];
     duration = json['duration']== null ? 0 : json['duration'];
     markedByPatient = json['marked_by_patient']== null ? 0 : json['marked_by_patient'];
+  }
+}
+
+class PatientRequestModel {
+  //String relativeName;
+  int todayDay;
+  String exerciseName;
+  int markedByRelative;
+
+  PatientRequestModel(
+      {//this.relativeName,
+        this.todayDay,
+        this.exerciseName,
+        this.markedByRelative});
+
+  PatientRequestModel.fromJson(Map<String, dynamic> json) {
+    //relativeName = json['relative_name'];
+    todayDay = json['today_day'];
+    exerciseName = json['exercise_name'];
+    markedByRelative = json['marked_by_relative'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    //data['relative_name'] = this.relativeName;
+    data['today_day'] = this.todayDay;
+    data['exercise_name'] = this.exerciseName;
+    data['marked_by_relative'] = this.markedByRelative;
+    return data;
   }
 }

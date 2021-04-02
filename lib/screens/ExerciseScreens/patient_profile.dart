@@ -122,7 +122,9 @@ class MapScreenState extends State<ProfilePageP>
                                           // await ;
 
                                             int x= await userService.userType;
-                                      if(x==0) {userService.setUserType(1);
+                                      if(x==0) {
+
+                                        userService.setUserType(1);
                                       Navigator.of(context).push(new MaterialPageRoute(builder: (context)=>RequestsScreenR()));
 
                                       }

@@ -16,77 +16,9 @@ import 'dart:async';
 
 
 
-//TODO GET API DATA
 
 
-final List<Exercise> exercises = [
-  Exercise(
-    image: 'assets/images/image001.jpg',
-    title: 'Ankle toe movement',
-    time: '5 min',
-    difficult: 'Low',
-    reps: '25',
-    url: 'https://www.youtube.com/watch?v=O1jfSo66z44&ab_channel=goodexerciseguide',
-    text_instruct:'Do this exercise regularly to reduce swelling. Follow the Video in real-time and repeat what she does on the screen',
-  ),
-  Exercise(
-    image: 'assets/images/image004.jpg',
-    title: 'Isometric Quads',
-    time: '10 min',
-    difficult: 'Medium',
-    reps: '10',
-    url: 'https://www.youtube.com/watch?v=O1jfSo66z44&ab_channel=goodexerciseguide',
-    text_instruct:'Do this exercise regularly to reduce swelling. Follow the Video in real-time and repeat what she does on the screen',
-  ),
-  Exercise(
-    image: 'assets/images/image003.jpg',
-    title: 'Quadriceps Sets',
-    time: '10 min',
-    difficult: 'Medium',
-    reps: '20',
-    url: 'https://www.youtube.com/watch?v=O1jfSo66z44&ab_channel=goodexerciseguide',
-    text_instruct:'Do this exercise regularly to reduce swelling. Follow the Video in real-time and repeat what she does on the screen',
-  ),
 
-];
-
-//type denotes day or week 1 for day and 0 for week
-
-final List<RequestRelative> requests= [
-  RequestRelative(
-    Patient_name: 'Anshul',
-    status: 'No Action',
-    date: 'yesterday',
-    image: 'assets/images/Dylan.jpg',
-    url: 'https://www.youtube.com/watch?v=O1jfSo66z44&ab_channel=goodexerciseguide',
-
-  ),
-  RequestRelative(
-    Patient_name: 'Sanskar',
-    status: 'No Action',
-    date: 'yesterday',
-    image: 'assets/images/Thomas.jpg',
-    url: 'https://www.youtube.com/watch?v=O1jfSo66z44&ab_channel=goodexerciseguide',
-
-  ),
-  RequestRelative(
-    Patient_name: 'Anshul',
-    status: 'Rejected',
-    date: '7th march',
-    image: 'assets/images/Dylan.jpg',
-    url: 'https://www.youtube.com/watch?v=O1jfSo66z44&ab_channel=goodexerciseguide',
-
-  ),
-  RequestRelative(
-    Patient_name: 'Sanskar',
-    status: 'Accepted',
-    date: '7th March',
-    image: 'assets/images/Thomas.jpg',
-    url: 'https://www.youtube.com/watch?v=O1jfSo66z44&ab_channel=goodexerciseguide',
-
-  ),
-
-];
 
 
 
@@ -200,12 +132,12 @@ class _RequestsScreenRState extends State<RequestsScreenR> {
                           // Generate 100 widgets that display their index in the List.
                           itemBuilder: (ctx, index) {
                             return RekuestsCardRelative(exercises: projectSnap.data[index],request: projectSnap.data[index][0],press: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context) {
-                                  return RequestsScreenR();
-                                }),
-                              );
+                              // Navigator.push(
+                              //   context,
+                              //   MaterialPageRoute(builder: (context) {
+                              //     return RequestsScreenR();
+                              //   }),
+                              // );
 
                             }, );
                           });}
