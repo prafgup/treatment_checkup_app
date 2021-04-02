@@ -38,7 +38,8 @@ class UserTypeService{
   List<String> RelativeAPI=[
     baseUrl+"/api/v1/relative/getRequests",
     baseUrl+"/api/v1/relative/getFriendRequests",
-    baseUrl+"/api/v1/relative/update_friend_requests"
+    baseUrl+"/api/v1/relative/update_friend_requests",
+    baseUrl+"/api/v1/relative/update_exercise_requests"
   ];
 
   Future<void> setUserRegistered(int status)async{
@@ -388,6 +389,47 @@ return 1;
 
   }
 
+  Future<int> RUpdateExerciseRequest(String patient_id, int day, int exercise_id, String exercise_status) async
+  {
+    await checkUserType();
+    if(userType==-1) throw Error();
+    await checkJWTToken();
+    var response;
+    Map<String, String> requestHeaders = {
+      'x-access-token': jwtToken
+    };
+    Map<String, String> requestBody = {
+      'patient_id': patient_id,
+      'day':day.toString(),
+      'exercise_id':exercise_id.toString(),
+      'exercise_status':exercise_status
+    };
+    try{
+      response = await http.post(
+          "https://treatment-application-dep.herokuapp.com/api/v1/relative/update_exercise_requests" ,
+          headers: requestHeaders,
+          body:requestBody
+      );
+    }
+    catch(e){
+      print(e);
+    }
+    if(response.statusCode == 200){
+      print("Update request successfull");
+      return 1;
+    }else {
+      print("Error in response");
+      print(response.body);
+      return 0;
+
+      throw new Error();
+
+    }
+
+
+
+  }
+
   Future<List<RExerciseRequest>> GetRelativeExerciseRequests()async{
     await checkUserType();
     if(userType==-1) throw Error();
@@ -434,6 +476,7 @@ return 1;
 
 
   }
+
 }
 class MyProfileUpdated {
   String userId;

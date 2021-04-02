@@ -93,7 +93,7 @@ class _RekuestsCardRelativeState extends State<RekuestsCardRelative> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Text(
-                                widget.request.firstName,
+                                widget.request.firstName+" "+widget.request.lastName,
                                 //type==1?"Day""$rekuestNum":"Week"+"$rekuestNum",
                                 style: Theme.of(context).textTheme.subtitle,
                               ),
@@ -104,7 +104,7 @@ class _RekuestsCardRelativeState extends State<RekuestsCardRelative> {
                                   GestureDetector(
                                     onTap: (){showDialog(context: context,
                                         builder: (BuildContext context){
-                                          return CustomDialogBox(
+                                          return CustomDialogBox2(
                                             title: "Please select all completed exercises:",
                                          //   descriptions: "If you press Yes, exercise will be marked done and cannot be changed later!",
                                             text: "Proceed",
@@ -132,11 +132,10 @@ class _RekuestsCardRelativeState extends State<RekuestsCardRelative> {
                                   GestureDetector(
                                     onTap: (){showDialog(context: context,
                                         builder: (BuildContext context){
-                                          return CustomDialogBox(
+                                          return CustomDialogBox2(
                                             title: "Do you wish to reject the request?",
                                            // descriptions: "If you press Yes, exercise will be marked not done and cannot be changed later!",
-                                            text: "Yes",
-
+                                            text: "Yes", exercises:widget.exercises
                                           );
                                         }
                                     );},
@@ -188,7 +187,7 @@ class _RekuestsCardRelativeState extends State<RekuestsCardRelative> {
                             ],
                           ),
                           Text(
-                            widget.request.todayDay.toString(),
+                            "Day "+widget.request.todayDay.toString(),
 
                             // type==1?"Day""$rekuestNum":"Week"+"$rekuestNum",
                             style: Theme.of(context).textTheme.bodyText2,
@@ -215,18 +214,25 @@ class _RekuestsCardRelativeState extends State<RekuestsCardRelative> {
 
 
 
-class CustomDialogBox extends StatefulWidget {
+class CustomDialogBox2 extends StatefulWidget {
   final String title,  text;
   final Image img;
  final List<RExerciseRequest> exercises;
-  const CustomDialogBox({Key key, this.title,  this.text, this.img, this.exercises}) : super(key: key);
+  const CustomDialogBox2({Key key, this.title,  this.text, this.img, this.exercises}) : super(key: key);
 
   @override
-  _CustomDialogBoxState createState() => _CustomDialogBoxState();
+  _CustomDialogBox2State createState() => _CustomDialogBox2State();
 }
 
-class _CustomDialogBoxState extends State<CustomDialogBox> {
-  List<String> selectedList = [];
+class _CustomDialogBox2State extends State<CustomDialogBox2> {
+  List<RExerciseRequest> selectedList = [];
+  UserTypeService userService;
+  @override
+  void initState() {
+    // TODO: implement initState
+
+    super.initState();  userService= UserTypeService();
+  }
   @override
   Widget build(BuildContext context) {
 
@@ -260,7 +266,7 @@ class _CustomDialogBoxState extends State<CustomDialogBox> {
             children: <Widget>[
               Text(widget.title,style: TextStyle(fontSize: 22,fontWeight: FontWeight.w600),),
               SizedBox(height: 15,),
-              if(widget.exercises != null)CheckboxListTile(
+              !widget.title.contains("reject")?CheckboxListTile(
                  title: Text("Select All"),
                  secondary:Icon(Icons.select_all),
                  activeColor: Colors.green,
@@ -271,7 +277,7 @@ class _CustomDialogBoxState extends State<CustomDialogBox> {
                setState(() {
                  if(value){
     for (int b = 0; b < exercises.length; b++) {
-                if (!selectedList.contains(exercises[b].title))   selectedList.add(exercises[b].title);}
+                if (!selectedList.contains(exercises[b].title))   selectedList.add(widget.exercises[b]);}
                  }
                  else{
                    selectedList.clear();
@@ -279,10 +285,10 @@ class _CustomDialogBoxState extends State<CustomDialogBox> {
          }
                  }
               );
-             }),
+             }):Container(),
 
 
-              if(widget.exercises != null)ListView.builder(
+             !widget.title.contains("reject")?ListView.builder(
                  shrinkWrap:  true ,
                  itemCount: widget.exercises.length,
 
@@ -298,42 +304,54 @@ class _CustomDialogBoxState extends State<CustomDialogBox> {
                       onChanged:  (bool value){
                         setState(() {
                           if(value){
-                            selectedList.add(widget.exercises[index].exerciseName);
+                            selectedList.add(widget.exercises[index]);
                           }else{
-                            selectedList.remove(widget.exercises[index].exerciseName);
+                            selectedList.remove(widget.exercises[index]);
                           }
                         });
                       },
-                    value: selectedList.contains(widget.exercises[index].exerciseName),
+                    value: selectedList.contains(widget.exercises[index]),
                   );
                 }
-             ),
+             ):Container(),
               SizedBox(height: 22,),
               Align(
                 alignment: Alignment.bottomRight,
                 child: FlatButton(
-                    onPressed: (){
-                      Navigator.of(context).pop();
-                    },
+                    onPressed:  () async {
+    if (widget.text=="Proceed"){
+    print("accepting Erequests");
+    int status=0;
+    for(int i=0;i<widget.exercises.length;i++){
+      if(selectedList.contains(widget.exercises[i]) ){
+     status += await userService.RUpdateExerciseRequest(selectedList[i].patientId,selectedList[i].todayDay,selectedList[i].exerciseId,"1");}
+    else{
+        status += await userService.RUpdateExerciseRequest(selectedList[i].patientId,selectedList[i].todayDay,selectedList[i].exerciseId,"2");
+    }}
+    if(status==widget.exercises.length)Navigator.pop(context);
+    }
+    else if (widget.title.contains("reject")){
+      print("rejecting Erequest");
+      print("HOLAAAAAAAAAAAA");
+      int status=0;
+      print(widget.exercises[0].patientId);
+      for(int i=0;i<widget.exercises.length;i++){
+
+          status += await userService.RUpdateExerciseRequest(selectedList[i].patientId,selectedList[i].todayDay,selectedList[i].exerciseId,"2");
+        }
+      if(status==widget.exercises.length)Navigator.pop(context);
+    }
+
+    },
+
                     child: Text(widget.text,style: TextStyle(fontSize: 18),)),
               ),
             ],
           ),
         ),
-        // Positioned(
-        //   left: 20.0,
-        //   right: 20.0,
-        //   child: CircleAvatar(
-        //     backgroundColor: Colors.transparent,
-        //     radius: 45,
-        //     child: ClipRRect(
-        //         borderRadius: BorderRadius.all(Radius.circular(45.0)),
-        //         child: Icons.check_circle_rounded
-        //         //Image.asset("assets/model.jpeg")
-        //     ),
-        //   ),
-        // ),
+
       ],
     );
   }
 }
+

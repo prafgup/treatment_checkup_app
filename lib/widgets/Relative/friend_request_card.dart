@@ -231,7 +231,7 @@ final FRequestModel request;
 }
 
 class _CustomDialogBoxState extends State<CustomDialogBox> {
-  List<String> selectedList = [];
+
   UserTypeService userService;
   @override
   void initState() {
