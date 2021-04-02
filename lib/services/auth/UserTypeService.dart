@@ -477,6 +477,55 @@ return 1;
 
   }
 
+  Future<List<TreatmentDayData>> GetPatientWeekExerciseDetails()async{
+    await checkUserType();
+    if(userType==-1) throw Error();
+
+    await checkJWTToken();
+
+    Map<String, String> requestHeaders = {
+      'x-access-token': "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIzN2Y4MTExYS1mN2NlLTQ0MWYtOTQ2Yy1jOWRlMzJkZmRjZTgiLCJpYXQiOjE2MTcyOTEzNTEsImV4cCI6MTYxNzg5NjE1MX0.kJAhaliTnH_acLygLVZCc0oyxWgOucboI6kM8LfnTk8"
+    };
+
+    print(requestHeaders);
+
+    var response;
+    try{
+      response = await http.get(
+          "https://treatment-application-dep.herokuapp.com/api/v1/patient/get_treatment_data",
+          headers: requestHeaders
+      );
+
+    }
+    catch(e){
+      print(e);
+    }
+
+    print(response.statusCode);
+
+    if(response.statusCode == 200){
+      print("Got DATA DAY");
+
+      List<TreatmentDayData> curr = (json.decode(response.body) as List)
+          .map((data) => TreatmentDayData.fromJson(data))
+          .toList();
+      print(curr);
+      return curr;
+    }
+    else{
+
+      print("Error in response");
+      print(response.body);
+      throw new Error();
+    }
+    // print(response.body);
+    // print(response.statusCode);
+    // return response.body.toString();
+
+
+
+  }
+
 }
 class MyProfileUpdated {
   String userId;
@@ -642,5 +691,38 @@ class RExerciseRequest {
     data['exercise_id'] = this.exerciseId;
     data['marked_by_relative'] = this.markedByRelative;
     return data;
+  }
+}
+
+
+class TreatmentDayData {
+  int todayDay;
+  String exerciseName;
+  int exerciseRep;
+  String instructions;
+  String exerciseVideoUrl;
+  String exerciseImgUrl;
+  int duration;
+  int markedByPatient;
+
+  TreatmentDayData(
+      {this.todayDay,
+        this.exerciseName,
+        this.exerciseRep,
+        this.instructions,
+        this.exerciseVideoUrl,
+        this.exerciseImgUrl,
+        this.duration,
+        this.markedByPatient});
+
+  TreatmentDayData.fromJson(Map<String, dynamic> json) {
+    todayDay = json['today_day'] == null ? 0 : json['today_day'];
+    exerciseName = json['exercise_name']== null ? "" : json['exercise_name'];
+    exerciseRep = json['exercise_rep']== null ? 0 : json['exercise_rep'];
+    instructions = json['instructions']== null ? "" : json['instructions'];
+    exerciseVideoUrl = json['exercise_video_url']== null ? "" : json['exercise_video_url'];
+    exerciseImgUrl = json['exercise_img_url']== null ? "" : json['exercise_img_url'];
+    duration = json['duration']== null ? 0 : json['duration'];
+    markedByPatient = json['marked_by_patient']== null ? 0 : json['marked_by_patient'];
   }
 }

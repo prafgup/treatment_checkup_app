@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:treatment_checkup_app/constants.dart';
 import 'package:treatment_checkup_app/models/exercise.dart';
+import 'package:treatment_checkup_app/services/auth/UserTypeService.dart';
 import 'package:treatment_checkup_app/widgets/bottom_nav_bar.dart';
 import 'package:treatment_checkup_app/widgets/search_bar.dart';
 import 'package:treatment_checkup_app/widgets/session_card.dart';
@@ -15,36 +16,119 @@ class DailyScreen extends StatefulWidget {
 
 class _DailyScreenState extends State<DailyScreen> {
   int count = 0;
-  final List<Exercise> exercises = [
-    Exercise(
-      image: 'assets/images/image001.jpg',
-      title: 'Ankle toe movement',
-      time: '5 min',
-      difficult: 'Low',
-      reps: '25',
-      url: 'https://www.youtube.com/watch?v=O1jfSo66z44&ab_channel=goodexerciseguide',
-      text_instruct:'Do this exercise regularly to reduce swelling. Follow the Video in real-time and repeat what she does on the screen',
-    ),
-    Exercise(
-      image: 'assets/images/image004.jpg',
-      title: 'Isometric Quads',
-      time: '10 min',
-      difficult: 'Medium',
-      reps: '10',
-      url: 'https://www.youtube.com/watch?v=O1jfSo66z44&ab_channel=goodexerciseguide',
-      text_instruct:'Do this exercise regularly to reduce swelling. Follow the Video in real-time and repeat what she does on the screen',
-    ),
-    Exercise(
-      image: 'assets/images/image003.jpg',
-      title: 'Quadriceps Sets',
-      time: '10 min',
-      difficult: 'Medium',
-      reps: '20',
-      url: 'https://www.youtube.com/watch?v=O1jfSo66z44&ab_channel=goodexerciseguide',
-      text_instruct:'Do this exercise regularly to reduce swelling. Follow the Video in real-time and repeat what she does on the screen',
-    ),
+  bool isLoading = true;
+  UserTypeService userService;
+  List<TreatmentDayData> allDayExercises = [];
 
+  List<List<Exercise>> exercises = [
+    [],
+    [Exercise(
+        day: 1,
+        image: 'assets/images/image001.jpg',
+        title: 'Ankle toe movement',
+        time: '5 min',
+        difficult: 'Low',
+        reps: '25',
+        url: 'https://www.youtube.com/watch?v=O1jfSo66z44&ab_channel=goodexerciseguide',
+        text_instruct:'Do this exercise regularly to reduce swelling. Follow the Video in real-time and repeat what she does on the screen',
+        totalTime : "100 min"
+    ),
+      Exercise(
+          day: 1,
+          image: 'assets/images/image001.jpg',
+          title: 'Ankle toe movement',
+          time: '5 min',
+          difficult: 'Low',
+          reps: '25',
+          url: 'https://www.youtube.com/watch?v=O1jfSo66z44&ab_channel=goodexerciseguide',
+          text_instruct:'Do this exercise regularly to reduce swelling. Follow the Video in real-time and repeat what she does on the screen',
+          totalTime : "100 min"
+      ),
+      Exercise(
+          day: 1,
+          image: 'assets/images/image001.jpg',
+          title: 'Ankle toe movement',
+          time: '5 min',
+          difficult: 'Low',
+          reps: '25',
+          url: 'https://www.youtube.com/watch?v=O1jfSo66z44&ab_channel=goodexerciseguide',
+          text_instruct:'Do this exercise regularly to reduce swelling. Follow the Video in real-time and repeat what she does on the screen',
+          totalTime : "100 min"
+      ),
+      Exercise(
+          day: 1,
+          image: 'assets/images/image001.jpg',
+          title: 'Ankle toe movement',
+          time: '5 min',
+          difficult: 'Low',
+          reps: '25',
+          url: 'https://www.youtube.com/watch?v=O1jfSo66z44&ab_channel=goodexerciseguide',
+          text_instruct:'Do this exercise regularly to reduce swelling. Follow the Video in real-time and repeat what she does on the screen',
+          totalTime : "100 min"
+      ),
+      Exercise(
+          day: 1,
+          image: 'assets/images/image001.jpg',
+          title: 'Ankle toe movement',
+          time: '5 min',
+          difficult: 'Low',
+          reps: '25',
+          url: 'https://www.youtube.com/watch?v=O1jfSo66z44&ab_channel=goodexerciseguide',
+          text_instruct:'Do this exercise regularly to reduce swelling. Follow the Video in real-time and repeat what she does on the screen',
+          totalTime : "100 min"
+      ),],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    []
   ];
+
+
+  Future<void> getMyWeekProgress() async {
+
+    allDayExercises = await userService.GetPatientWeekExerciseDetails();
+    for(int i=0;i<allDayExercises.length;i++){
+
+      int totalTime =0;
+      for(int j=0;j<allDayExercises.length;j++){
+        if(allDayExercises[i].todayDay == allDayExercises[j].todayDay){
+          totalTime+=allDayExercises[i].duration;
+        }
+      }
+
+      exercises[allDayExercises[i].todayDay-1].add(Exercise(
+        day: allDayExercises[i].todayDay,
+        image: allDayExercises[i].exerciseImgUrl == '' ? 'assets/images/image003.jpg' : allDayExercises[i].exerciseImgUrl,
+        title: allDayExercises[i].exerciseName,
+        time: allDayExercises[i].duration.toString(),
+        difficult: 'Medium',
+        reps: allDayExercises[i].exerciseRep.toString(),
+        url: allDayExercises[i].exerciseVideoUrl == ''?'https://www.youtube.com/watch?v=O1jfSo66z44&ab_channel=goodexerciseguide' : allDayExercises[i].exerciseVideoUrl,
+        text_instruct: allDayExercises[i].instructions,
+        totalTime: totalTime.toString() +' Min'
+      ),);
+    }
+    setState(() {
+      isLoading = false;
+    });
+
+  }
+
+
+  @override
+  void initState() {
+    isLoading = true;
+    userService = UserTypeService();
+    getMyWeekProgress();
+    super.initState();
+  }
+
+
+
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -114,8 +198,9 @@ class _DailyScreenState extends State<DailyScreen> {
                               MaterialPageRoute(
                                 builder: (_) {
                                   return ActivityDetail(
-                                    exercises: exercises,
+                                    exercises: exercises[index],
                                     tag: 'imageHeader$count',
+                                    day : index+1
                                   );
                                 },
                               ),
@@ -131,6 +216,11 @@ class _DailyScreenState extends State<DailyScreen> {
               ),
             ),
           ),
+          isLoading == true? Container(
+              color: Colors.black.withOpacity(0.5),
+              height: MediaQuery.of(context).size.height,
+              width: MediaQuery.of(context).size.width,
+              child: Center(child: CircularProgressIndicator(),)):Container(),
         ],
       ),
     );

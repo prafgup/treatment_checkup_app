@@ -5,11 +5,13 @@ import 'package:flutter/material.dart';
 
 class ActivityDetail extends StatelessWidget {
   final String tag;
+  final int day;
   final List<Exercise> exercises;
 
   ActivityDetail({
     @required this.exercises,
     @required this.tag,
+    @required this.day,
   });
 
   @override
@@ -65,7 +67,7 @@ class ActivityDetail extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(
-                        "Day 1",//TODO
+                        "Day "+day.toString(),
                         style: TextStyle(
                           fontSize: 22.0,
                           color: Colors.blueGrey,
@@ -95,7 +97,7 @@ class ActivityDetail extends StatelessWidget {
                                         color: Colors.blueGrey[300]),
                                   ),
                                   Text(
-                                    '30 min',//TODO
+                                    exercises.length == 0 ? 'NA' : exercises[0].totalTime,
                                     style: TextStyle(
                                         fontSize: 18.0,
                                         color: Colors.lightBlue,

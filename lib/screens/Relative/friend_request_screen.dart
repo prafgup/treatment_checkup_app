@@ -6,7 +6,7 @@ import 'package:treatment_checkup_app/constants.dart';
 import 'package:treatment_checkup_app/services/auth/UserTypeService.dart';
 import 'package:treatment_checkup_app/widgets/Relative/friend_request_card.dart';
 
-import 'file:///C:/Users/ankit/Desktop/DEP/New%20folder/treatment_checkup_app/lib/widgets/Relative/bottom_nav_bar_relative.dart';
+import 'package:treatment_checkup_app/widgets/Relative/bottom_nav_bar_relative.dart';
 
 
 

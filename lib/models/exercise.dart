@@ -1,9 +1,11 @@
 import 'package:flutter/foundation.dart';
 
 class Exercise {
-  final String title, time, difficult, image, reps,url,text_instruct;
+  final String title, time, difficult, image, reps,url,text_instruct,totalTime;
+  final int day;
 
   Exercise({
+    this.day,
     @required this.title,
     @required this.time,
     @required this.difficult,
@@ -11,5 +13,6 @@ class Exercise {
     @required this.reps,
     this.url,
     this.text_instruct,
+    this.totalTime
   });
 }
