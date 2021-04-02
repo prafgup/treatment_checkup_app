@@ -204,7 +204,7 @@ class Portrait extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (_) {
-                          return this.index!=0?ActivityTimer(exercises: this.exercises, index: this.index-1):DailyScreen();
+                          return this.index!=0?ActivityTimer(exercises: this.exercises, index: this.index-1) : DailyScreen(this.index-1); //TODO
                         }),
                       );
                     },

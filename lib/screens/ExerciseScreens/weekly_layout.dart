@@ -78,7 +78,7 @@ class DetailsScreen extends StatelessWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(builder: (context) {
-                              return DailyScreen();
+                              return DailyScreen(index+1);
                             }),
                           );
 

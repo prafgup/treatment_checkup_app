@@ -10,6 +10,8 @@ import 'package:treatment_checkup_app/widgets/radial_progress.dart';
 
 import 'activity_detail.dart';
 class DailyScreen extends StatefulWidget {
+  final int weekNumber;
+  DailyScreen(this.weekNumber);
   @override
   _DailyScreenState createState() => _DailyScreenState();
 }
@@ -91,15 +93,17 @@ class _DailyScreenState extends State<DailyScreen> {
 
     allDayExercises = await userService.GetPatientWeekExerciseDetails();
     for(int i=0;i<allDayExercises.length;i++){
-
+      if((allDayExercises[i].todayDay-1)/7 != widget.weekNumber-1){
+        continue;
+      }
       int totalTime =0;
       for(int j=0;j<allDayExercises.length;j++){
         if(allDayExercises[i].todayDay == allDayExercises[j].todayDay){
-          totalTime+=allDayExercises[i].duration;
+          totalTime+=allDayExercises[j].duration;
         }
       }
 
-      exercises[allDayExercises[i].todayDay-1].add(Exercise(
+      exercises[(allDayExercises[i].todayDay-1)%7].add(Exercise(
         day: allDayExercises[i].todayDay,
         image: allDayExercises[i].exerciseImgUrl == '' ? 'assets/images/image003.jpg' : allDayExercises[i].exerciseImgUrl,
         title: allDayExercises[i].exerciseName,
