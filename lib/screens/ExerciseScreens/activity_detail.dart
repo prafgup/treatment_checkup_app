@@ -17,7 +17,7 @@ class ActivityDetail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
-
+    var size = MediaQuery.of(context).size;
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
@@ -134,15 +134,20 @@ class ActivityDetail extends StatelessWidget {
                           ],
                         ),
                       ),
-                      Column(
-                        children: [
-                          ListView.builder(shrinkWrap: true,
-                              itemCount: exercises.length,
-                              itemBuilder: (context,index){
-                                return NextStep(image: exercises[index].image, title: exercises[index].title, seconds: exercises[index].time);
-                              }),
-                        ],
+                      SizedBox(
+                        height: size.height*0.4,
+                        child: GridView.count(
+                          // Create a grid with 2 columns. If you change the scrollDirection to
+                          // horizontal, this produces 2 rows.
+                          crossAxisCount: 1,mainAxisSpacing: 10.0,childAspectRatio:5 ,
+                          shrinkWrap: true,
+                          // Generate 100 widgets that display their index in the List.
+                          children: List.generate(exercises.length, (index) {
+                            return  NextStep(image: exercises[index].image, title: exercises[index].title, seconds: exercises[index].time);
+                          }),
+                        ),
                       ),
+
                     ],
                   ),
                 ),

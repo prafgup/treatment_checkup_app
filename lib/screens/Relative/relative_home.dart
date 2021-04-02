@@ -117,7 +117,7 @@ class _RequestsScreenRState extends State<RequestsScreenR> {
       return '${req.todayDay}+${req.patientId}';
     }).values.toList();
 
-    print(grp_list);
+   // print(grp_list);
 
     setState(() {
       isLoading = false;

@@ -24,7 +24,7 @@ class UserTypeService{
   int userRegistered = -1;
   MyProfileUpdated myProfileUpdated;
   FriendRequest myFriendRequests;
-
+  List<RExerciseRequest> myExerciseRequests;
 
   static String baseUrl = "https://treatment-application-dep.herokuapp.com";
 //do not change order of the lists as indexing is used below to access: if want to add then add at end of list in api lists.
@@ -341,11 +341,11 @@ return 1;
   Future<FriendRequest> GetFriendRequests()async{
     print(jwtToken);
 
-    // if(myFriendRequests != null){
-    //   print("exists");
-    //   print(myFriendRequests.toJson());
-    //   return FriendRequest.fromJson(myFriendRequests.toJson());
-    // }
+    if(myFriendRequests != null){
+      //print("exists");
+      //print(myFriendRequests.toJson());
+      return FriendRequest.fromJson(myFriendRequests.toJson());
+    }
     await checkUserType();
     if(userType==-1) throw Error();
     await checkJWTToken();
@@ -432,6 +432,13 @@ return 1;
 
   Future<List<RExerciseRequest>> GetRelativeExerciseRequests()async{
     await checkUserType();
+
+    if(myExerciseRequests != null){
+      //print("exists");
+      return myExerciseRequests;
+      //print(myFriendRequests.toJson());
+      //return RExerciseRequest.fromJson(myExerciseRequests.toJson());
+    }
     if(userType==-1) throw Error();
 
     await checkJWTToken();
@@ -457,11 +464,11 @@ return 1;
     if(response.statusCode == 200){
       print("Got Ex Requests");
 
-      List<RExerciseRequest> reqs = (json.decode(response.body) as List)
+       myExerciseRequests = (json.decode(response.body) as List)
           .map((data) => RExerciseRequest.fromJson(data))
           .toList();
 
-      return reqs;
+      return myExerciseRequests;
    }
     else{
 
