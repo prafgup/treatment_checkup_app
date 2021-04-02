@@ -35,7 +35,7 @@ class _BottomNavBarRState extends State<BottomNavBarR> {
             svgScr: "assets/icons/calendar.svg",
             isActive: widget.active_icon[0],
             press: () {
-              Navigator.push(
+              if(!widget.active_icon[0])Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) {
                   return FriendRequestScreenR();
@@ -49,7 +49,7 @@ class _BottomNavBarRState extends State<BottomNavBarR> {
             svgScr: "assets/icons/gym.svg",
             isActive: widget.active_icon[1],
             press: () {
-              Navigator.push(
+              if(!widget.active_icon[1]) Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) {
                   return RequestsScreenR();
@@ -63,7 +63,7 @@ class _BottomNavBarRState extends State<BottomNavBarR> {
             isActive: widget.active_icon[2],
             svgScr: "assets/icons/Settings.svg",
             press: () {
-              Navigator.push(
+              if(!widget.active_icon[2]) Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) {
                   return ProfilePageP();

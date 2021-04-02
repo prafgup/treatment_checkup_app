@@ -337,7 +337,7 @@ class _CustomDialogBox2State extends State<CustomDialogBox2> {
       print(widget.exercises[0].patientId);
       for(int i=0;i<widget.exercises.length;i++){
 
-          status += await userService.RUpdateExerciseRequest(selectedList[i].patientId,selectedList[i].todayDay,selectedList[i].exerciseId,"2");
+          status += await userService.RUpdateExerciseRequest(widget.exercises[i].patientId,widget.exercises[i].todayDay,widget.exercises[i].exerciseId,"2");
         }
       if(status==widget.exercises.length)Navigator.pop(context);
     }

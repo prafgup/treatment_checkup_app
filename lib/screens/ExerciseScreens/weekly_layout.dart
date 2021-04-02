@@ -12,7 +12,7 @@ class DetailsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return Scaffold(
-      bottomNavigationBar: BottomNavBar(),
+      bottomNavigationBar: BottomNavBar(active_icon: [false,true,false],),
       body: Stack(
         children: <Widget>[
           Container(

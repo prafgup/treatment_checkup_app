@@ -1,21 +1,18 @@
+import 'package:async/async.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:treatment_checkup_app/constants.dart';
 import 'package:treatment_checkup_app/models/exercise.dart';
 import 'package:treatment_checkup_app/models/requests_relative.dart';
-import 'package:treatment_checkup_app/screens/ExerciseScreens/daily_layout.dart';
-import 'package:treatment_checkup_app/services/auth/UserTypeService.dart';
-import 'package:treatment_checkup_app/widgets/bottom_nav_bar.dart';
-import 'package:treatment_checkup_app/widgets/Relative/bottom_nav_bar_relative.dart';
-import 'package:treatment_checkup_app/widgets/request_card.dart';
-import 'package:treatment_checkup_app/widgets/Relative/requests_card_relative.dart';
-import 'package:treatment_checkup_app/widgets/search_bar.dart';
-import 'package:treatment_checkup_app/widgets/session_card.dart';
-import 'package:treatment_checkup_app/widgets/radial_progress.dart';
-import 'package:treatment_checkup_app/models/requests.dart';
 
+import 'package:treatment_checkup_app/services/auth/UserTypeService.dart';
+
+import 'package:treatment_checkup_app/widgets/Relative/bottom_nav_bar_relative.dart';
+
+import 'package:treatment_checkup_app/widgets/Relative/requests_card_relative.dart';
+
+import 'dart:async';
 
 
 
@@ -107,33 +104,37 @@ class _RequestsScreenRState extends State<RequestsScreenR> {
 
   bool isLoading;
   UserTypeService userService;
+  AsyncMemoizer _memoizer;
   var grp_list;
   Future<void> _getRelativeExerciseRequests() async {
-    setState(() {
-      isLoading = true;
-    });
-    List<RExerciseRequest> req_list = await userService.GetRelativeExerciseRequests();
-     grp_list=groupBy(req_list, (RExerciseRequest req) {
-      return '${req.todayDay}+${req.patientId}';
-    }).values.toList();
+  return this._memoizer.runOnce(() async{
+  setState(() {
+  isLoading = true;
+  });
+  List<RExerciseRequest> req_list = await userService.GetRelativeExerciseRequests();
+  grp_list=groupBy(req_list, (RExerciseRequest req) {
+  return '${req.todayDay}+${req.patientId}';
+  }).values.toList();
 
-   // print(grp_list);
+  // print(grp_list);
 
-    setState(() {
-      isLoading = false;
-    });
-    return grp_list;
+  setState(() {
+  isLoading = false;
+  });
+  return grp_list;
+  });
   }
   @override
   void initState() {
     super.initState();
     isLoading = false;
     userService = UserTypeService();
-    _getRelativeExerciseRequests().catchError((e){
-      setState(() {
-        isLoading = false;
-      });
-    });
+    _memoizer= AsyncMemoizer();
+    // _getRelativeExerciseRequests().catchError((e){
+    //   setState(() {
+    //     isLoading = false;
+    //   });
+    // });
   }
   @override
   Widget build(BuildContext context) {
@@ -189,7 +190,8 @@ class _RequestsScreenRState extends State<RequestsScreenR> {
                               //print('project snapshot data is: ${projectSnap.data}');
                               return Container();
                             }
-                            return
+                       // ignore: missing_return
+                       if(projectSnap.hasData){     return
                       GridView.builder(
                           itemCount: projectSnap.data.length,
                           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -206,7 +208,14 @@ class _RequestsScreenRState extends State<RequestsScreenR> {
                               );
 
                             }, );
-                          });})
+                          });}
+                      return Container(
+                          color: Colors.black.withOpacity(0.1),
+                          height: MediaQuery.of(context).size.height*0.8,
+                          width: MediaQuery.of(context).size.width,
+                          child: Center(child: CircularProgressIndicator(),));
+
+                      })
                     ),
 
 

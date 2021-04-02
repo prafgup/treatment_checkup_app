@@ -341,11 +341,11 @@ return 1;
   Future<FriendRequest> GetFriendRequests()async{
     print(jwtToken);
 
-    if(myFriendRequests != null){
-      //print("exists");
-      //print(myFriendRequests.toJson());
-      return FriendRequest.fromJson(myFriendRequests.toJson());
-    }
+    // if(myFriendRequests != null){
+    //   //print("exists");
+    //   //print(myFriendRequests.toJson());
+    //   return FriendRequest.fromJson(myFriendRequests.toJson());
+    // }
     await checkUserType();
     if(userType==-1) throw Error();
     await checkJWTToken();
@@ -432,13 +432,12 @@ return 1;
 
   Future<List<RExerciseRequest>> GetRelativeExerciseRequests()async{
     await checkUserType();
-
-    if(myExerciseRequests != null){
-      //print("exists");
-      return myExerciseRequests;
-      //print(myFriendRequests.toJson());
-      //return RExerciseRequest.fromJson(myExerciseRequests.toJson());
-    }
+    // if(myExerciseRequests != null){
+    //   //print("exists");
+    //   return myExerciseRequests;
+    //   //print(myFriendRequests.toJson());
+    //   //return RExerciseRequest.fromJson(myExerciseRequests.toJson());
+    // }
     if(userType==-1) throw Error();
 
     await checkJWTToken();

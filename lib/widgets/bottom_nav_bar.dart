@@ -7,11 +7,18 @@ import 'package:treatment_checkup_app/screens/Requests_screen/patients_request_s
 import 'package:treatment_checkup_app/screens/personalTrainerApp/account/AccountHome.dart';
 
 
-class BottomNavBar extends StatelessWidget {
+class BottomNavBar extends StatefulWidget {
+  final List<bool> active_icon;
   const BottomNavBar({
     Key key,
+    this.active_icon,
   }) : super(key: key);
 
+  @override
+  _BottomNavBarState createState() => _BottomNavBarState();
+}
+
+class _BottomNavBarState extends State<BottomNavBar> {
   @override
   Widget build(BuildContext context) {
 
@@ -23,10 +30,11 @@ class BottomNavBar extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           BottomNavItem(
+            isActive: widget.active_icon[0],
             title: "Requests",
             svgScr: "assets/icons/calendar.svg",
             press: () {
-              Navigator.push(
+              if(!widget.active_icon[0])Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) {
                   return RequestsScreenP();
@@ -36,11 +44,12 @@ class BottomNavBar extends StatelessWidget {
             },
           ),
           BottomNavItem(
+            isActive: widget.active_icon[1],
             title: "All Exercises",
             svgScr: "assets/icons/gym.svg",
-            isActive: true,
+
             press: () {
-              Navigator.push(
+              if(!widget.active_icon[1])Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) {
                   return DetailsScreen();
@@ -50,10 +59,11 @@ class BottomNavBar extends StatelessWidget {
             },
           ),
           BottomNavItem(
+            isActive: widget.active_icon[2],
             title: "Settings",
             svgScr: "assets/icons/Settings.svg",
             press: () {
-              Navigator.push(
+              if(!widget.active_icon[2])Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) {
                   return ProfilePageP();

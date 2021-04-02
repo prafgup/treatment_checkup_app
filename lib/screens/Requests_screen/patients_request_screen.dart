@@ -67,7 +67,7 @@ class RequestsScreenP extends StatelessWidget {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return Scaffold(
-      bottomNavigationBar: BottomNavBar(),
+      bottomNavigationBar: BottomNavBar(active_icon: [true,false,false],),
       body: Stack(
         children: <Widget>[
           Container(

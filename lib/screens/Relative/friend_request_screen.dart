@@ -1,3 +1,4 @@
+import 'package:async/async.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -36,24 +37,27 @@ class _FriendRequestScreenRState extends State<FriendRequestScreenR> {
 
   bool isLoading;
   UserTypeService userService;
+  AsyncMemoizer _memoizer;
   // ignore: non_constant_identifier_names
   String my_number;
   List<FRequestModel> req_list;
   Future<void> _getFriendRequests() async {
+    return this._memoizer.runOnce(() async{
     setState(() {
       isLoading = true;
     });
     FriendRequest response = await userService.GetFriendRequests();
 
-    req_list=response.Req_list;
-    my_number=response.my_number;
+    req_list = response.Req_list;
+    my_number = response.my_number;
 
     setState(() {
       isLoading = false;
     });
     return req_list;
+  });
   }
-Future _future;
+
 
 
   @override
@@ -61,11 +65,14 @@ Future _future;
     super.initState();
     isLoading = false;
     userService = UserTypeService();
-   _future= _getFriendRequests().catchError((e){
-      setState(() {
-        isLoading = false;
-      });
-    });
+    _memoizer= AsyncMemoizer();
+
+
+   // _future= _getFriendRequests().catchError((e){
+   //    setState(() {
+   //      isLoading = false;
+   //    });
+   //  });
   }
   @override
   Widget build(BuildContext context) {
@@ -121,6 +128,7 @@ Future _future;
     //print('project snapshot data is: ${projectSnap.data}');
     return Container();
     }
+    if(projectSnap.hasData){
     return  GridView.builder(
                             itemCount: projectSnap.data.length,
                             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -139,7 +147,12 @@ Future _future;
 
                               }, );
                             }
-                            );
+                            );}
+    return Container(
+        color: Colors.black.withOpacity(0.1),
+        height: MediaQuery.of(context).size.height*0.8,
+        width: MediaQuery.of(context).size.width,
+        child: Center(child: CircularProgressIndicator(),));
                       }
                       )
                     ),
