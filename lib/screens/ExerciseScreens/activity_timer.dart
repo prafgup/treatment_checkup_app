@@ -3,6 +3,7 @@ import 'package:flutter/material.dart' as prefix0;
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:treatment_checkup_app/models/exercise.dart';
 import 'package:treatment_checkup_app/screens/ExerciseScreens/daily_layout.dart';
+import 'package:treatment_checkup_app/screens/ExerciseScreens/weekly_layout.dart';
 import 'package:treatment_checkup_app/widgets/game_screen/game_screen.dart';
 
 import 'video_player.dart';
@@ -204,7 +205,7 @@ class Portrait extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (_) {
-                          return this.index!=0?ActivityTimer(exercises: this.exercises, index: this.index-1) : DailyScreen(this.index-1); //TODO
+                          return this.index!=0?ActivityTimer(exercises: this.exercises, index: this.index-1) : DetailsScreen(); //TODO
                         }),
                       );
                     },

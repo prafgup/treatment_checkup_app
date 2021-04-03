@@ -7,7 +7,68 @@ import 'package:treatment_checkup_app/widgets/bottom_nav_bar.dart';
 import 'package:treatment_checkup_app/widgets/search_bar.dart';
 import 'package:treatment_checkup_app/widgets/session_card.dart';
 import 'package:treatment_checkup_app/widgets/radial_progress.dart';
-class DetailsScreen extends StatelessWidget {
+import 'package:treatment_checkup_app/widgets/session_card.dart';
+import 'package:treatment_checkup_app/widgets/radial_progress.dart';
+import 'package:treatment_checkup_app/models/exercise.dart';
+import 'package:treatment_checkup_app/services/auth/UserTypeService.dart';
+
+class DetailsScreen extends StatefulWidget {
+  @override
+  _DetailsScreenState createState() => _DetailsScreenState();
+}
+
+class _DetailsScreenState extends State<DetailsScreen> {
+
+  bool isLoading = true;
+  UserTypeService userService;
+  List<TreatmentDayData> allDayExercises = [];
+  List<List<Exercise>> weekExercises = [[], [], [], [], [], [], [], [], [], [], []];
+  int weekSize = 0;
+
+  Future<void> getMyWeekProgress() async {
+
+    allDayExercises = await userService.GetPatientWeekExerciseDetails();
+    for(int i=0;i<allDayExercises.length;i++){
+
+      int totalTime =0;
+      for(int j=0;j<allDayExercises.length;j++){
+        if(allDayExercises[i].todayDay == allDayExercises[j].todayDay){
+          totalTime+=allDayExercises[j].duration;
+        }
+      }
+
+      weekExercises[(allDayExercises[i].todayDay-1)~/7].add(
+        Exercise(
+          day: allDayExercises[i].todayDay,
+          image: allDayExercises[i].exerciseImgUrl == '' ? 'assets/images/image003.jpg' : allDayExercises[i].exerciseImgUrl,
+          title: allDayExercises[i].exerciseName,
+          time: allDayExercises[i].duration.toString(),
+          difficult: 'Medium',
+          reps: allDayExercises[i].exerciseRep.toString(),
+          url: allDayExercises[i].exerciseVideoUrl == ''?'https://www.youtube.com/watch?v=O1jfSo66z44&ab_channel=goodexerciseguide' : allDayExercises[i].exerciseVideoUrl,
+          text_instruct: allDayExercises[i].instructions,
+          totalTime: totalTime.toString() +' Min'
+      ),);
+    }
+    setState(() {
+      isLoading = false;
+    });
+
+  }
+
+
+  @override
+  void initState() {
+    isLoading = true;
+    userService = UserTypeService();
+    weekSize = weekExercises.length;
+    getMyWeekProgress();
+    super.initState();
+  }
+
+
+
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -66,24 +127,25 @@ class DetailsScreen extends StatelessWidget {
                       ),
                     ),
                     SizedBox(
-                      height: size.height*0.5,
+                      height: size.height*0.4,
                       child: GridView.count(
-                      // Create a grid with 2 columns. If you change the scrollDirection to
-                      // horizontal, this produces 2 rows.
-                      crossAxisCount: 1,mainAxisSpacing: 10.0,childAspectRatio:5 ,
-                      shrinkWrap: true,
-                      // Generate 100 widgets that display their index in the List.
-                      children: List.generate(10, (index) {
-                        return SeassionCard(seassionNum:index+1, isDone:index<5?true:false,press: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) {
-                              return DailyScreen(index+1);
-                            }),
-                          );
-
-                        }, );
-                      }),
+                        // Create a grid with 2 columns. If you change the scrollDirection to
+                        // horizontal, this produces 2 rows.
+                        crossAxisCount: 1,mainAxisSpacing: 10.0,childAspectRatio:5 ,
+                        shrinkWrap: true,
+                        // Generate 100 widgets that display their index in the List.
+                        children: List.generate(weekSize, (index) {
+                          return SeassionCard(seassionNum:index+1, isDone:weekExercises[index].length != 0?true:false,press: () {
+                            if(weekExercises[index].length > 0){
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) {
+                                  return DailyScreen(index+1,weekExercises[index]);
+                                }),
+                              );
+                            }
+                          }, );
+                        }),
                       ),
                     ),
 
@@ -92,6 +154,11 @@ class DetailsScreen extends StatelessWidget {
               ),
             ),
           ),
+          isLoading == true? Container(
+              color: Colors.black.withOpacity(0.5),
+              height: MediaQuery.of(context).size.height,
+              width: MediaQuery.of(context).size.width,
+              child: Center(child: CircularProgressIndicator(),)):Container(),
         ],
       ),
     );
