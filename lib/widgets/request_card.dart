@@ -73,7 +73,7 @@ class _RekuestCardState extends State<RekuestCard> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Text(
-                              "Sanyam",
+                              "Day "+widget.request[0].todayDay.toString(),
                               //widget.request.Relative_name,
                               //type==1?"Day""$rekuestNum":"Week"+"$rekuestNum",
                               style: Theme.of(context).textTheme.subtitle,
@@ -105,7 +105,7 @@ class _RekuestCardState extends State<RekuestCard> {
                           ],
                         ),
                         Text(
-                          widget.request[0].todayDay.toString(),
+                            "All Exercises",
 
                          // type==1?"Day""$rekuestNum":"Week"+"$rekuestNum",
                           style: Theme.of(context).textTheme.bodyText2,

@@ -82,8 +82,7 @@ class _RequestsScreenPState extends State<RequestsScreenP> {
         return '${req.todayDay}';//+${req.relativeName}';
       }).values.toList();
 
-      // print(grp_list);
-
+     //  print(grp_list);//grp_list.sort((a, b) => (a[0].todayDay)<=((b[0].todayDay)));
       return grp_list;
     });
   }
@@ -153,11 +152,12 @@ class _RequestsScreenPState extends State<RequestsScreenP> {
                               GridView.builder(
                                   itemCount: projectSnap.data.length,
                                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 1,mainAxisSpacing: 10.0,childAspectRatio:4
+                                      crossAxisCount: 1,mainAxisSpacing: 10.0,childAspectRatio:4.1,
+
                                   ),
                                   // Generate 100 widgets that display their index in the List.
                                   itemBuilder: (ctx, index) {
-                                    return RekuestCard(request: projectSnap.data[index][0],press: () {
+                                    return RekuestCard(request: projectSnap.data[index],press: () {
                                       // Navigator.push(
                                       //   context,
                                       //   MaterialPageRoute(builder: (context) {

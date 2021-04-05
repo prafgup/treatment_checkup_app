@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:treatment_checkup_app/configs/app_colors.dart';
+import 'package:treatment_checkup_app/screens/ExerciseScreens/weekly_layout.dart';
 import 'package:treatment_checkup_app/widgets/common/button.dart';
 import 'package:treatment_checkup_app/widgets/game_screen/game_screen.dart';
 
@@ -50,7 +51,12 @@ class ResultScreen extends StatelessWidget {
                   Button(
                       buttonLabel: 'Main Menu',
                       onPressed: () {
-                        Navigator.of(context).popUntil((route) => route.isFirst);
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (context) {
+                            return DetailsScreen();
+                          }),
+                        );
                       }),
                   Button(
                       buttonLabel: 'Assess Again',

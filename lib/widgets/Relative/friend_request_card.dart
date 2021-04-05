@@ -282,11 +282,24 @@ class _CustomDialogBoxState extends State<CustomDialogBox> {
                        print("accepting Frequest");
                        int status = await userService.UpdateFriendRequest(widget.request.user_id,"A");
                        if(status==1)Navigator.pop(context);
+                       Navigator.pushReplacement(
+                         context,
+                         MaterialPageRoute(builder: (context) {
+                           return FriendRequestScreenR();
+                         }),
+                       );
                      }
-                     else if (widget.title.contains("reject")){}
+                     else if (widget.title.contains("reject")){
                       print("rejecting Frequest");
                     int status = await userService.UpdateFriendRequest(widget.request.user_id,"R");
                      if(status==1) Navigator.pop(context);
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) {
+                          return FriendRequestScreenR();
+                        }),
+                      );
+                     }
                     },
                     child: Text(widget.text,style: TextStyle(fontSize: 18),)),
               ),

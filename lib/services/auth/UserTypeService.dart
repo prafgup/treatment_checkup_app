@@ -340,17 +340,18 @@ return 1;
     await checkJWTToken();
     var response;
     Map<String, String> requestHeaders = {
-      'x-access-token': "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIzN2Y4MTExYS1mN2NlLTQ0MWYtOTQ2Yy1jOWRlMzJkZmRjZTAiLCJpYXQiOjE2MTc2MzUyNDgsImV4cCI6MTYxODI0MDA0OH0.wkOstU78AFAZcGwm5us8e1KuHCV_zkvWF0ojLfJejRY"
+      'x-access-token':jwtToken
+      //"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIzN2Y4MTExYS1mN2NlLTQ0MWYtOTQ2Yy1jOWRlMzJkZmRjZTAiLCJpYXQiOjE2MTc2MzUyNDgsImV4cCI6MTYxODI0MDA0OH0.wkOstU78AFAZcGwm5us8e1KuHCV_zkvWF0ojLfJejRY"
     };
-    Map<String, dynamic> requestBody = {
-      'day': currDay,
+    Map<String, String> requestBody = {
+      'day': currDay.toString(),
     };
     try{
       print('Sending '+requestHeaders.toString());
       response = await http.post(
           "https://treatment-application-dep.herokuapp.com/api/v1/patient/update_exercises" ,
           headers: requestHeaders,
-          body:json.encode(requestBody)
+          body:requestBody
       );
     }
     catch(e){
@@ -494,7 +495,7 @@ return 1;
        myExerciseRequests = (json.decode(response.body) as List)
           .map((data) => RExerciseRequest.fromJson(data))
           .toList();
-
+      print(myExerciseRequests);
       return myExerciseRequests;
    }
     else{
@@ -519,7 +520,7 @@ return 1;
     //   //return RExerciseRequest.fromJson(myExerciseRequests.toJson());
     // }
     if(userType==-1) throw Error();
-
+    print(jwtToken);
     await checkJWTToken();
     Map<String, String> requestHeaders = {
       'x-access-token': jwtToken
@@ -538,7 +539,7 @@ return 1;
 
     if(response.statusCode == 200){
       print("Got Ex Requests");
-
+      print(response.body);
       return (json.decode(response.body) as List)
           .map((data) => PatientRequestModel.fromJson(data))
           .toList();
@@ -564,7 +565,8 @@ return 1;
     await checkJWTToken();
 
     Map<String, String> requestHeaders = {
-      'x-access-token': "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIzN2Y4MTExYS1mN2NlLTQ0MWYtOTQ2Yy1jOWRlMzJkZmRjZTAiLCJpYXQiOjE2MTc2MzUyNDgsImV4cCI6MTYxODI0MDA0OH0.wkOstU78AFAZcGwm5us8e1KuHCV_zkvWF0ojLfJejRY"
+      'x-access-token': jwtToken
+      //"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIzN2Y4MTExYS1mN2NlLTQ0MWYtOTQ2Yy1jOWRlMzJkZmRjZTAiLCJpYXQiOjE2MTc2MzUyNDgsImV4cCI6MTYxODI0MDA0OH0.wkOstU78AFAZcGwm5us8e1KuHCV_zkvWF0ojLfJejRY"
     };
 
     print(requestHeaders);

@@ -176,11 +176,11 @@ class _RekuestsCardRelativeState extends State<RekuestsCardRelative> {
                                      color: widget.request.markedByRelative==1 ? Colors.green :widget.request.markedByRelative==2? Colors.red:Colors.yellow,
                                    ),
                                  ),//SizedBox(width: 20),
-                                 Text(
-                                   widget.request.markedByRelative.toString(),
-                                   //type==1?"Day""$rekuestNum":"Week"+"$rekuestNum",
-                                   style: Theme.of(context).textTheme.subtitle,
-                                 ),
+                                 // Text(
+                                 //   widget.request.markedByRelative.toString(),
+                                 //   //type==1?"Day""$rekuestNum":"Week"+"$rekuestNum",
+                                 //   style: Theme.of(context).textTheme.subtitle,
+                                 // ),
                                ],
                              ),
 
@@ -324,15 +324,15 @@ class _CustomDialogBox2State extends State<CustomDialogBox2> {
     int status=0;
     for(int i=0;i<widget.exercises.length;i++){
       if(selectedList.contains(widget.exercises[i]) ){
-     status += await userService.RUpdateExerciseRequest(selectedList[i].patientId,selectedList[i].todayDay,selectedList[i].exerciseId,"1");}
+     status += await userService.RUpdateExerciseRequest(widget.exercises[i].patientId,widget.exercises[i].todayDay,widget.exercises[i].exerciseId,"1");}
     else{
-        status += await userService.RUpdateExerciseRequest(selectedList[i].patientId,selectedList[i].todayDay,selectedList[i].exerciseId,"2");
+        status += await userService.RUpdateExerciseRequest(widget.exercises[i].patientId,widget.exercises[i].todayDay,widget.exercises[i].exerciseId,"2");
     }}
     if(status==widget.exercises.length)Navigator.pop(context);
+
     }
     else if (widget.title.contains("reject")){
       print("rejecting Erequest");
-      print("HOLAAAAAAAAAAAA");
       int status=0;
       print(widget.exercises[0].patientId);
       for(int i=0;i<widget.exercises.length;i++){
@@ -340,8 +340,14 @@ class _CustomDialogBox2State extends State<CustomDialogBox2> {
           status += await userService.RUpdateExerciseRequest(widget.exercises[i].patientId,widget.exercises[i].todayDay,widget.exercises[i].exerciseId,"2");
         }
       if(status==widget.exercises.length)Navigator.pop(context);
-    }
 
+    }
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) {
+        return RequestsScreenR();
+      }),
+    );
     },
 
                     child: Text(widget.text,style: TextStyle(fontSize: 18),)),

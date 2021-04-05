@@ -27,10 +27,8 @@ class ActivityTimer extends StatelessWidget {
     return Scaffold(
       body: SingleChildScrollView(
         child: OrientationBuilder(builder: (context, orientation) {
-          return (MediaQuery.of(context).orientation ==
-              prefix0.Orientation.portrait)
-              ? Portrait(image: this.image, tag: this.tag,exercises: this.exercises,index:this.index)
-              : Landscape(image: this.exercises[this.index].image, tag: this.tag,exercises: this.exercises,index:this.index);
+          return Portrait(image: this.image, tag: this.tag,exercises: this.exercises,index:this.index);
+
         }),
       ),
     );
@@ -264,117 +262,6 @@ class Portrait extends StatelessWidget {
   }
 }
 
-class Landscape extends StatelessWidget {
-  final String image, tag;
-final List<Exercise> exercises; final int index;
-  Landscape({@required this.image, @required this.tag,@required this.exercises,@required this.index});
-
-  @override
-  Widget build(BuildContext context) {
-    var size = MediaQuery.of(context).size;
-    return Stack(
-      children: <Widget>[
-        Container(
-          child: Image.network(
-            this.image,
-            fit: BoxFit.fill,
-          ),
-        ),
-        Positioned(
-          top: 40.0,
-          left: 40.0,
-          child: Text(
-            'Plank',
-            style: TextStyle(
-              fontSize: 28.0,
-              fontWeight: FontWeight.w900,
-              color: Colors.grey[500],
-            ),
-          ),
-        ),
-        Positioned(
-          top: 80.0,
-          left: 40.0,
-          child: Text(
-            'Next: Push-ups',
-            style: TextStyle(
-              fontSize: 20.0,
-              fontWeight: FontWeight.w900,
-              color: Colors.grey[800],
-            ),
-          ),
-        ),
-        Positioned(
-            top: 30.0,
-            left: size.width - 60.0,
-            child: GestureDetector(
-                child: Container(
-                    width: 45.0,
-                    height: 45.0,
-                    decoration: BoxDecoration(
-                      color: Colors.black,
-                      shape: BoxShape.circle,
-                    ),
-                    child: Icon(
-                      Icons.close,
-                      size: 29.0,
-                      color: Colors.grey[600],
-                    )),
-                onTap: () {
-                  Navigator.pop(context);
-                })),
-        Positioned(
-            left: 40.0,
-            top: size.height - 60.0,
-            child: Text(
-              '5',
-              style: TextStyle(
-                fontSize: 35.0,
-                fontWeight: FontWeight.w900,
-                color: Colors.grey[500],
-              ),
-            )),
-        Positioned(
-            top: size.height - 80.0,
-            left: size.width / 2 - 30.0,
-            child: Container(
-                width: 60.0,
-                height: 60.0,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  shape: BoxShape.circle,
-                ),
-                child: Icon(
-                  Icons.pause,
-                  size: 38.0,
-                ))),
-        Positioned(
-          top: size.height - 80.0,
-          left: size.width - 170.0,
-          child: Container(
-            height: 60.0,
-            width: 145.0,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(360.0),
-            ),
-            child: Center(
-              child: Text(
-                'Next',
-                style: TextStyle(
-                  fontSize: 20.0,
-                  color: Colors.black87,
-                  fontWeight: FontWeight.w900,
-                ),
-              ),
-            ),
-          ),
-        )
-      ],
-    );
-  }
-}
-
 
 
 
@@ -393,6 +280,7 @@ class _RouteToGameScreenState extends State<RouteToGameScreen> {
   UserTypeService userService;
   bool isLoading;
   Future<void> getMyWeekProgress() async {
+    print("curr day sent is "+widget.currDay.toString());
     bool status = await userService.UpdateDayExerciseStatus(widget.currDay);
     print(status);
     if(status == true){
