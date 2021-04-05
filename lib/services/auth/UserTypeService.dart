@@ -331,11 +331,39 @@ return 1;
       return 0;
 
       throw new Error();
-
     }
+  }
 
-
-
+  Future<bool> UpdateDayExerciseStatus(int currDay) async {
+    await checkUserType();
+    if(userType==-1) throw Error();
+    await checkJWTToken();
+    var response;
+    Map<String, String> requestHeaders = {
+      'x-access-token': "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIzN2Y4MTExYS1mN2NlLTQ0MWYtOTQ2Yy1jOWRlMzJkZmRjZTAiLCJpYXQiOjE2MTc2MzUyNDgsImV4cCI6MTYxODI0MDA0OH0.wkOstU78AFAZcGwm5us8e1KuHCV_zkvWF0ojLfJejRY"
+    };
+    Map<String, dynamic> requestBody = {
+      'day': currDay,
+    };
+    try{
+      print('Sending '+requestHeaders.toString());
+      response = await http.post(
+          "https://treatment-application-dep.herokuapp.com/api/v1/patient/update_exercises" ,
+          headers: requestHeaders,
+          body:json.encode(requestBody)
+      );
+    }
+    catch(e){
+      print(e);
+    }
+    if(response.statusCode == 200){
+      print("Update Day successfull");
+      return true;
+    }else {
+      print("Error in response");
+      print(response.body);
+      return false;
+    }
   }
 
   Future<FriendRequest> GetFriendRequests()async{
@@ -536,7 +564,7 @@ return 1;
     await checkJWTToken();
 
     Map<String, String> requestHeaders = {
-      'x-access-token': "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIzN2Y4MTExYS1mN2NlLTQ0MWYtOTQ2Yy1jOWRlMzJkZmRjZTgiLCJpYXQiOjE2MTcyOTEzNTEsImV4cCI6MTYxNzg5NjE1MX0.kJAhaliTnH_acLygLVZCc0oyxWgOucboI6kM8LfnTk8"
+      'x-access-token': "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIzN2Y4MTExYS1mN2NlLTQ0MWYtOTQ2Yy1jOWRlMzJkZmRjZTAiLCJpYXQiOjE2MTc2MzUyNDgsImV4cCI6MTYxODI0MDA0OH0.wkOstU78AFAZcGwm5us8e1KuHCV_zkvWF0ojLfJejRY"
     };
 
     print(requestHeaders);
@@ -567,7 +595,7 @@ return 1;
     else{
 
       print("Error in response");
-      print(response.body);
+      print(response.toString());
       throw new Error();
     }
     // print(response.body);

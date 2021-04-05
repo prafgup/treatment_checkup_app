@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart' as prefix0;
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:treatment_checkup_app/models/exercise.dart';
 import 'package:treatment_checkup_app/screens/ExerciseScreens/daily_layout.dart';
 import 'package:treatment_checkup_app/screens/ExerciseScreens/weekly_layout.dart';
+import 'package:treatment_checkup_app/services/auth/UserTypeService.dart';
 import 'package:treatment_checkup_app/widgets/game_screen/game_screen.dart';
 
 import 'video_player.dart';
@@ -229,7 +231,7 @@ class Portrait extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (_) {
-                          return this.index!=exercises.length-1?ActivityTimer(exercises: this.exercises, index: this.index+1):GameScreen();
+                          return this.index!=exercises.length-1?ActivityTimer(exercises: this.exercises, index: this.index+1):RouteToGameScreen(exercises[0].day);
                         }),
                       );
                     },
@@ -369,6 +371,57 @@ final List<Exercise> exercises; final int index;
           ),
         )
       ],
+    );
+  }
+}
+
+
+
+
+class RouteToGameScreen extends StatefulWidget {
+
+  final int currDay;
+  RouteToGameScreen(this.currDay);
+  @override
+  _RouteToGameScreenState createState() => _RouteToGameScreenState();
+}
+
+class _RouteToGameScreenState extends State<RouteToGameScreen> {
+
+
+
+  UserTypeService userService;
+  bool isLoading;
+  Future<void> getMyWeekProgress() async {
+    bool status = await userService.UpdateDayExerciseStatus(widget.currDay);
+    print(status);
+    if(status == true){
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (_) {
+          return GameScreen();
+        }),
+      );
+    }
+  }
+
+
+  @override
+  void initState() {
+    isLoading = true;
+    userService = UserTypeService();
+    getMyWeekProgress();
+    super.initState();
+  }
+
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: Center(
+        child: SpinKitFoldingCube(color: Colors.green),
+      ),
     );
   }
 }
