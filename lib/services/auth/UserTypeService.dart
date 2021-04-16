@@ -492,11 +492,14 @@ return 1;
     if(response.statusCode == 200){
       print("Got Ex Requests");
 
-       myExerciseRequests = (json.decode(response.body) as List)
+      List<RExerciseRequest> myList = (json.decode(response.body) as List)
           .map((data) => RExerciseRequest.fromJson(data))
           .toList();
-      print(myExerciseRequests);
-      return myExerciseRequests;
+      print(myList);
+      print("Test");
+      myList.sort((a,b) => (b.todayDay).compareTo(a.todayDay));
+
+      return myList;
    }
     else{
 
@@ -539,10 +542,15 @@ return 1;
 
     if(response.statusCode == 200){
       print("Got Ex Requests");
-      print(response.body);
-      return (json.decode(response.body) as List)
+      print(response.body); // TODO if empty list gives error
+      List<PatientRequestModel> myList = (json.decode(response.body) as List)
           .map((data) => PatientRequestModel.fromJson(data))
           .toList();
+      print(myList);
+      print("Test");
+      myList.sort((a,b) => b.todayDay.compareTo(a.todayDay));
+
+      return myList;
 
 
     }
