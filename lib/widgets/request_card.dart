@@ -95,7 +95,7 @@ class _RekuestCardState extends State<RekuestCard> {
                                   ),
                                 ),//SizedBox(width: 20),
                                 Text(
-                                  widget.request[0].markedByRelative==0?"No action":"Marked",
+                                  widget.request[0].markedByRelative==0?"No action":"Processed",
                                   //type==1?"Day""$rekuestNum":"Week"+"$rekuestNum",
                                   style: Theme.of(context).textTheme.subtitle,
                                 ),
