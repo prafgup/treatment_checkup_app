@@ -19,11 +19,16 @@ class DailyScreen extends StatefulWidget {
 
 class _DailyScreenState extends State<DailyScreen> {
   int count = 0;
+  int completedDaySize=0;
   List<List<Exercise>> exercises = [[], [], [], [], [], [], []];
 
   getMyWeekProgress() async {
     for(int i=0;i<widget.thisWeekExercise.length;i++){
       exercises[(widget.thisWeekExercise[i].day-1)%7].add(widget.thisWeekExercise[i]);
+    }
+    for(int i=0;i<exercises.length;i++){
+      if(exercises[i].length != 0)
+        completedDaySize+=1;
     }
     setState(() {
 
@@ -70,10 +75,10 @@ class _DailyScreenState extends State<DailyScreen> {
                           .copyWith(fontWeight: FontWeight.w900),
                     ),
                     SizedBox(height: 10),
-                    Text(
-                      "3-10 MIN Course",
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
+                    // Text(
+                    //   "3-10 MIN Course",
+                    //   style: TextStyle(fontWeight: FontWeight.bold),
+                    // ),
                     SizedBox(height: 10),
                     SizedBox(
                       width: size.width * .6, // it just take 60% of total width
@@ -86,7 +91,9 @@ class _DailyScreenState extends State<DailyScreen> {
                       child:RadialProgress(
                         width: size.width * 0.4,
                         height: size.width * 0.4,
-                        progress: 0.6,type: 1.0,
+                        progress: completedDaySize*1.0/7.0,
+                        left: 7-completedDaySize*1.0,
+                        type: 1.0,
                       ),
                     ),
                     SizedBox(
@@ -94,7 +101,7 @@ class _DailyScreenState extends State<DailyScreen> {
                       child: GridView.count(
                         // Create a grid with 2 columns. If you change the scrollDirection to
                         // horizontal, this produces 2 rows.
-                        crossAxisCount: 2,mainAxisSpacing: 10.0,childAspectRatio:3 ,
+                        crossAxisCount: 2,mainAxisSpacing: 15.0,crossAxisSpacing: 5.0,childAspectRatio:2.5 ,
                         shrinkWrap: true,
                         // Generate 100 widgets that display their index in the List.
                         children: List.generate(7, (index) {

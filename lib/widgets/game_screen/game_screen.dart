@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:treatment_checkup_app/configs/app_colors.dart';
 import 'package:treatment_checkup_app/widgets/game_screen/quiz.dart';
-
-import 'package:treatment_checkup_app/models/question.dart';
-import 'package:treatment_checkup_app/services/quiz_service.dart';
+import 'package:treatment_checkup_app/services/auth/UserTypeService.dart';
 
 class GameScreen extends StatefulWidget {
+  final List<Feedbak> questions;
+  final int day;
+  GameScreen(this.questions,this.day);
   @override
   _GameScreenState createState() => _GameScreenState();
 }
 
 class _GameScreenState extends State<GameScreen> {
   bool isLoading;
-  List<Question> questions;
+
   static const numberOfQuestions = 3;
 
   @override
@@ -27,9 +28,9 @@ class _GameScreenState extends State<GameScreen> {
       isLoading = true;
     });
 
-    questions = await QuizService().getQuestions(numberOfQuestions);
 
-    if (questions == null) {
+
+    if (widget.questions == null) {
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
@@ -63,7 +64,7 @@ class _GameScreenState extends State<GameScreen> {
           child: CircularProgressIndicator(),
         )
             : Quiz(
-          questions: questions,
+          questions: widget.questions,day: widget.day,
         ),
       ),
     );

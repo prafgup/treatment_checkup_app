@@ -229,7 +229,7 @@ class Portrait extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (_) {
-                          return this.index!=exercises.length-1?ActivityTimer(exercises: this.exercises, index: this.index+1):RouteToGameScreen(exercises[0].day);
+                          return this.index!=exercises.length-1?ActivityTimer(exercises: this.exercises, index: this.index+1):DetailsScreen();
                         }),
                       );
                     },
@@ -263,53 +263,3 @@ class Portrait extends StatelessWidget {
 }
 
 
-
-
-class RouteToGameScreen extends StatefulWidget {
-
-  final int currDay;
-  RouteToGameScreen(this.currDay);
-  @override
-  _RouteToGameScreenState createState() => _RouteToGameScreenState();
-}
-
-class _RouteToGameScreenState extends State<RouteToGameScreen> {
-
-
-
-  UserTypeService userService;
-  bool isLoading;
-  Future<void> getMyWeekProgress() async {
-    print("curr day sent is "+widget.currDay.toString());
-    bool status = await userService.UpdateDayExerciseStatus(widget.currDay);
-    print(status);
-    if(status == true){
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (_) {
-          return GameScreen();
-        }),
-      );
-    }
-  }
-
-
-  @override
-  void initState() {
-    isLoading = true;
-    userService = UserTypeService();
-    getMyWeekProgress();
-    super.initState();
-  }
-
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: Center(
-        child: SpinKitFoldingCube(color: Colors.green),
-      ),
-    );
-  }
-}

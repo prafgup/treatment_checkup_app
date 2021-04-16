@@ -5,11 +5,11 @@ import 'package:treatment_checkup_app/widgets/game_screen/answer_card.dart';
 import 'package:treatment_checkup_app/widgets/game_screen/progress_bar.dart';
 import 'package:treatment_checkup_app/widgets/game_screen/result_card.dart';
 import 'package:treatment_checkup_app/widgets/result_screen/result_screen.dart';
-
+import 'package:treatment_checkup_app/services/auth/UserTypeService.dart';
 class Quiz extends StatefulWidget {
-  final List<Question> questions;
-
-  Quiz({@required this.questions});
+  final List<Feedbak> questions;
+ final int day;
+  Quiz({@required this.questions,this.day});
 
   @override
   _QuizState createState() => _QuizState();
@@ -41,6 +41,8 @@ class _QuizState extends State<Quiz> {
     }
 
     // String correctAnswer = widget.questions[questionIndex].correctAnswer;
+
+    int status = await UserTypeService().PUpdateFeedback(widget.day.toString(),widget.questions[questionIndex].questionNo.toString(), selectedAnswer);
 
     setState(() {
       isDelayActive = true;
@@ -93,6 +95,14 @@ class _QuizState extends State<Quiz> {
                   fontWeight: FontWeight.w700,
                 ),
               ),
+              Text(
+                "Select the option considering 5 as high and 0 as low",
+                textAlign: TextAlign.left,
+                style: TextStyle(
+                  fontSize: 10,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
               Column(
                 children: optionList
               )
@@ -105,7 +115,7 @@ class _QuizState extends State<Quiz> {
 
   void updateOptions() {
     optionList = new List<Widget>();
-    List<String> optionsQuestions = widget.questions[questionIndex].options;
+    List<String> optionsQuestions = ['0','1','2','3','4','5'];
     for(var i=0; i<optionsQuestions.length; ++i){
       if(isDelayActive){
         optionList.add(new ResultCard(titleLabel: optionsQuestions[i],
@@ -115,6 +125,7 @@ class _QuizState extends State<Quiz> {
             isSelected: selectedAnswer!=null && selectedAnswer.toLowerCase()==optionsQuestions[i].toLowerCase(),
             onTap: () {
               selectedAnswer=optionsQuestions[i];
+
               updateQuiz();
             }
         ));

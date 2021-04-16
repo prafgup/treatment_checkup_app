@@ -13,7 +13,7 @@ class ResultScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).primaryColor,
+      backgroundColor: Theme.of(context).bottomAppBarColor,
       body: SafeArea(
         child: Column(
           children: <Widget>[
@@ -21,7 +21,9 @@ class ResultScreen extends StatelessWidget {
               flex: 6,
               child: Card(
                 margin: EdgeInsets.all(20),
-                color: AppColors.green,
+                color: Colors.white70
+
+                ,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30),
                 ),
@@ -29,15 +31,21 @@ class ResultScreen extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
+
+                    Center(child: Icon(Icons.check_circle,size: 120.0,color: Colors.green
+                      ,)),
                     Center(
                       child: Text(
-                        'Completed',
-                        style: TextStyle(fontSize: 40, fontWeight: FontWeight.w900),
+                        'Feedback Recorded',
+                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.w900,color: Colors.deepPurple
+                        ),
                       ),
                     ),
-                    Text(
-                      'No Signs of Trouble',
-                      style: TextStyle(fontSize: 30),
+                    Center(
+                      child: Text(
+                        'Someone will get back to you soon!',
+                        style: TextStyle(fontSize: 20,color: Colors.green),
+                      ),
                     ),
                   ],
                 ),
@@ -48,8 +56,10 @@ class ResultScreen extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
-                  Button(
-                      buttonLabel: 'Main Menu',
+                  RaisedButton(
+                      child:  Text('Proceed',style: TextStyle(fontSize: 20,color:Colors.white),),elevation: 10.0,
+                      color: Colors.green,
+                      splashColor: Colors.lightBlueAccent,
                       onPressed: () {
                         Navigator.pushReplacement(
                           context,
@@ -58,16 +68,16 @@ class ResultScreen extends StatelessWidget {
                           }),
                         );
                       }),
-                  Button(
-                      buttonLabel: 'Assess Again',
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => GameScreen(),
-                          ),
-                        );
-                      }),
+                  // Button(
+                  //     buttonLabel: 'Assess Again',
+                  //     onPressed: () {
+                  //       Navigator.push(
+                  //         context,
+                  //         MaterialPageRoute(
+                  //           builder: (context) => GameScreen(),
+                  //         ),
+                  //       );
+                  //     }),
                 ],
               ),
             ),

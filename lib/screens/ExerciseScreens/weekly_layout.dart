@@ -11,7 +11,8 @@ import 'package:treatment_checkup_app/widgets/session_card.dart';
 import 'package:treatment_checkup_app/widgets/radial_progress.dart';
 import 'package:treatment_checkup_app/models/exercise.dart';
 import 'package:treatment_checkup_app/services/auth/UserTypeService.dart';
-
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:treatment_checkup_app/widgets/game_screen/game_screen.dart';
 class DetailsScreen extends StatefulWidget {
   @override
   _DetailsScreenState createState() => _DetailsScreenState();
@@ -24,7 +25,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
   List<TreatmentDayData> allDayExercises = [];
   List<List<Exercise>> weekExercises = [[], [], [], [], [], [], [], [], [], [], []];
   int weekSize = 0;
-
+  int completedWeekSize=0;
+  int curr_prog_day=1;
   Future<void> getMyWeekProgress() async {
 
     allDayExercises = await userService.GetPatientWeekExerciseDetails();
@@ -49,6 +51,15 @@ class _DetailsScreenState extends State<DetailsScreen> {
           text_instruct: allDayExercises[i].instructions,
           totalTime: totalTime.toString() +' Min'
       ),);
+    }
+    for(int i=0;i<weekExercises.length;i++){
+      if(weekExercises[i].length != 0)
+        completedWeekSize+=1;
+    }
+    //to get curr day
+    for(int i=0;i<allDayExercises.length;i++){
+      if(curr_prog_day< allDayExercises[i].todayDay)
+        curr_prog_day =  allDayExercises[i].todayDay;
     }
     setState(() {
       isLoading = false;
@@ -96,18 +107,54 @@ class _DetailsScreenState extends State<DetailsScreen> {
                     SizedBox(
                       height: size.height * 0.05,
                     ),
-                    Text(
-                      "Exercise",
-                      style: Theme.of(context)
-                          .textTheme
-                          .display1
-                          .copyWith(fontWeight: FontWeight.w900),
+                    Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "Exercise",
+                          style: Theme.of(context)
+                              .textTheme
+                              .display1
+                              .copyWith(fontWeight: FontWeight.w900),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(left: 10,right: 0,top: 0,bottom: 0),
+                          child: RaisedButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (_) {
+                                  return RouteToGameScreen(curr_prog_day);
+                                }),
+                              );
+                            },
+                            elevation: 5,
+                            color: Color.fromRGBO(108, 71, 145, 1),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(18.0),
+
+                            ),
+                            child: Row(
+                              children: [
+                               Icon(Icons.feedback_outlined,color: Colors.white,size: 16,),
+                                Text("  Give Feedback to Doctor",
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w500
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        )
+                      ],
                     ),
+
                     SizedBox(height: 10),
-                    Text(
-                      "3-10 MIN Course",
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
+                    // Text(
+                    //   "3-10 MIN Course",
+                    //   style: TextStyle(fontWeight: FontWeight.bold),
+                    // ),
                     SizedBox(height: 10),
                     SizedBox(
                       width: size.width * .6, // it just take 60% of total width
@@ -123,11 +170,12 @@ class _DetailsScreenState extends State<DetailsScreen> {
                         width: size.width * 0.4,
                         height: size.width * 0.4
                         ,
-                        progress: 0.3,
+                        progress: completedWeekSize*1.0/weekSize*1.0,
+                        left: weekSize-completedWeekSize*1.0,
                       ),
                     ),
                     SizedBox(
-                      height: size.height*0.4,
+                      height: size.height*0.47,
                       child: GridView.count(
                         // Create a grid with 2 columns. If you change the scrollDirection to
                         // horizontal, this produces 2 rows.
@@ -160,6 +208,59 @@ class _DetailsScreenState extends State<DetailsScreen> {
               width: MediaQuery.of(context).size.width,
               child: Center(child: CircularProgressIndicator(),)):Container(),
         ],
+      ),
+    );
+  }
+}
+
+
+
+
+
+class RouteToGameScreen extends StatefulWidget {
+
+  final int currDay;
+  RouteToGameScreen(this.currDay);
+  @override
+  _RouteToGameScreenState createState() => _RouteToGameScreenState();
+}
+
+class _RouteToGameScreenState extends State<RouteToGameScreen> {
+
+
+
+  UserTypeService userService;
+  bool isLoading;
+  Future<void> getMyWeekProgress() async {
+     print("curr day sent for feedback is "+widget.currDay.toString());
+     List<Feedbak> qs = await userService.GetPatientFeedbackForm(widget.currDay.toString());
+     print(qs);
+     if(qs != null){
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (_) {
+          return GameScreen(qs, widget.currDay);
+        })
+      );
+    }
+  }
+
+
+  @override
+  void initState() {
+    isLoading = true;
+    userService = UserTypeService();
+    getMyWeekProgress();
+    super.initState();
+  }
+
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: Center(
+        child: SpinKitFoldingCube(color: Colors.green),
       ),
     );
   }

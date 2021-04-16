@@ -607,7 +607,89 @@ return 1;
 
 
   }
+  Future<List<Feedbak>> GetPatientFeedbackForm(String day)async {
+    await checkUserType();
+    if(userType==-1) throw Error();
+    print(jwtToken);
+    await checkJWTToken();
+    Map<String, String> requestHeaders = {
+      'x-access-token': jwtToken
+    };
+    Map<String, String> requestBody = {
+      "day": day,
 
+    };
+    var response;
+    try{
+      response = await http.post(
+          "https://treatment-application-dep.herokuapp.com/api/v1/questionnaire/get_patient_questionnaire",
+          headers: requestHeaders,
+          body:requestBody
+
+      );
+
+    }
+    catch(e){
+      print(e);
+    }
+
+    if(response.statusCode == 200){
+      print("Got feedback form");
+      print(response.body);
+      return (json.decode(response.body) as List)
+          .map((data) => Feedbak.fromJson(data))
+          .toList();
+
+
+    }
+    else{
+
+      print("Error in response in feedback form fetch");
+      print(response.body);
+      throw new Error();
+    }
+
+
+
+
+  }
+  Future<int> PUpdateFeedback(String day, String id, String resp) async
+  {
+    await checkUserType();
+    if(userType==-1) throw Error();
+    await checkJWTToken();
+    var response;
+    Map<String, String> requestHeaders = {
+      'x-access-token': jwtToken
+    };
+    Map<String, String> requestBody = {
+
+      'day':day,
+      'id': id,
+      'response':resp
+    };
+    try{
+      response = await http.post(
+          "https://treatment-application-dep.herokuapp.com/api/v1/questionnaire/fill_questionnaire" ,
+          headers: requestHeaders,
+          body:requestBody
+      );
+    }
+    catch(e){
+      print(e);
+    }
+    if(response.statusCode == 200){
+      print("Update feedback successfull");
+      return 1;
+    }else {
+      print("Error in response in feedback filling api");
+      print(response.body);
+      return 0;
+
+      throw new Error();
+    }
+
+  }
 }
 class MyProfileUpdated {
   String userId;
@@ -834,6 +916,25 @@ class PatientRequestModel {
     data['today_day'] = this.todayDay;
     data['exercise_name'] = this.exerciseName;
     data['marked_by_relative'] = this.markedByRelative;
+    return data;
+  }
+}
+
+class Feedbak {
+  int questionNo;
+  String question;
+
+  Feedbak({this.questionNo, this.question});
+
+  Feedbak.fromJson(Map<String, dynamic> json) {
+    questionNo = json['question_no'];
+    question = json['question'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['question_no'] = this.questionNo;
+    data['question'] = this.question;
     return data;
   }
 }
