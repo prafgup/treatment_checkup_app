@@ -555,15 +555,10 @@ return 1;
 
     }
     else{
-
       print("Error in response in patient ex request");
       print(response.body);
       throw new Error();
     }
-
-
-
-
   }
 
   Future<List<TreatmentDayData>> GetPatientWeekExerciseDetails()async{
@@ -611,10 +606,9 @@ return 1;
     // print(response.body);
     // print(response.statusCode);
     // return response.body.toString();
-
-
-
   }
+
+
   Future<List<Feedbak>> GetPatientFeedbackForm(String day)async {
     await checkUserType();
     if(userType==-1) throw Error();
@@ -656,10 +650,6 @@ return 1;
       print(response.body);
       throw new Error();
     }
-
-
-
-
   }
   Future<int> PUpdateFeedback(String day, String id, String resp) async
   {
@@ -698,6 +688,40 @@ return 1;
     }
 
   }
+
+  Future<RelativesInfo> getPatientRelativeInfo()async {
+    await checkUserType();
+    if(userType==-1) throw Error();
+    print(jwtToken);
+    await checkJWTToken();
+    Map<String, String> requestHeaders = {
+      'x-access-token': jwtToken
+    };
+    var response;
+    try{
+      response = await http.get(
+          "https://treatment-application-dep.herokuapp.com/api/v1/patient/getPatientRelativeInfo",
+          headers: requestHeaders
+      );
+    }
+    catch(e){
+      print(e);
+    }
+    if(response.statusCode == 200){
+      print("Got my relatives");
+      print(response.body);
+      return RelativesInfo.fromJson(json.decode(response.body)['profile']);
+
+
+    }
+    else{
+      print("Error in response in feedback form fetch");
+      print(response.body);
+      throw new Error();
+    }
+  }
+
+
 }
 class MyProfileUpdated {
   String userId;
@@ -943,6 +967,36 @@ class Feedbak {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['question_no'] = this.questionNo;
     data['question'] = this.question;
+    return data;
+  }
+}
+
+
+class RelativesInfo {
+  String relative1;
+  String relative1Status;
+  String relative2;
+  String relative2Status;
+
+  RelativesInfo(
+      {this.relative1,
+        this.relative1Status,
+        this.relative2,
+        this.relative2Status});
+
+  RelativesInfo.fromJson(Map<String, dynamic> json) {
+    relative1 = json['relative_1'];
+    relative1Status = json['relative_1_status'];
+    relative2 = json['relative_2'] == null ? "" : json['relative_2'];
+    relative2Status = json['relative_2_status'] == null ? "" : json['relative_2_status'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['relative_1'] = this.relative1;
+    data['relative_1_status'] = this.relative1Status;
+    data['relative_2'] = this.relative2;
+    data['relative_2_status'] = this.relative2Status;
     return data;
   }
 }

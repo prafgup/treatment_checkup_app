@@ -34,7 +34,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
             title: "Requests",
             svgScr: "assets/icons/calendar.svg",
             press: () {
-              if(!widget.active_icon[0])Navigator.push(
+              if(!widget.active_icon[0])Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(builder: (context) {
                   return RequestsScreenP();
@@ -49,7 +49,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
             svgScr: "assets/icons/gym.svg",
 
             press: () {
-              if(!widget.active_icon[1])Navigator.push(
+              if(!widget.active_icon[1])Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(builder: (context) {
                   return DetailsScreen();

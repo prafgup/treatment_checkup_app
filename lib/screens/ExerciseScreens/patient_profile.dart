@@ -14,6 +14,7 @@ class MapScreenState extends State<ProfilePageP>
     with SingleTickerProviderStateMixin {
   bool _status = true;
   bool _isLoading = false;
+  bool _isLoadingRelativeInfo = false;
   final FocusNode myFocusNode = FocusNode();
   final TextEditingController _userNameFirst = new TextEditingController();
   final TextEditingController _userNameSecond = new TextEditingController();
@@ -26,18 +27,26 @@ class MapScreenState extends State<ProfilePageP>
   String _profilePic = "";
   UserTypeService userService;
   MyProfileUpdated myProfileUpdated;
-
+  RelativesInfo relativeInfo;
   @override
   void initState() {
     _isLoading = true;
+    _isLoadingRelativeInfo = true;
     userService = UserTypeService();
     getMyProfile();
+    getMyRelatives();
     super.initState();
   }
 
+  Future<void> getMyRelatives() async {
+    relativeInfo = await userService.getPatientRelativeInfo();
+    setState(() {
+      _isLoadingRelativeInfo = true;
+    });
+
+  }
 
   Future<void> getMyProfile() async {
-
     myProfileUpdated = await userService.getMyProfileData();
     _userNameFirst.text  = myProfileUpdated.firstName;
     _userNameSecond.text = myProfileUpdated.lastName;
@@ -51,6 +60,20 @@ class MapScreenState extends State<ProfilePageP>
       _isLoading = false;
     });
 
+  }
+
+  String getStatusFromCode(String sc){
+    if(sc == 'A'){
+      return "Accepted";
+    }
+    if(sc == 'R'){
+      return "Rejected";
+    }
+    if(sc == 'W'){
+      return "Waiting";
+    }
+
+    return "";
   }
 
   Future<void> saveProfile() async {
@@ -477,6 +500,43 @@ class MapScreenState extends State<ProfilePageP>
                                       ),
                                     ],
                                   )),
+                              _isLoadingRelativeInfo && relativeInfo!= null && userService.userType == 0 ? Column(
+                                children: [
+                                  Padding(
+                                      padding: EdgeInsets.only(
+                                          left: 25.0, right: 25.0, top: 25.0),
+                                      child: new Row(
+                                        mainAxisSize: MainAxisSize.max,
+                                        children: <Widget>[
+                                          new Column(
+                                            mainAxisAlignment: MainAxisAlignment.start,
+                                            mainAxisSize: MainAxisSize.min,
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: <Widget>[
+                                              new Text(
+                                                'Relative Request Status',
+                                                style: TextStyle(
+                                                    fontSize: 16.0,
+                                                    fontWeight: FontWeight.bold),
+                                              ),
+                                              Text(
+                                                relativeInfo.relative1 + "      " + getStatusFromCode(relativeInfo.relative1Status),
+                                                style: TextStyle(
+                                                    fontSize: 16.0,
+                                                    ),
+                                              ),
+                                              Text(
+                                                relativeInfo.relative2 + "      " + getStatusFromCode(relativeInfo.relative2Status),
+                                                style: TextStyle(
+                                                    fontSize: 16.0,
+                                                    ),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      )),
+                                ],
+                              ) : Container(),
                               !_status ? _getActionButtons() : new Container(),
                             ],
                           ),
