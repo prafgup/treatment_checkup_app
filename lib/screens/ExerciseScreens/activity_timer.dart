@@ -52,7 +52,7 @@ class Portrait extends StatelessWidget {
       await textsespeech.setSpeechRate(0.7);
       await textsespeech.setPitch(1);
 
-     await textsespeech.speak(this.exercises[this.index].text_instruct);
+     await textsespeech.speak(this.exercises[this.index].title);
     }
     var size = MediaQuery.of(context).size;
     return Column(

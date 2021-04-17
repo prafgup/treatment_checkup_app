@@ -240,7 +240,7 @@ class _RegisterPatientRelativeState extends State<RegisterPatientRelative> {
                                               enabledBorder: outlineBorder,
                                               focusedBorder: outlineBorder,
                                               hintStyle: hintTextStyleSolid,
-                                              hintText: "Relative 2 Mobile Number",
+                                              hintText: "Relative 2 Mobile Number(optional)",
                                             ),
                                             maxLines: 1,
                                           ) : Container(),
