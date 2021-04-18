@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:treatment_checkup_app/constants.dart';
 import 'package:treatment_checkup_app/models/exercise.dart';
 import 'package:treatment_checkup_app/models/requests_relative.dart';
@@ -288,66 +289,75 @@ class _CustomDialogBox2State extends State<CustomDialogBox2> {
              }):Container(),
 
 
-             !widget.title.contains("reject")?ListView.builder(
-                 shrinkWrap:  true ,
-                 itemCount: widget.exercises.length,
+             !widget.title.contains("reject")?SizedBox(
+                  height: MediaQuery.of(context).size.height*0.5,
+               child: GridView.count(
+                 crossAxisCount: 1,mainAxisSpacing: 3.0,childAspectRatio:5 ,
+                 shrinkWrap: true,
 
-                itemBuilder:     (context,index){
-                  List<bool> _checked=List<bool>.filled(widget.exercises.length,false,growable:false);
-                  return CheckboxListTile(
-                    title: Text(widget.exercises[index].exerciseName),
-                      secondary:Image( image: AssetImage("assets/images/image004.jpg"),width: 50.0,height: 50.0,),
-                      activeColor: Colors.green,
-                      checkColor: Colors.purple,
+                 children: List.generate(widget.exercises.length, (index){
+                    List<bool> _checked=List<bool>.filled(widget.exercises.length,false,growable:false);
+                    return CheckboxListTile(
+                      title: Text(widget.exercises[index].exerciseName),
+                        secondary:Image( image: AssetImage("assets/images/image004.jpg"),width: 50.0,height: 50.0,),
+                        activeColor: Colors.green,
+                        checkColor: Colors.purple,
 
 
-                      onChanged:  (bool value){
-                        setState(() {
-                          if(value){
-                            selectedList.add(widget.exercises[index]);
-                          }else{
-                            selectedList.remove(widget.exercises[index]);
-                          }
-                        });
-                      },
-                    value: selectedList.contains(widget.exercises[index]),
-                  );
-                }
-             ):Container(),
-              SizedBox(height: 22,),
+                        onChanged:  (bool value){
+                          setState(() {
+                            if(value){
+                              selectedList.add(widget.exercises[index]);
+                            }else{
+                              selectedList.remove(widget.exercises[index]);
+                            }
+                          });
+                        },
+                      value: selectedList.contains(widget.exercises[index]),
+                    );
+                  }
+               ),
+               )):Container(),
+              SizedBox(height: 15,),
               Align(
                 alignment: Alignment.bottomRight,
                 child: FlatButton(
                     onPressed:  () async {
-    if (widget.text=="Proceed"){
-    print("accepting Erequests");
-    int status=0;
-    for(int i=0;i<widget.exercises.length;i++){
-      if(selectedList.contains(widget.exercises[i]) ){
-     status += await userService.RUpdateExerciseRequest(widget.exercises[i].patientId,widget.exercises[i].todayDay,widget.exercises[i].exerciseId,"1");}
-    else{
-        status += await userService.RUpdateExerciseRequest(widget.exercises[i].patientId,widget.exercises[i].todayDay,widget.exercises[i].exerciseId,"2");
-    }}
-    if(status==widget.exercises.length)Navigator.pop(context);
-
-    }
-    else if (widget.title.contains("reject")){
-      print("rejecting Erequest");
-      int status=0;
-      print(widget.exercises[0].patientId);
-      for(int i=0;i<widget.exercises.length;i++){
-
-          status += await userService.RUpdateExerciseRequest(widget.exercises[i].patientId,widget.exercises[i].todayDay,widget.exercises[i].exerciseId,"2");
-        }
-      if(status==widget.exercises.length)Navigator.pop(context);
-
-    }
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) {
-        return RequestsScreenR();
-      }),
-    );
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (_) {
+                          return RouteToRequestScreen(widget.text,widget.exercises,widget.title,selectedList); //TODO
+                        }),
+                      );
+    // if (widget.text=="Proceed"){
+    // print("accepting Erequests");
+    // int status=0;
+    // for(int i=0;i<widget.exercises.length;i++){
+    //   if(selectedList.contains(widget.exercises[i]) ){
+    //  status += await userService.RUpdateExerciseRequest(widget.exercises[i].patientId,widget.exercises[i].todayDay,widget.exercises[i].exerciseId,"1");}
+    // else{
+    //     status += await userService.RUpdateExerciseRequest(widget.exercises[i].patientId,widget.exercises[i].todayDay,widget.exercises[i].exerciseId,"2");
+    // }}
+    // if(status==widget.exercises.length)Navigator.pop(context);
+    //
+    // }
+    // else if (widget.title.contains("reject")){
+    //   print("rejecting Erequest");
+    //   int status=0;
+    //   print(widget.exercises[0].patientId);
+    //   for(int i=0;i<widget.exercises.length;i++){
+    //
+    //       status += await userService.RUpdateExerciseRequest(widget.exercises[i].patientId,widget.exercises[i].todayDay,widget.exercises[i].exerciseId,"2");
+    //     }
+    //   if(status==widget.exercises.length)Navigator.pop(context);
+    //
+    // }
+    // Navigator.pushReplacement(
+    //   context,
+    //   MaterialPageRoute(builder: (context) {
+    //     return RequestsScreenR();
+    //   }),
+    // );
     },
 
                     child: Text(widget.text,style: TextStyle(fontSize: 18),)),
@@ -361,3 +371,78 @@ class _CustomDialogBox2State extends State<CustomDialogBox2> {
   }
 }
 
+
+class RouteToRequestScreen extends StatefulWidget {
+  final List<RExerciseRequest> exercises;
+  final String text;
+  final String title;
+  final List<RExerciseRequest> selectedList;
+  RouteToRequestScreen(this.text,this.exercises,this.title,this.selectedList);
+  @override
+  _RouteToRequestScreenState createState() => _RouteToRequestScreenState();
+}
+
+class _RouteToRequestScreenState extends State<RouteToRequestScreen> {
+
+
+
+  UserTypeService userService;
+  bool isLoading;
+  Future<void> getMyWeekProgress() async {
+
+    if (widget.text=="Proceed"){
+      print("accepting Erequests");
+      int status=0;
+      for(int i=0;i<widget.exercises.length;i++){
+        if(widget.selectedList.contains(widget.exercises[i]) ){
+          status += await userService.RUpdateExerciseRequest(widget.exercises[i].patientId,widget.exercises[i].todayDay,widget.exercises[i].exerciseId,"1");}
+        else{
+          status += await userService.RUpdateExerciseRequest(widget.exercises[i].patientId,widget.exercises[i].todayDay,widget.exercises[i].exerciseId,"2");
+        }}
+      if(status==widget.exercises.length)Navigator.pop(context);
+
+    }
+    else if (widget.title.contains("reject")){
+      print("rejecting Erequest");
+      int status=0;
+      print(widget.exercises[0].patientId);
+      for(int i=0;i<widget.exercises.length;i++){
+
+        status += await userService.RUpdateExerciseRequest(widget.exercises[i].patientId,widget.exercises[i].todayDay,widget.exercises[i].exerciseId,"2");
+      }
+      if(status==widget.exercises.length)Navigator.pop(context);
+
+    }
+    // print("curr day sent is "+widget.currDay.toString());
+    // bool status = await userService.UpdateDayExerciseStatus(widget.currDay);
+    // print(status);
+    // if(status == widget.exercises.length){
+    //   Navigator.pushReplacement(
+    //     context,
+    //     MaterialPageRoute(builder: (_) {
+    //       return RequestsScreenR();
+    //     }),
+    //   );
+    // }
+  }
+
+
+  @override
+  void initState() {
+    isLoading = true;
+    userService = UserTypeService();
+    getMyWeekProgress();
+    super.initState();
+  }
+
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: Center(
+        child: SpinKitFoldingCube(color: Colors.green),
+      ),
+    );
+  }
+}

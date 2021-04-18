@@ -115,7 +115,7 @@ class _QuizState extends State<Quiz> {
 
   void updateOptions() {
     optionList = new List<Widget>();
-    List<String> optionsQuestions = ['0','1','2','3','4','5'];
+    List<String> optionsQuestions = ['1','2','3','4','5'];
     for(var i=0; i<optionsQuestions.length; ++i){
       if(isDelayActive){
         optionList.add(new ResultCard(titleLabel: optionsQuestions[i],

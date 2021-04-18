@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_cupertino_date_picker/flutter_cupertino_date_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:treatment_checkup_app/main.dart';
+import 'package:treatment_checkup_app/screens/welcomeBoarding/welcomeBoarding.dart';
 import 'package:treatment_checkup_app/services/auth/FirebaseUser.dart';
 import '../../services/auth/UserTypeService.dart';import 'package:treatment_checkup_app/screens/Relative/relative_home.dart';
 import 'package:treatment_checkup_app/screens/ExerciseScreens/weekly_layout.dart';
@@ -148,12 +150,19 @@ class MapScreenState extends State<ProfilePageP>
                                       if(x==0) {
 
                                         userService.setUserType(1);
-                                      Navigator.of(context).push(new MaterialPageRoute(builder: (context)=>RequestsScreenR()));
-
-                                      }
+                                        Navigator.pushAndRemoveUntil(context,
+                                            MaterialPageRoute(builder: (BuildContext context) => RequestsScreenR()),
+                                                (Route<dynamic> route) => route is TreatmentPartner
+                                        );
+                                      // Navigator.of(context).pushReplacement(new MaterialPageRoute(builder: (context)=>RequestsScreenR()));
+                                      //
+                                       }
                                       else {
                                         userService.setUserType(0);
-                                        Navigator.of(context).push(new MaterialPageRoute(builder: (context)=> DetailsScreen()));
+                                        Navigator.pushAndRemoveUntil(context,
+                                            MaterialPageRoute(builder: (BuildContext context) => DetailsScreen()),
+                                                (Route<dynamic> route) => route is TreatmentPartner
+                                        );
 
                                       }
                                         },

@@ -202,7 +202,7 @@ class Portrait extends StatelessWidget {
                 children: <Widget>[
                   GestureDetector(
                     onTap: (){
-                      Navigator.push(
+                      Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(builder: (_) {
                           return this.index!=0?ActivityTimer(exercises: this.exercises, index: this.index-1) : DetailsScreen(); //TODO
@@ -282,12 +282,18 @@ class _RouteToGameScreenState extends State<RouteToGameScreen> {
     bool status = await userService.UpdateDayExerciseStatus(widget.currDay);
     print(status);
     if(status == true){
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (_) {
-          return DetailsScreen();
-        }),
+      Navigator.pushAndRemoveUntil(context,
+          MaterialPageRoute(builder: (BuildContext context) => DetailsScreen()),
+              (Route<dynamic> route) => route is DetailsScreen
       );
+
+
+      // Navigator.pushReplacement(
+      //   context,
+      //   MaterialPageRoute(builder: (_) {
+      //     return DetailsScreen();
+      //   }),
+      // );
     }
   }
 

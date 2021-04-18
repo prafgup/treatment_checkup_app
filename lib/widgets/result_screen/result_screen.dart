@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:treatment_checkup_app/configs/app_colors.dart';
 import 'package:treatment_checkup_app/screens/ExerciseScreens/weekly_layout.dart';
+import 'package:treatment_checkup_app/screens/welcomeBoarding/welcomeBoarding.dart';
 import 'package:treatment_checkup_app/widgets/common/button.dart';
 import 'package:treatment_checkup_app/widgets/game_screen/game_screen.dart';
 
@@ -61,12 +62,16 @@ class ResultScreen extends StatelessWidget {
                       color: Colors.green,
                       splashColor: Colors.lightBlueAccent,
                       onPressed: () {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(builder: (context) {
-                            return DetailsScreen();
-                          }),
+                        Navigator.pushAndRemoveUntil(context,
+                            MaterialPageRoute(builder: (BuildContext context) => DetailsScreen()),
+                                (Route<dynamic> route) => route is WelcomeBoarding
                         );
+                        // Navigator.pushReplacement(
+                        //   context,
+                        //   MaterialPageRoute(builder: (context) {
+                        //     return DetailsScreen();
+                        //   }),
+                        // );
                       }),
                   // Button(
                   //     buttonLabel: 'Assess Again',

@@ -119,7 +119,7 @@ class _WelcomeBoardingState extends State<WelcomeBoarding> {
                               ),
                             children: <TextSpan>[
                               TextSpan(
-                                text: "Exercise Tracker",
+                                text: "Physio Tracker",
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   color: Color.fromRGBO(108, 71, 145, 1)
