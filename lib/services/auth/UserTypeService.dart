@@ -42,6 +42,15 @@ class UserTypeService{
     baseUrl+"/api/v1/relative/update_exercise_requests"
   ];
 
+  Future<void> resetSingleton() async{
+     userType = -1;
+     jwtToken = "";
+     userRegistered = -1;
+     myProfileUpdated = null;
+     myFriendRequests = null;
+     myExerciseRequests = null;
+  }
+
   Future<void> setUserRegistered(int status)async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setInt('registered',status);

@@ -16,7 +16,7 @@ class FirebaseSignInService{
 
   Future<void> signOut(BuildContext ct) async {
     print("SIGNING OUT");
-    await UserTypeService().setUserType(-1);
+    await UserTypeService().resetSingleton();
     await FirebaseAuth.instance.signOut();
    RestartWidget.restartApp(ct);
   }

@@ -528,18 +528,19 @@ class MapScreenState extends State<ProfilePageP>
                                                     fontSize: 16.0,
                                                     fontWeight: FontWeight.bold),
                                               ),
+                                              SizedBox(height: 10,),
                                               Text(
                                                 relativeInfo.relative1 + "      " + getStatusFromCode(relativeInfo.relative1Status),
                                                 style: TextStyle(
                                                     fontSize: 16.0,
                                                     ),
                                               ),
-                                              Text(
+                                              relativeInfo.relative2.length > 1 ? Text(
                                                 relativeInfo.relative2 + "      " + getStatusFromCode(relativeInfo.relative2Status),
                                                 style: TextStyle(
                                                     fontSize: 16.0,
                                                     ),
-                                              ),
+                                              ): Container(),
                                             ],
                                           ),
                                         ],
