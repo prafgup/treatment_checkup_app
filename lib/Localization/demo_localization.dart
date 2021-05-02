@@ -24,7 +24,7 @@ class DemoLocalization {
   }
 
   String translate(String key) {
-    print("returning"+ _localizedValues[key]);
+    //print("returning"+ _localizedValues[key]);
     return _localizedValues[key];
   }
 
