@@ -9,6 +9,19 @@
   "all_exercises": "All Exercises",
   "settings": "Settings",
   "requests": "Requests",
-  "feedback":"Give Feedback to Doctor"
+  "feedback":"Give Feedback to Doctor",
+  "accept": "Accept",
+  "reject": "Reject",
+  "pers_info": "Personal Information",
+  "fname": "First Name",
+  "lname": "Last Name",
+  "efname": "Enter First Name",
+  "elname": "Enter Last Name",
+  "edob": "Enter Date of Birth",
+  "dob": "Date of Birth",
+  "email": "Email ID",
+  "address": "Address",
+  "save": "Save",
+  "cancel": "Cancel"
 
 }

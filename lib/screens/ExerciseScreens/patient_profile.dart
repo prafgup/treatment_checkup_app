@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_cupertino_date_picker/flutter_cupertino_date_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:treatment_checkup_app/Localization/localization_constant.dart';
 import 'package:treatment_checkup_app/main.dart';
 import 'package:treatment_checkup_app/screens/welcomeBoarding/welcomeBoarding.dart';
 import 'package:treatment_checkup_app/services/auth/FirebaseUser.dart';
@@ -292,7 +293,7 @@ class MapScreenState extends State<ProfilePageP>
                                       Expanded(
                                         child: Container(
                                           child: new Text(
-                                            'First Name',
+                                      getTranslated(context, "fname"),
                                             style: TextStyle(
                                                 fontSize: 16.0,
                                                 fontWeight: FontWeight.bold),
@@ -325,8 +326,8 @@ class MapScreenState extends State<ProfilePageP>
                                           padding: EdgeInsets.only(right: 10.0),
                                           child: new TextField(
                                             controller: _userNameFirst,
-                                            decoration: const InputDecoration(
-                                                hintText: "Enter First Name"),
+                                            decoration:   const InputDecoration(
+                                                 hintText:"Enter First Name" ),
                                             enabled: !_status,
                                           ),
                                         ),
@@ -336,7 +337,8 @@ class MapScreenState extends State<ProfilePageP>
                                         child: new TextField(
                                           controller: _userNameSecond,
                                           decoration: const InputDecoration(
-                                              hintText: "Enter Last Name"),
+                                              hintText: "Enter Last Name"
+                                          ),
                                           enabled: !_status,
                                         ),
                                         flex: 2,
@@ -355,7 +357,7 @@ class MapScreenState extends State<ProfilePageP>
                                         mainAxisSize: MainAxisSize.min,
                                         children: <Widget>[
                                           new Text(
-                                            'Date of Birth',
+                                  getTranslated(context, "dob"),
                                             style: TextStyle(
                                                 fontSize: 16.0,
                                                 fontWeight: FontWeight.bold),
@@ -414,7 +416,7 @@ class MapScreenState extends State<ProfilePageP>
                                         mainAxisSize: MainAxisSize.min,
                                         children: <Widget>[
                                           new Text(
-                                            'Email ID',
+                                            getTranslated(context, "email"),
                                             style: TextStyle(
                                                 fontSize: 16.0,
                                                 fontWeight: FontWeight.bold),
@@ -451,7 +453,7 @@ class MapScreenState extends State<ProfilePageP>
                                         mainAxisSize: MainAxisSize.min,
                                         children: <Widget>[
                                           new Text(
-                                            'Address',
+                                            getTranslated(context, "address"),
                                             style: TextStyle(
                                                 fontSize: 16.0,
                                                 fontWeight: FontWeight.bold),
@@ -502,7 +504,7 @@ class MapScreenState extends State<ProfilePageP>
                                         child: new TextField(
                                           controller : _city,
                                           decoration: const InputDecoration(
-                                              hintText: "Enter City"),
+                                              hintText: "Enter City" ),
                                           enabled: !_status,
                                         ),
                                         flex: 2,
@@ -557,11 +559,22 @@ class MapScreenState extends State<ProfilePageP>
                 ],
               ),
             ),
-            _isLoading == true? Container(
-                color: Colors.black.withOpacity(0.5),
-                height: MediaQuery.of(context).size.height,
-                width: MediaQuery.of(context).size.width,
-                child: Center(child: CircularProgressIndicator(),)):Container(),
+            _isLoading == true? Column(
+              children: [
+                Container(
+
+                    height: MediaQuery.of(context).size.height/3,
+                    alignment:Alignment.center,
+                    width: MediaQuery.of(context).size.width,
+                    ),
+                Container(
+                    color: Colors.black.withOpacity(0.5),
+                    height: MediaQuery.of(context).size.height*2/3,
+                    alignment:Alignment.center,
+                    width: MediaQuery.of(context).size.width,
+                    child: Center(child: CircularProgressIndicator(),)),
+              ],
+            ):Container(),
           ],
         ));
   }
@@ -585,7 +598,8 @@ class MapScreenState extends State<ProfilePageP>
               padding: EdgeInsets.only(right: 10.0),
               child: Container(
                   child: new RaisedButton(
-                    child: new Text("Save"),
+                    child:      new Text(getTranslated(context, "save")),
+
                     textColor: Colors.white,
                     color: Colors.green,
                     onPressed: () async {
@@ -613,7 +627,7 @@ class MapScreenState extends State<ProfilePageP>
               padding: EdgeInsets.only(left: 10.0),
               child: Container(
                   child: new RaisedButton(
-                    child: new Text("Cancel"),
+                    child: new Text(getTranslated(context, "cancel")),
                     textColor: Colors.white,
                     color: Colors.red,
                     onPressed: () {

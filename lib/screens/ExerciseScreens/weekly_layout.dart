@@ -193,7 +193,7 @@ void _changeLanguage(Language language) async {
                             child: Row(
                               children: [
                                Icon(Icons.feedback_outlined,color: Colors.white,size: 16,),
-                                Text("  Give Feedback to Doctor",
+                                Text(getTranslated(context, "feedback"),
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontSize: 12,

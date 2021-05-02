@@ -56,7 +56,7 @@ class _RegisterPatientRelativeState extends State<RegisterPatientRelative> {
     setState(() {
       isLoading = true;
     });
-    int statusCode = await userService.registerPatient(_userNameSecond.text, _userNameSecond.text, _relative1.text, _relative2.text);
+    int statusCode = await userService.registerPatient(_userNameFirst.text, _userNameSecond.text, _relative1.text, _relative2.text);
     successPushPage(statusCode);
   }
 
@@ -64,7 +64,7 @@ class _RegisterPatientRelativeState extends State<RegisterPatientRelative> {
     setState(() {
       isLoading = true;
     });
-    int statusCode = await userService.registerRelative(_userNameSecond.text, _userNameSecond.text);
+    int statusCode = await userService.registerRelative(_userNameFirst.text, _userNameSecond.text);
     successPushPage(statusCode);
   }
 
