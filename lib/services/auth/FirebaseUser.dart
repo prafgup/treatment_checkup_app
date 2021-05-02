@@ -18,7 +18,7 @@ class FirebaseSignInService{
     print("SIGNING OUT");
     await UserTypeService().setUserType(-1);
     await FirebaseAuth.instance.signOut();
-    RestartWidget.restartApp(ct);
+   RestartWidget.restartApp(ct);
   }
 
 

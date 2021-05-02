@@ -955,18 +955,24 @@ class PatientRequestModel {
 class Feedbak {
   int questionNo;
   String question;
+  String question_hi;
+  String question_pa;
 
-  Feedbak({this.questionNo, this.question});
+  Feedbak({this.questionNo, this.question,this.question_hi,this.question_pa});
 
   Feedbak.fromJson(Map<String, dynamic> json) {
     questionNo = json['question_no'];
     question = json['question'];
+    question_hi=json['question_hindi'];
+    question_pa=json['question_punjabi'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['question_no'] = this.questionNo;
     data['question'] = this.question;
+    data['question_hindi']=this.question_hi;
+    data['question_punjabi']=this.question_pa;
     return data;
   }
 }

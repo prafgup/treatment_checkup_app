@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:treatment_checkup_app/Localization/localization_constant.dart';
 import 'package:treatment_checkup_app/constants.dart';
 import 'package:treatment_checkup_app/screens/ExerciseScreens/patient_profile.dart';
 import 'package:treatment_checkup_app/screens/ExerciseScreens/weekly_layout.dart';
@@ -31,7 +32,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
         children: <Widget>[
           BottomNavItem(
             isActive: widget.active_icon[0],
-            title: "Requests",
+            title: getTranslated(context, "requests"),
             svgScr: "assets/icons/calendar.svg",
             press: () {
               if(!widget.active_icon[0])Navigator.pushReplacement(
@@ -45,7 +46,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
           ),
           BottomNavItem(
             isActive: widget.active_icon[1],
-            title: "All Exercises",
+            title:getTranslated(context,  "all_exercises"),
             svgScr: "assets/icons/gym.svg",
 
             press: () {
@@ -60,7 +61,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
           ),
           BottomNavItem(
             isActive: widget.active_icon[2],
-            title: "Settings",
+            title: getTranslated(context, "settings"),
             svgScr: "assets/icons/Settings.svg",
             press: () {
               if(!widget.active_icon[2])Navigator.push(

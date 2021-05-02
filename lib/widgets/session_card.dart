@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:treatment_checkup_app/Localization/localization_constant.dart';
 import 'package:treatment_checkup_app/constants.dart';
 
 
@@ -66,7 +67,7 @@ class SeassionCard extends StatelessWidget {
                     ),
                     SizedBox(width: 10),
                     Text(
-                     type==1?"Day""$seassionNum":"Week"+"$seassionNum",
+                     type==1?getTranslated(context, 'day')+" $seassionNum":getTranslated(context, 'week')+" $seassionNum",
                       style: Theme.of(context).textTheme.subtitle,
                     )
                   ],

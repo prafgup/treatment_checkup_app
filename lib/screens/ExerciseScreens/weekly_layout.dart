@@ -1,7 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
+import 'package:treatment_checkup_app/Localization/demo_localization.dart';
+import 'package:treatment_checkup_app/Localization/localization_constant.dart';
 import 'package:treatment_checkup_app/constants.dart';
+import 'package:treatment_checkup_app/main.dart';
+import 'package:treatment_checkup_app/models/language.dart';
 import 'package:treatment_checkup_app/screens/ExerciseScreens/daily_layout.dart';
 import 'package:treatment_checkup_app/widgets/bottom_nav_bar.dart';
 import 'package:treatment_checkup_app/widgets/search_bar.dart';
@@ -27,6 +32,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
   int weekSize = 0;
   int completedWeekSize=0;
   int curr_prog_day=1;
+  Locale _locale;
   Future<void> getMyWeekProgress() async {
 
     allDayExercises = await userService.GetPatientWeekExerciseDetails();
@@ -66,7 +72,23 @@ class _DetailsScreenState extends State<DetailsScreen> {
     });
 
   }
+@override
+void _changeLanguage(Language language) async {
+  _locale = await setLocale(language.languageCode);
+  print(language.languageCode);
+  MyApp.setLocale(context, _locale);
+  print(_locale);
+}
 
+  @override
+  void didChangeDependencies() {
+    getLocale().then((locale) {
+      setState(() {
+        this._locale = locale;
+      });
+    });
+    super.didChangeDependencies();
+  }
 
   @override
   void initState() {
@@ -82,9 +104,44 @@ class _DetailsScreenState extends State<DetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
+
     var size = MediaQuery.of(context).size;
+
+
     return Scaffold(
+      extendBodyBehindAppBar: true,
       bottomNavigationBar: BottomNavBar(active_icon: [false,true,false],),
+      //drawer: _drawerlist(),
+      appBar: AppBar(   backgroundColor: Colors.transparent,
+        leading: IconButton(
+          icon: Icon(Icons.info, color:  Color.fromRGBO(108, 71, 145, 1),size:25.0),
+          onPressed: () => {},
+        ),
+        elevation: 0,
+        actions: <Widget>[Padding(padding: EdgeInsets.all(8.0)
+        ,child: DropdownButton(dropdownColor: Colors.white,elevation: 10,focusColor: Color.fromRGBO(108, 71, 145, 1),
+
+            onChanged: (Language language){
+              _changeLanguage(language);
+              RestartWidget.restartApp(context);
+            },
+
+
+            items:
+            Language.languagelist().map<DropdownMenuItem<Language>>((lang) => DropdownMenuItem(value:lang,child:
+            Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children:
+            <Widget>[Text(lang.name,style: TextStyle(fontSize: 16,
+                fontWeight: FontWeight.w500),)]
+
+            ))).toList(),
+            icon:Icon(Icons.g_translate_outlined,color: Color.fromRGBO(108, 71, 145, 1),size: 40,)
+
+          ),
+        )
+        ],
+      ),
       body: Stack(
         children: <Widget>[
           Container(
@@ -110,7 +167,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                     Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          "Exercise",
+                          getTranslated(context, "exercise"),
                           style: Theme.of(context)
                               .textTheme
                               .display1
@@ -159,7 +216,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                     SizedBox(
                       width: size.width * .6, // it just take 60% of total width
                       child: Text(
-                        "Make your surgery a success by following the exercise schedule daily!!",
+                        getTranslated(context, "motivate_text"),
                       ),
                     ),
                     SizedBox(

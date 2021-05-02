@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:treatment_checkup_app/Localization/localization_constant.dart';
 import 'package:vector_math/vector_math_64.dart' as math;
 
 
@@ -32,7 +33,7 @@ class RadialProgress extends StatelessWidget {
                 ),
                 TextSpan(text: "\n"),
                 TextSpan(
-                  text: type==1.0?"Days left":"Weeks left",
+                  text: type==1.0?getTranslated(context, "d_left"):getTranslated(context, "w_left"),
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w500,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:treatment_checkup_app/Localization/localization_constant.dart';
 import 'package:treatment_checkup_app/models/question.dart';
 import 'package:treatment_checkup_app/widgets/common/button.dart';
 import 'package:treatment_checkup_app/widgets/game_screen/answer_card.dart';
@@ -17,21 +18,51 @@ class Quiz extends StatefulWidget {
 
 class _QuizState extends State<Quiz> {
   static const delayDuration = 1;
-
+  bool isLoading = true;
+  Locale _locale;
   int questionIndex = 0;
   String questionText;
+  String hintText;
   String selectedAnswer;
   bool isDelayActive = false;
   int numberOfCorrectAnswers = 0;
   List<Widget> optionList;
 
   int get numberOfQuestions => widget.questions.length;
+@override
+void set_question() async {
+  _locale = await getLocale()
+    ;
+  String str_locale=_locale.toString();
+      print(_locale);
+      if(str_locale.compareTo("en")==0) {
+        this.questionText = widget.questions[questionIndex].question;
+        hintText="Select the option considering 5 as high and 0 as low";
+      }
+      else if(str_locale.compareTo("hi")==0) {
+        print(widget.questions[questionIndex].question_hi);
+        this.questionText = widget.questions[questionIndex].question_hi;
+        hintText="5 को उच्च और 0 को निम्न मानकर विकल्प चुनें";
+      }
+      else if(str_locale.compareTo("pa")==0) {
+        this.questionText = widget.questions[questionIndex].question_pa;
+        hintText="5 ਨੂੰ ਉੱਚ ਅਤੇ 0 ਨੂੰ ਘੱਟ ਮੰਨਦੇ ਹੋਏ ਵਿਕਲਪ ਦੀ ਚੋਣ ਕਰੋ";
+      }
 
+      //else  this.questionText = widget.questions[questionIndex].question;
+     // print(questionText);print(_locale);
+  setState(() {
+    isLoading = false;
+  });
+}
   @override
-  void initState() {
+  Future<void> initState() {
     super.initState();
+    isLoading = true;
+    set_question();
 
-    questionText = widget.questions[questionIndex].question;
+
+
     updateOptions();
   }
 
@@ -53,8 +84,23 @@ class _QuizState extends State<Quiz> {
     await Future.delayed(Duration(seconds: delayDuration));
 
     if (questionIndex < widget.questions.length) {
-      setState(() {
-        questionText = widget.questions[questionIndex].question;
+
+       _locale=await getLocale();
+      //
+       setState(() {
+        String str_locale=_locale.toString();
+        print(_locale);
+        if(str_locale.compareTo("en")==0) {
+          this.questionText = widget.questions[questionIndex].question;
+        }
+        else if(str_locale.compareTo("hi")==0) {
+          print(widget.questions[questionIndex].question_hi);
+          this.questionText = widget.questions[questionIndex].question_hi;
+        }
+        else if(str_locale.compareTo("pa")==0) {
+          this.questionText = widget.questions[questionIndex].question_pa;
+        }
+        //questionText = widget.questions[questionIndex].question;
         selectedAnswer = null;
         isDelayActive = false;
         updateOptions();
@@ -73,8 +119,13 @@ class _QuizState extends State<Quiz> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
+  Widget build(BuildContext context) {return
+    isLoading == true? Container(
+        color: Colors.black.withOpacity(0.5),
+        height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
+        child: Center(child: CircularProgressIndicator(),)):
+     Scaffold(
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(24.0),
@@ -96,7 +147,7 @@ class _QuizState extends State<Quiz> {
                 ),
               ),
               Text(
-                "Select the option considering 5 as high and 0 as low",
+                hintText,
                 textAlign: TextAlign.left,
                 style: TextStyle(
                   fontSize: 10,
