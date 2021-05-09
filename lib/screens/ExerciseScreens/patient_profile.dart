@@ -189,10 +189,15 @@ class MapScreenState extends State<ProfilePageP>
                                 child: new Row(
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: <Widget>[
-                                    new Icon(
-                                      Icons.arrow_back_ios,
-                                      color: Colors.black,
-                                      size: 22.0,
+                                    InkWell(
+                                      onTap : (){
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: new Icon(
+                                        Icons.arrow_back_ios,
+                                        color: Colors.black,
+                                        size: 22.0,
+                                      ),
                                     ),
                                     Padding(
                                       padding: EdgeInsets.only(left: 10.0),

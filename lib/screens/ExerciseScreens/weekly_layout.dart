@@ -28,6 +28,7 @@ class DetailsScreen extends StatefulWidget {
 class _DetailsScreenState extends State<DetailsScreen> {
 
   bool isLoading = true;
+  bool isError = false;
   UserTypeService userService;
   List<TreatmentDayData> allDayExercises = [];
   List<List<Exercise>> weekExercises = [[], [], [], [], [], [], [], [], [], [], []];
@@ -37,41 +38,47 @@ class _DetailsScreenState extends State<DetailsScreen> {
   Locale _locale;
   Future<void> getMyWeekProgress() async {
 
-    allDayExercises = await userService.GetPatientWeekExerciseDetails();
-    for(int i=0;i<allDayExercises.length;i++){
+    try{
+      allDayExercises = await userService.GetPatientWeekExerciseDetails();
+      for(int i=0;i<allDayExercises.length;i++){
 
-      int totalTime =0;
-      for(int j=0;j<allDayExercises.length;j++){
-        if(allDayExercises[i].todayDay == allDayExercises[j].todayDay){
-          totalTime+=allDayExercises[j].duration*allDayExercises[j].exerciseRep;
+        int totalTime =0;
+        for(int j=0;j<allDayExercises.length;j++){
+          if(allDayExercises[i].todayDay == allDayExercises[j].todayDay){
+            totalTime+=allDayExercises[j].duration*allDayExercises[j].exerciseRep;
+          }
         }
+        totalTime=(totalTime/60).toInt();
+        weekExercises[(allDayExercises[i].todayDay-1)~/7].add(
+          Exercise(
+              day: allDayExercises[i].todayDay,
+              image: allDayExercises[i].exerciseImgUrl == '' ? 'assets/images/image003.jpg' : allDayExercises[i].exerciseImgUrl,
+              title: allDayExercises[i].exerciseName,
+              time: allDayExercises[i].duration.toString(),
+              difficult: 'Medium',
+              reps: allDayExercises[i].exerciseRep.toString(),
+              url: allDayExercises[i].exerciseVideoUrl == ''?'https://www.youtube.com/watch?v=O1jfSo66z44&ab_channel=goodexerciseguide' : allDayExercises[i].exerciseVideoUrl,
+              text_instruct: allDayExercises[i].instructions,
+              totalTime: totalTime.toString() +' '+getTranslated(context, "minutes")
+          ),);
       }
-      totalTime=(totalTime/60).toInt();
-      weekExercises[(allDayExercises[i].todayDay-1)~/7].add(
-        Exercise(
-          day: allDayExercises[i].todayDay,
-          image: allDayExercises[i].exerciseImgUrl == '' ? 'assets/images/image003.jpg' : allDayExercises[i].exerciseImgUrl,
-          title: allDayExercises[i].exerciseName,
-          time: allDayExercises[i].duration.toString(),
-          difficult: 'Medium',
-          reps: allDayExercises[i].exerciseRep.toString(),
-          url: allDayExercises[i].exerciseVideoUrl == ''?'https://www.youtube.com/watch?v=O1jfSo66z44&ab_channel=goodexerciseguide' : allDayExercises[i].exerciseVideoUrl,
-          text_instruct: allDayExercises[i].instructions,
-          totalTime: totalTime.toString() +' '+getTranslated(context, "minutes")
-      ),);
+      for(int i=0;i<weekExercises.length;i++){
+        if(weekExercises[i].length != 0)
+          completedWeekSize+=1;
+      }
+      //to get curr day
+      for(int i=0;i<allDayExercises.length;i++){
+        if(curr_prog_day< allDayExercises[i].todayDay)
+          curr_prog_day =  allDayExercises[i].todayDay;
+      }
+      setState(() {
+        isLoading = false;
+      });
+    }catch(e){
+      setState(() {
+        isError = true;
+      });
     }
-    for(int i=0;i<weekExercises.length;i++){
-      if(weekExercises[i].length != 0)
-        completedWeekSize+=1;
-    }
-    //to get curr day
-    for(int i=0;i<allDayExercises.length;i++){
-      if(curr_prog_day< allDayExercises[i].todayDay)
-        curr_prog_day =  allDayExercises[i].todayDay;
-    }
-    setState(() {
-      isLoading = false;
-    });
 
   }
 @override
@@ -281,6 +288,7 @@ void _changeLanguage(Language language) async {
               height: MediaQuery.of(context).size.height,
               width: MediaQuery.of(context).size.width,
               child: Center(child: CircularProgressIndicator(),)):Container(),
+          isError == true? CustomErrorBox() : Container(),
         ],
       ),
     );
@@ -390,41 +398,115 @@ class _CustomDialogBoxState extends State<CustomDialogBox> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-                  Row( mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Container(
-            height: 100,
-            width: 100,
-            decoration: BoxDecoration(
-                color: Colors.white ,
-                shape: BoxShape.rectangle,
-                border: Border.all(color: Colors.transparent),
-                image: DecorationImage(
-                      image: AssetImage('assets/images/iit.jpg'),
-                      fit: BoxFit.fill,
+              Row( mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Container(
+                    height: 100,
+                    width: 100,
+                    decoration: BoxDecoration(
+                        color: Colors.white ,
+                        shape: BoxShape.rectangle,
+                        border: Border.all(color: Colors.transparent),
+                        image: DecorationImage(
+                          image: AssetImage('assets/images/iit.jpg'),
+                          fit: BoxFit.fill,
 
-                )
+                        )
 
-            ),
-                      ),
-                      Container(
-                        height: 100,
-                        width: 100,
-                        decoration: BoxDecoration(
-                            color: Colors.white ,
-                            shape: BoxShape.rectangle,
-                            border: Border.all(color: Colors.transparent),
-                            image: DecorationImage(
-                              image: AssetImage('assets/images/pgi.png'),
-                              fit: BoxFit.fill,
-
-                            )
-
-                        ),
-                      )
-                    ],
+                    ),
                   ),
+                  Container(
+                    height: 100,
+                    width: 100,
+                    decoration: BoxDecoration(
+                        color: Colors.white ,
+                        shape: BoxShape.rectangle,
+                        border: Border.all(color: Colors.transparent),
+                        image: DecorationImage(
+                          image: AssetImage('assets/images/pgi.png'),
+                          fit: BoxFit.fill,
+
+                        )
+
+                    ),
+                  )
+                ],
+              ),
               Text("App developed and maintained by CSE IIT Ropar in collaboration with PGI Chandigarh",
+                textAlign: TextAlign.center,
+                style: TextStyle(fontFamily: 'Cairo',fontSize: 18,fontWeight: FontWeight.w400),),
+
+
+            ],
+          ),
+        ),
+
+      ],
+    );
+  }
+}
+
+
+
+class CustomErrorBox extends StatefulWidget {
+
+
+
+  @override
+  _CustomErrorBoxState createState() => _CustomErrorBoxState();
+}
+class _CustomErrorBoxState extends State<CustomErrorBox> {
+
+  Widget build(BuildContext context) {
+
+    return Dialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20.0),
+      ),
+      elevation: 0,
+      backgroundColor: Colors.transparent,
+      child: contentBox(context),
+    );
+  }
+  contentBox(context){
+    return Stack(
+      children: <Widget>[
+        Container(
+          padding: EdgeInsets.all(20.0),
+          // margin: EdgeInsets.only(top: Constants.avatarRadius),
+          decoration: BoxDecoration(
+              shape: BoxShape.rectangle,
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(20.0),
+              boxShadow: [
+                BoxShadow(color: Colors.grey,offset: Offset(0,10),
+                    blurRadius: 10
+                ),
+              ]
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Row( mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Container(
+                    height: 100,
+                    width: 100,
+                    decoration: BoxDecoration(
+                        color: Colors.white ,
+                        shape: BoxShape.rectangle,
+                        border: Border.all(color: Colors.transparent),
+                        image: DecorationImage(
+                          image: AssetImage('assets/images/pgi.png'),
+                          fit: BoxFit.fill,
+
+                        )
+
+                    ),
+                  )
+                ],
+              ),
+              Text("Treatment has not been started by the Doctor, please contact PGI Chandigarh",
                 textAlign: TextAlign.center,
                 style: TextStyle(fontFamily: 'Cairo',fontSize: 18,fontWeight: FontWeight.w400),),
 
