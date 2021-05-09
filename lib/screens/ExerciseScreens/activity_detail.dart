@@ -136,7 +136,7 @@ class ActivityDetail extends StatelessWidget {
                         ),
                       ),
                       SizedBox(
-                        height: size.height*0.4,
+                        height: size.height*0.3,
                         child: GridView.count(
                           // Create a grid with 2 columns. If you change the scrollDirection to
                           // horizontal, this produces 2 rows.
