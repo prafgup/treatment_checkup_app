@@ -74,7 +74,12 @@ void set_question() async {
 
     // String correctAnswer = widget.questions[questionIndex].correctAnswer;
 
-    int status = await UserTypeService().PUpdateFeedback(widget.day.toString(),widget.questions[questionIndex].questionNo.toString(), selectedAnswer_num.toString());
+    int status = await UserTypeService().PUpdateFeedback(
+        widget.day.toString(),
+        widget.questions[questionIndex].questionNo.toString(),
+        selectedAnswer_num.toString(),
+        isLast: (questionIndex == widget.questions.length - 1)
+    );
 
     setState(() {
       isDelayActive = true;

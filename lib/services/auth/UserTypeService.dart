@@ -660,7 +660,7 @@ return 1;
       throw new Error();
     }
   }
-  Future<int> PUpdateFeedback(String day, String id, String resp) async
+  Future<int> PUpdateFeedback(String day, String id, String resp,{bool isLast = false}) async
   {
     await checkUserType();
     if(userType==-1) throw Error();
@@ -681,6 +681,12 @@ return 1;
           headers: requestHeaders,
           body:requestBody
       );
+      if(isLast){
+        await http.get(
+            "https://treatment-application-dep.herokuapp.com/api/v1/questionnaire/updateQuestionnaireInfo" ,
+            headers: requestHeaders,
+        );
+      }
     }
     catch(e){
       print(e);
