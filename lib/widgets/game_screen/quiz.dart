@@ -17,13 +17,14 @@ class Quiz extends StatefulWidget {
 }
 
 class _QuizState extends State<Quiz> {
-  static const delayDuration = 1;
+  static const delayDuration = 50;
   bool isLoading = true;
   Locale _locale;
   int questionIndex = 0;
   String questionText;
   String hintText;
   String selectedAnswer;
+  int selectedAnswer_num;
   bool isDelayActive = false;
   int numberOfCorrectAnswers = 0;
   List<Widget> optionList;
@@ -73,7 +74,7 @@ void set_question() async {
 
     // String correctAnswer = widget.questions[questionIndex].correctAnswer;
 
-    int status = await UserTypeService().PUpdateFeedback(widget.day.toString(),widget.questions[questionIndex].questionNo.toString(), selectedAnswer);
+    int status = await UserTypeService().PUpdateFeedback(widget.day.toString(),widget.questions[questionIndex].questionNo.toString(), selectedAnswer_num.toString());
 
     setState(() {
       isDelayActive = true;
@@ -81,7 +82,7 @@ void set_question() async {
       questionIndex++;
     });
 
-    await Future.delayed(Duration(seconds: delayDuration));
+    await Future.delayed(Duration(milliseconds: delayDuration));
 
     if (questionIndex < widget.questions.length) {
 
@@ -102,6 +103,7 @@ void set_question() async {
         }
         //questionText = widget.questions[questionIndex].question;
         selectedAnswer = null;
+        selectedAnswer_num=null;
         isDelayActive = false;
         updateOptions();
       });
@@ -146,14 +148,14 @@ void set_question() async {
                   fontWeight: FontWeight.w700,
                 ),
               ),
-              Text(
-                hintText,
-                textAlign: TextAlign.left,
-                style: TextStyle(
-                  fontSize: 10,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
+              // Text(
+              //   hintText,
+              //   textAlign: TextAlign.left,
+              //   style: TextStyle(
+              //     fontSize: 10,
+              //     fontWeight: FontWeight.w700,
+              //   ),
+              // ),
               Column(
                 children: optionList
               )
@@ -166,7 +168,8 @@ void set_question() async {
 
   void updateOptions() {
     optionList = new List<Widget>();
-    List<String> optionsQuestions = ['1','2','3','4','5'];
+
+    List<String> optionsQuestions =['😄', '😊', '😐', '😟', '😩'] ;//['1','2','3','4','5'];
     for(var i=0; i<optionsQuestions.length; ++i){
       if(isDelayActive){
         optionList.add(new ResultCard(titleLabel: optionsQuestions[i],
@@ -176,7 +179,7 @@ void set_question() async {
             isSelected: selectedAnswer!=null && selectedAnswer.toLowerCase()==optionsQuestions[i].toLowerCase(),
             onTap: () {
               selectedAnswer=optionsQuestions[i];
-
+              selectedAnswer_num=i+1;
               updateQuiz();
             }
         ));

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:treatment_checkup_app/Localization/localization_constant.dart';
 
 class NextStep extends StatelessWidget {
   final String image, title;
@@ -44,7 +45,7 @@ class NextStep extends StatelessWidget {
                 ),
               ),
               Text(
-                '${this.seconds} sec',
+                '${this.seconds} '+getTranslated(context, "seconds"),
                 style: TextStyle(
                   fontSize: 14.0,
                   color: Colors.blueGrey[200],

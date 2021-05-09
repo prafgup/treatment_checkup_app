@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -41,10 +43,10 @@ class _DetailsScreenState extends State<DetailsScreen> {
       int totalTime =0;
       for(int j=0;j<allDayExercises.length;j++){
         if(allDayExercises[i].todayDay == allDayExercises[j].todayDay){
-          totalTime+=allDayExercises[j].duration;
+          totalTime+=allDayExercises[j].duration*allDayExercises[j].exerciseRep;
         }
       }
-
+      totalTime=(totalTime/60).toInt();
       weekExercises[(allDayExercises[i].todayDay-1)~/7].add(
         Exercise(
           day: allDayExercises[i].todayDay,
@@ -55,7 +57,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
           reps: allDayExercises[i].exerciseRep.toString(),
           url: allDayExercises[i].exerciseVideoUrl == ''?'https://www.youtube.com/watch?v=O1jfSo66z44&ab_channel=goodexerciseguide' : allDayExercises[i].exerciseVideoUrl,
           text_instruct: allDayExercises[i].instructions,
-          totalTime: totalTime.toString() +' Min'
+          totalTime: totalTime.toString() +' '+getTranslated(context, "minutes")
       ),);
     }
     for(int i=0;i<weekExercises.length;i++){
@@ -114,8 +116,16 @@ void _changeLanguage(Language language) async {
       //drawer: _drawerlist(),
       appBar: AppBar(   backgroundColor: Colors.transparent,
         leading: IconButton(
-          icon: Icon(Icons.info, color:  Color.fromRGBO(108, 71, 145, 1),size:25.0),
-          onPressed: () => {},
+          icon: Icon(Icons.info, color:  Color.fromRGBO(108, 71, 145, 1),size:30.0),
+          onPressed: () => {
+          showDialog(context: context,
+          builder: (BuildContext context){
+          return CustomDialogBox(
+          );
+          }
+          )
+
+          },
         ),
         elevation: 0,
         actions: <Widget>[Padding(padding: EdgeInsets.all(8.0)
@@ -168,6 +178,7 @@ void _changeLanguage(Language language) async {
                       children: [
                         Text(
                           getTranslated(context, "exercise"),
+
                           style: Theme.of(context)
                               .textTheme
                               .display1
@@ -192,11 +203,12 @@ void _changeLanguage(Language language) async {
                             ),
                             child: Row(
                               children: [
-                               Icon(Icons.feedback_outlined,color: Colors.white,size: 16,),
-                                Text(getTranslated(context, "feedback"),
+                               Icon(Icons.feedback_outlined,color: Colors.white,size: 18,),
+                                Text(" "+getTranslated(context, "feedback"),
                                   style: TextStyle(
                                       color: Colors.white,
-                                      fontSize: 12,
+                                      fontFamily: 'Cairo',
+                                      fontSize: 14,
                                       fontWeight: FontWeight.w500
                                   ),
                                 ),
@@ -219,17 +231,22 @@ void _changeLanguage(Language language) async {
                         getTranslated(context, "motivate_text"),
                       ),
                     ),
-                    SizedBox(
-                      width: size.width * .5, // it just take the 50% width
-                      // height: size.height*.15
-                      // ,
-                      child:RadialProgress(
-                        width: size.width * 0.4,
-                        height: size.width * 0.4
-                        ,
-                        progress: completedWeekSize*1.0/weekSize*1.0,
-                        left: weekSize-completedWeekSize*1.0,
-                      ),
+                    Row(
+                      children: [
+                        SizedBox(
+                          width: size.width * .5, // it just take the 50% width
+                          // height: size.height*.15
+                          // ,
+                          child:RadialProgress(
+                            width: size.width * 0.4,
+                            height: size.width * 0.4
+                            ,
+                            progress: completedWeekSize*1.0/weekSize*1.0,
+                            left: weekSize-completedWeekSize*1.0,
+                          ),
+                        ),
+
+                      ],
                     ),
                     SizedBox(
                       height: size.height*0.47,
@@ -323,3 +340,100 @@ class _RouteToGameScreenState extends State<RouteToGameScreen> {
   }
 }
 
+
+class CustomDialogBox extends StatefulWidget {
+
+
+
+  @override
+  _CustomDialogBoxState createState() => _CustomDialogBoxState();
+}
+
+class _CustomDialogBoxState extends State<CustomDialogBox> {
+
+  UserTypeService userService;
+  @override
+  void initState() {
+    // TODO: implement initState
+
+    super.initState();  userService= UserTypeService();
+  }
+  @override
+
+  Widget build(BuildContext context) {
+
+    return Dialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20.0),
+      ),
+      elevation: 0,
+      backgroundColor: Colors.transparent,
+      child: contentBox(context),
+    );
+  }
+  contentBox(context){
+    return Stack(
+      children: <Widget>[
+        Container(
+          padding: EdgeInsets.all(20.0),
+          // margin: EdgeInsets.only(top: Constants.avatarRadius),
+          decoration: BoxDecoration(
+              shape: BoxShape.rectangle,
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(20.0),
+              boxShadow: [
+                BoxShadow(color: Colors.grey,offset: Offset(0,10),
+                    blurRadius: 10
+                ),
+              ]
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+                  Row( mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Container(
+            height: 100,
+            width: 100,
+            decoration: BoxDecoration(
+                color: Colors.white ,
+                shape: BoxShape.rectangle,
+                border: Border.all(color: Colors.transparent),
+                image: DecorationImage(
+                      image: AssetImage('assets/images/iit.jpg'),
+                      fit: BoxFit.fill,
+
+                )
+
+            ),
+                      ),
+                      Container(
+                        height: 100,
+                        width: 100,
+                        decoration: BoxDecoration(
+                            color: Colors.white ,
+                            shape: BoxShape.rectangle,
+                            border: Border.all(color: Colors.transparent),
+                            image: DecorationImage(
+                              image: AssetImage('assets/images/pgi.png'),
+                              fit: BoxFit.fill,
+
+                            )
+
+                        ),
+                      )
+                    ],
+                  ),
+              Text("App developed and maintained by CSE IIT Ropar in collaboration with PGI Chandigarh",
+                textAlign: TextAlign.center,
+                style: TextStyle(fontFamily: 'Cairo',fontSize: 18,fontWeight: FontWeight.w400),),
+
+
+            ],
+          ),
+        ),
+
+      ],
+    );
+  }
+}

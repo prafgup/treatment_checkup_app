@@ -3,6 +3,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:treatment_checkup_app/Localization/localization_constant.dart';
 import 'package:treatment_checkup_app/constants.dart';
 import 'package:treatment_checkup_app/screens/ExerciseScreens/daily_layout.dart';
 import 'package:treatment_checkup_app/services/auth/UserTypeService.dart';
@@ -82,6 +83,8 @@ class _RequestsScreenPState extends State<RequestsScreenP> {
         return '${req.todayDay}';//+${req.relativeName}';
       }).values.toList();
 
+
+
      //  print(grp_list);//grp_list.sort((a, b) => (a[0].todayDay)<=((b[0].todayDay)));
       return grp_list;
     });
@@ -128,7 +131,7 @@ class _RequestsScreenPState extends State<RequestsScreenP> {
                       height: size.height * 0.03,
                     ),
                     Text(
-                      "Requests",
+                      getTranslated(context, "requests"),
                       style: Theme.of(context)
                           .textTheme
                           .display1
