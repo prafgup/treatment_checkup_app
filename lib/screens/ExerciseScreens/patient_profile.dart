@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_cupertino_date_picker/flutter_cupertino_date_picker.dart';
@@ -8,6 +9,13 @@ import 'package:treatment_checkup_app/screens/welcomeBoarding/welcomeBoarding.da
 import 'package:treatment_checkup_app/services/auth/FirebaseUser.dart';
 import '../../services/auth/UserTypeService.dart';import 'package:treatment_checkup_app/screens/Relative/relative_home.dart';
 import 'package:treatment_checkup_app/screens/ExerciseScreens/weekly_layout.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:file_picker/file_picker.dart';
+
+import 'package:path/path.dart' as path;
+import 'dart:io';
+
 class ProfilePageP extends StatefulWidget {
   @override
   MapScreenState createState() => MapScreenState();
@@ -28,6 +36,7 @@ class MapScreenState extends State<ProfilePageP>
   final TextEditingController _pinCode = new TextEditingController();
   final TextEditingController _city = new TextEditingController();
   String _profilePic = "";
+  String _defaultPic = "https://i.pinimg.com/originals/51/f6/fb/51f6fb256629fc755b8870c801092942.png";
   UserTypeService userService;
   MyProfileUpdated myProfileUpdated;
   RelativesInfo relativeInfo;
@@ -58,6 +67,7 @@ class MapScreenState extends State<ProfilePageP>
     _address.text = myProfileUpdated.homeAddress;
     _pinCode.text = myProfileUpdated.lastName;
     _city.text = myProfileUpdated.lastName;
+    _profilePic = myProfileUpdated.profilePic;
 
     setState(() {
       _isLoading = false;
@@ -91,9 +101,12 @@ class MapScreenState extends State<ProfilePageP>
     print(_dob.text);
     myProfileUpdated.dob = _dob.text.length == 0 ? "" : DateFormat("MMM dd, yyyy").parseUTC(_dob.text).toIso8601String() ;
     myProfileUpdated.homeAddress = _address.text ;
+
+    myProfileUpdated.profilePic = _profilePic;
+
+
 //    myProfileUpdated.lastName = _pinCode.text ;
 //    myProfileUpdated.lastName = _city.text ;
-
 
     myProfileUpdated = await userService.updateMyProfileData(myProfileUpdated);
 
@@ -103,6 +116,40 @@ class MapScreenState extends State<ProfilePageP>
     });
 
   }
+
+
+  Future<void> addUploadImage() async {
+
+    setState(() {
+      _isLoading = true;
+    });
+
+    String UID = await userService.getUID();
+
+    File image = await ImagePicker.pickImage(source: ImageSource.gallery);
+    StorageReference reference = FirebaseStorage.instance.ref().child(UID+"/ProfileImages/${path.basename(image.path)}");
+    StorageUploadTask uploadTask = reference.putFile(image);
+    await uploadTask.onComplete;
+    String photoPublicUrl = (await reference.getDownloadURL()).toString();
+
+    print(photoPublicUrl);
+    setState(() {
+     _profilePic = photoPublicUrl;
+      _isLoading = false;
+    });
+
+    try{
+      await saveProfile();
+    }catch(e){
+      setState(() {
+        _isLoading = true;
+      });
+    }
+
+    print("eof");
+
+  }
+
 
 
   @override
@@ -214,34 +261,49 @@ class MapScreenState extends State<ProfilePageP>
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: <Widget>[
-                                    new Container(
-                                        width: 140.0,
-                                        height: 140.0,
-                                        decoration: new BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          image: new DecorationImage(
-                                            image: new ExactAssetImage(
-                                                'assets/images/Dylan.jpg'),
-                                            fit: BoxFit.cover,
+                                    new CachedNetworkImage(
+                                          imageUrl: _profilePic.length > 10 ? _profilePic : _defaultPic,
+                                          imageBuilder: (context, imageProvider) => Container(
+                                            height: 140,
+                                            width: 140,
+                                            decoration: BoxDecoration(
+                                              image: DecorationImage(
+                                                image: imageProvider,
+                                                fit: BoxFit.cover,
+                                              ),
+                                              shape: BoxShape.circle
+                                            ),
                                           ),
-                                        )),
+                                          placeholder: (context, url) => CircularProgressIndicator(),
+                                          errorWidget: (context, url, error) => Icon(Icons.error),
+                              )
                                   ],
                                 ),
-                                Padding(
-                                    padding: EdgeInsets.only(top: 90.0, right: 100.0),
-                                    child: new Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: <Widget>[
-                                        new CircleAvatar(
-                                          backgroundColor: Colors.deepPurpleAccent,
-                                          radius: 25.0,
-                                          child: new Icon(
-                                            Icons.camera_alt,
-                                            color: Colors.white,
-                                          ),
-                                        )
-                                      ],
-                                    )),
+                                _status ? InkWell(
+                                  onTap: () async {
+                                    print("uploading");
+                                    await addUploadImage().catchError((e){
+                                      setState(() {
+                                        _isLoading = false;
+                                      });
+                                    });
+                                  },
+                                  child: Padding(
+                                      padding: EdgeInsets.only(top: 90.0, right: 100.0),
+                                      child: new Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: <Widget>[
+                                          new CircleAvatar(
+                                            backgroundColor: Colors.deepPurpleAccent,
+                                            radius: 25.0,
+                                            child: new Icon(
+                                              Icons.camera_alt,
+                                              color: Colors.white,
+                                            ),
+                                          )
+                                        ],
+                                      )),
+                                ) : Container(),
                               ]),
                             )
                           ],
