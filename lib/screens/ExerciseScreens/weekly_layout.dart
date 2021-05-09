@@ -178,9 +178,9 @@ void _changeLanguage(Language language) async {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    SizedBox(
-                      height: size.height * 0.05,
-                    ),
+//                    SizedBox(
+//                      height: size.height * 0.05,
+//                    ),
                     Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
@@ -256,7 +256,7 @@ void _changeLanguage(Language language) async {
                       ],
                     ),
                     SizedBox(
-                      height: size.height*0.47,
+                      height: size.height*0.4,
                       child: GridView.count(
                         // Create a grid with 2 columns. If you change the scrollDirection to
                         // horizontal, this produces 2 rows.

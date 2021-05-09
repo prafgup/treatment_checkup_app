@@ -98,7 +98,7 @@ class _DailyScreenState extends State<DailyScreen> {
                       ),
                     ),
                     SizedBox(
-                      height: size.height*0.5,
+                      height: size.height*0.45,
                       child: GridView.count(
                         // Create a grid with 2 columns. If you change the scrollDirection to
                         // horizontal, this produces 2 rows.
