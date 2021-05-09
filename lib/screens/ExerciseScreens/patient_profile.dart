@@ -64,10 +64,24 @@ class MapScreenState extends State<ProfilePageP>
     _userNameSecond.text = myProfileUpdated.lastName;
     _emailId.text = myProfileUpdated.emailId;
     _dob.text = myProfileUpdated.dob.length == 0 ? "" : DateFormat.yMMMd().format(DateTime.parse(myProfileUpdated.dob));
-    _address.text = myProfileUpdated.homeAddress;
-    _pinCode.text = myProfileUpdated.lastName;
-    _city.text = myProfileUpdated.lastName;
+
     _profilePic = myProfileUpdated.profilePic;
+
+
+    _address.text = "";
+    _pinCode.text = "";
+    _city.text = "";
+
+    List<String> addresses = myProfileUpdated.homeAddress.split("+#+#+");
+    if(addresses.length >= 1){
+      _address.text = addresses[0];
+    }
+    if(addresses.length >= 2){
+      _pinCode.text = addresses[1];
+    }
+    if(addresses.length >= 3){
+      _city.text = addresses[2];
+    }
 
     setState(() {
       _isLoading = false;
@@ -101,7 +115,8 @@ class MapScreenState extends State<ProfilePageP>
     myProfileUpdated.emailId = _emailId.text ;
     print(_dob.text);
     myProfileUpdated.dob = _dob.text.length == 0 ? "" : DateFormat("MMM dd, yyyy").parseUTC(_dob.text).toIso8601String() ;
-    myProfileUpdated.homeAddress = _address.text ;
+
+    myProfileUpdated.homeAddress = _address.text + "+#+#+" + _pinCode.text + "+#+#+" + _city.text;
 
     myProfileUpdated.profilePic = _profilePic;
 
@@ -623,17 +638,17 @@ class MapScreenState extends State<ProfilePageP>
                 ],
               ),
             ),
-            _isLoading == true? Column(
+            _isLoading == true ? Column(
               children: [
                 Container(
 
-                    height: MediaQuery.of(context).size.height/3,
+                    height: MediaQuery.of(context).size.height*1.5/10,
                     alignment:Alignment.center,
                     width: MediaQuery.of(context).size.width,
                     ),
                 Container(
                     color: Colors.black.withOpacity(0.5),
-                    height: MediaQuery.of(context).size.height*2/3,
+                    height: MediaQuery.of(context).size.height*8.5/10,
                     alignment:Alignment.center,
                     width: MediaQuery.of(context).size.width,
                     child: Center(child: CircularProgressIndicator(),)),
