@@ -392,15 +392,19 @@ class _RouteToRequestScreenState extends State<RouteToRequestScreen> {
 
     if (widget.text=="Proceed"){
       print("accepting Erequests");
+      //print(widget.exercises.length);
       int status=0;
       for(int i=0;i<widget.exercises.length;i++){
         if(widget.selectedList.contains(widget.exercises[i]) ){
+          // print(widget.exercises[i].patientId);
+          // print(widget.exercises[i].todayDay);
+          // print(widget.exercises[i].exerciseId);
           status += await userService.RUpdateExerciseRequest(widget.exercises[i].patientId,widget.exercises[i].todayDay,widget.exercises[i].exerciseId,"1");}
         else{
           status += await userService.RUpdateExerciseRequest(widget.exercises[i].patientId,widget.exercises[i].todayDay,widget.exercises[i].exerciseId,"2");
         }}
       if(status==widget.exercises.length)Navigator.pop(context);
-
+print(status);
     }
     else if (widget.title.contains("reject")){
       print("rejecting Erequest");

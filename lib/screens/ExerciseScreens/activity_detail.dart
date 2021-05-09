@@ -1,3 +1,4 @@
+import 'package:treatment_checkup_app/Localization/localization_constant.dart';
 import 'package:treatment_checkup_app/widgets/next_step.dart';
 import 'package:treatment_checkup_app/models/exercise.dart';
 import 'activity_timer.dart';
@@ -67,7 +68,7 @@ class ActivityDetail extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(
-                        "Day "+day.toString(),
+                        getTranslated(context, "day")+" "+day.toString(),
                         style: TextStyle(
                           fontSize: 22.0,
                           color: Colors.blueGrey,
@@ -91,7 +92,7 @@ class ActivityDetail extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
                                   Text(
-                                    'Time',
+                                    getTranslated(context, "time"),
                                     style: TextStyle(
                                         fontSize: 14.0,
                                         color: Colors.blueGrey[300]),
@@ -106,31 +107,31 @@ class ActivityDetail extends StatelessWidget {
                                 ],
                               ),
                             ),
-                            Container(
-                              margin: EdgeInsets.only(right: 45.0),
-                              child: Column(
-                                mainAxisAlignment:
-                                MainAxisAlignment.spaceBetween,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Text(
-                                    'Intensity',
-                                    style: TextStyle(
-                                      fontSize: 14.0,
-                                      color: Colors.blueGrey[300],
-                                    ),
-                                  ),
-                                  Text(
-                                    "Beginner",//TODO
-                                    style: TextStyle(
-                                      fontSize: 18.0,
-                                      color: Colors.lightBlue,
-                                      fontWeight: FontWeight.w900,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
+                            // Container(
+                            //   margin: EdgeInsets.only(right: 45.0),
+                            //   child: Column(
+                            //     mainAxisAlignment:
+                            //     MainAxisAlignment.spaceBetween,
+                            //     crossAxisAlignment: CrossAxisAlignment.start,
+                            //     children: <Widget>[
+                            //       Text(
+                            //         'Intensity',
+                            //         style: TextStyle(
+                            //           fontSize: 14.0,
+                            //           color: Colors.blueGrey[300],
+                            //         ),
+                            //       ),
+                            //       Text(
+                            //         "Beginner",//TODO
+                            //         style: TextStyle(
+                            //           fontSize: 18.0,
+                            //           color: Colors.lightBlue,
+                            //           fontWeight: FontWeight.w900,
+                            //         ),
+                            //       ),
+                            //     ],
+                            //   ),
+                            // ),
                           ],
                         ),
                       ),
@@ -171,7 +172,7 @@ class ActivityDetail extends StatelessWidget {
                 ),
               ]),
           child: Text(
-            'Start',
+            getTranslated(context, "start"),
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 22.0,

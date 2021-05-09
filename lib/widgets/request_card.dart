@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:treatment_checkup_app/Localization/localization_constant.dart';
 import 'package:treatment_checkup_app/constants.dart';
 
 import 'package:treatment_checkup_app/services/auth/UserTypeService.dart';
@@ -25,7 +26,6 @@ class _RekuestCardState extends State<RekuestCard> {
       return ClipRRect(
         borderRadius: BorderRadius.circular(13),
         child: Container(
-
           width: constraint.maxWidth / 2 -
               10,
           // constraint.maxWidth provide us the available with for this widget
@@ -48,7 +48,8 @@ class _RekuestCardState extends State<RekuestCard> {
               onTap: (){ //Navigator.of(context).pushReplacement(new MaterialPageRoute(builder: (context)=> RequestsScreenR()));
               },
               child: Padding(
-                padding: const EdgeInsets.all(16.0),
+
+                padding: const EdgeInsets.all(12.0),
                 child: Row(
                   children: <Widget>[
                     Container(
@@ -73,7 +74,7 @@ class _RekuestCardState extends State<RekuestCard> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Text(
-                              "Day "+widget.request[0].todayDay.toString(),
+                              getTranslated(context, "day")+" "+widget.request[0].todayDay.toString(),
                               //widget.request.Relative_name,
                               //type==1?"Day""$rekuestNum":"Week"+"$rekuestNum",
                               style: Theme.of(context).textTheme.subtitle,
@@ -94,10 +95,13 @@ class _RekuestCardState extends State<RekuestCard> {
                                     color: widget.request[0].markedByRelative!=0 ? Colors.green :Colors.yellow,
                                   ),
                                 ),//SizedBox(width: 20),
-                                Text(
-                                  widget.request[0].markedByRelative==0?"No action":"Processed",
-                                  //type==1?"Day""$rekuestNum":"Week"+"$rekuestNum",
-                                  style: Theme.of(context).textTheme.subtitle,
+                                FittedBox(
+                                  fit: BoxFit.fitWidth,
+                                  child: Text(
+                                    widget.request[0].markedByRelative==0?getTranslated(context, "no_action"):getTranslated(context, "processed"),
+                                    //type==1?"Day""$rekuestNum":"Week"+"$rekuestNum",
+                                    style: Theme.of(context).textTheme.subtitle,softWrap: true,overflow: TextOverflow.fade,
+                                  ),
                                 ),
                               ],
                             ),
@@ -105,8 +109,7 @@ class _RekuestCardState extends State<RekuestCard> {
                           ],
                         ),
                         Text(
-                            "All Exercises",
-
+                          getTranslated(context, "all_exercises"),
                          // type==1?"Day""$rekuestNum":"Week"+"$rekuestNum",
                           style: Theme.of(context).textTheme.bodyText2,
                         ),

@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:treatment_checkup_app/Localization/localization_constant.dart';
 import 'package:treatment_checkup_app/configs/app_colors.dart';
@@ -6,11 +8,8 @@ import 'package:treatment_checkup_app/screens/welcomeBoarding/welcomeBoarding.da
 import 'package:treatment_checkup_app/widgets/common/button.dart';
 import 'package:treatment_checkup_app/widgets/game_screen/game_screen.dart';
 
-class ResultScreen extends StatelessWidget {
-  final int numberOfQuestions;
-  final int numberOfCorrectAnswers;
+class ResultScreenExercise extends StatelessWidget {
 
-  ResultScreen({@required this.numberOfCorrectAnswers, @required this.numberOfQuestions});
 
   @override
   Widget build(BuildContext context) {
@@ -38,17 +37,28 @@ class ResultScreen extends StatelessWidget {
                       ,)),
                     Center(
                       child: Text(
-                        getTranslated(context, 'feedback_recorded'),
+                       getTranslated(context, "exercise_recorded"),
                         style: TextStyle(fontSize: 20, fontWeight: FontWeight.w900,color: Colors.deepPurple
                         ),
                       ),
                     ),
                     Center(
                       child: Text(
-                        getTranslated(context, 'get_back'),
+
+                        getTranslated(context, 'relative_can_cnfm'),
+                        textAlign: TextAlign.center,
                         style: TextStyle(fontSize: 20,color: Colors.green),
                       ),
                     ),
+                    Center(
+                      child: Text(
+                        getTranslated(context, "consider_feedback"),
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900,color: Colors.deepPurple
+                        ),
+                      ),
+                    ),
+
                   ],
                 ),
               ),

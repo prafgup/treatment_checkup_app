@@ -66,14 +66,15 @@ class MapScreenState extends State<ProfilePageP>
   }
 
   String getStatusFromCode(String sc){
+    //return " ";
     if(sc == 'A'){
-      return "Accepted";
+      return getTranslated(context, 'accepted');
     }
     if(sc == 'R'){
-      return "Rejected";
+      return getTranslated(context, 'rejected');
     }
     if(sc == 'W'){
-      return "Waiting";
+      return getTranslated(context, 'waiting');
     }
 
     return "";
@@ -133,7 +134,7 @@ class MapScreenState extends State<ProfilePageP>
                                     ),
                                     Padding(
                                       padding: EdgeInsets.only(left: 10.0),
-                                      child: new Text("Profile",
+                                      child: new Text(getTranslated(context, 'profile'),
                                         style: TextStyle(
                                             color: Colors.black,
                                             fontSize: 20,
@@ -175,7 +176,8 @@ class MapScreenState extends State<ProfilePageP>
                                         ),
                                         child: Text(
 
-                                          userService.userType==0?"Switch to Relative":"Switch to Patient",
+                                          userService.userType==0?getTranslated(context, 'switch_r')
+                                              :"Switch to Patient",
                                           style: TextStyle(
                                               color: Colors.white,
                                               fontSize: 12,
@@ -196,7 +198,7 @@ class MapScreenState extends State<ProfilePageP>
                                           borderRadius: BorderRadius.circular(18.0),
 
                                         ),
-                                        child: Text("LOGOUT",
+                                        child: Text(getTranslated(context, 'logout'),
                                           style: TextStyle(
                                               color: Colors.white,
                                               fontSize: 12,
@@ -267,7 +269,7 @@ class MapScreenState extends State<ProfilePageP>
                                         mainAxisSize: MainAxisSize.min,
                                         children: <Widget>[
                                           new Text(
-                                            'Personal Information',
+                                            getTranslated(context, 'pers_info'),
                                             style: TextStyle(
                                                 fontSize: 18.0,
                                                 fontWeight: FontWeight.bold),
@@ -304,7 +306,7 @@ class MapScreenState extends State<ProfilePageP>
                                       Expanded(
                                         child: Container(
                                           child: new Text(
-                                            'Last Name',
+                                            getTranslated(context, 'lname'),
                                             style: TextStyle(
                                                 fontSize: 16.0,
                                                 fontWeight: FontWeight.bold),
@@ -525,7 +527,7 @@ class MapScreenState extends State<ProfilePageP>
                                             crossAxisAlignment: CrossAxisAlignment.start,
                                             children: <Widget>[
                                               new Text(
-                                                'Relative Request Status',
+                                                getTranslated(context, 'r_request_status'),
                                                 style: TextStyle(
                                                     fontSize: 16.0,
                                                     fontWeight: FontWeight.bold),

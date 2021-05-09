@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:treatment_checkup_app/Localization/localization_constant.dart';
 import 'package:treatment_checkup_app/constants.dart';
 import 'package:treatment_checkup_app/models/exercise.dart';
 import 'package:treatment_checkup_app/services/auth/UserTypeService.dart';
@@ -68,7 +69,7 @@ class _DailyScreenState extends State<DailyScreen> {
                       height: size.height * 0.05,
                     ),
                     Text(
-                      "Exercise",
+                      getTranslated(context, "exercise"),
                       style: Theme.of(context)
                           .textTheme
                           .display1
@@ -83,7 +84,7 @@ class _DailyScreenState extends State<DailyScreen> {
                     SizedBox(
                       width: size.width * .6, // it just take 60% of total width
                       child: Text(
-                        "Make your surgery a success by following the exercise schedule daily!!",
+                          getTranslated(context, "motivate_text")
                       ),
                     ),
                     SizedBox(

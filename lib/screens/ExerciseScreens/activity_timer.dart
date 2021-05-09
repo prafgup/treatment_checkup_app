@@ -1,12 +1,17 @@
+import 'dart:ui';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart' as prefix0;
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_tts/flutter_tts.dart';
+import 'package:treatment_checkup_app/Localization/localization_constant.dart';
 import 'package:treatment_checkup_app/models/exercise.dart';
 import 'package:treatment_checkup_app/screens/ExerciseScreens/daily_layout.dart';
 import 'package:treatment_checkup_app/screens/ExerciseScreens/weekly_layout.dart';
 import 'package:treatment_checkup_app/services/auth/UserTypeService.dart';
 import 'package:treatment_checkup_app/widgets/game_screen/game_screen.dart';
+import 'package:treatment_checkup_app/widgets/result_screen/result_screen_exercise.dart';
 
 import 'video_player.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
@@ -48,8 +53,8 @@ class Portrait extends StatelessWidget {
     @override
     Future _speak() async{
 
-      await textsespeech.setLanguage("en-US");
-      await textsespeech.setSpeechRate(0.7);
+      await textsespeech.setLanguage("en-IN");
+      await textsespeech.setSpeechRate(1);
       await textsespeech.setPitch(1);
 
      await textsespeech.speak(this.exercises[this.index].title);
@@ -152,6 +157,7 @@ class Portrait extends StatelessWidget {
                     padding: const EdgeInsets.only(bottom: 15.0),
                     child: Text(
                       this.exercises[this.index].title,
+                      textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 28.0,
                         fontWeight: FontWeight.w900,
@@ -162,7 +168,7 @@ class Portrait extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.only(bottom: 20.0),
                     child: Text(
-                  this.index!=exercises.length-1? 'Next:'+ this.exercises[this.index+1].title:' Next : Questionnaire ',
+                  this.index!=exercises.length-1? getTranslated(context, "next")+':'+ this.exercises[this.index+1].title:getTranslated(context, "next") +' : '+getTranslated(context, "rest"),
                       style: TextStyle(
                         fontSize: 20.0,
                         fontWeight: FontWeight.w900,
@@ -196,6 +202,18 @@ class Portrait extends StatelessWidget {
                       ),
                     ),
                   ),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 20.0),
+                    child: Text(
+                        getTranslated(context, "next_explain"),
+                       textAlign: TextAlign.center,
+                       style: TextStyle(
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.w900,
+                        color: Colors.grey[300],
+                      ),
+                    ),
+                  ),
                 ],
               ),
               Row(
@@ -205,7 +223,7 @@ class Portrait extends StatelessWidget {
                       Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(builder: (_) {
-                          return this.index!=0?ActivityTimer(exercises: this.exercises, index: this.index-1) : DetailsScreen(); //TODO
+                          return this.index!=0?ActivityTimer(exercises: this.exercises, index: this.index-1) : ResultScreenExercise(); //TODO
                         }),
                       );
                     },
@@ -242,7 +260,7 @@ class Portrait extends StatelessWidget {
                       ),
                       child: Center(
                         child: Text(
-                          'Next',
+                          getTranslated(context, "next"),
                           style: TextStyle(
                             color: Color.fromRGBO(82, 126, 255, 1.0),
                             fontSize: 18.0,
@@ -282,9 +300,11 @@ class _RouteToGameScreenState extends State<RouteToGameScreen> {
     bool status = await userService.UpdateDayExerciseStatus(widget.currDay);
     print(status);
     if(status == true){
-      Navigator.pushAndRemoveUntil(context,
-          MaterialPageRoute(builder: (BuildContext context) => DetailsScreen()),
-              (Route<dynamic> route) => route is DetailsScreen
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (_) {
+          return  ResultScreenExercise(); //TODO
+        }),
       );
 
 
