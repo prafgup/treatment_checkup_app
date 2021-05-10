@@ -30,7 +30,9 @@ class ActivityDetail extends StatelessWidget {
                   child: Container(
                     width: MediaQuery.of(context).size.width,
                     height: 270,
-                    child: Image.asset(
+                    child:
+
+                    Image.asset(
                       'assets/images/image001.jpg',//TODO
                       fit: BoxFit.fitHeight,
                     ),

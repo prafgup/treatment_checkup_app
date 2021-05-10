@@ -52,7 +52,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
         weekExercises[(allDayExercises[i].todayDay-1)~/7].add(
           Exercise(
               day: allDayExercises[i].todayDay,
-              image: allDayExercises[i].exerciseImgUrl == '' ? 'assets/images/image003.jpg' : allDayExercises[i].exerciseImgUrl,
+              image:allDayExercises[i].exerciseVideoUrl== '' ? 'https://jflowershealth.com/wp-content/uploads/2020/09/iStock-1172191646-1024x448.jpg' :'https://img.youtube.com/vi/${(Uri.tryParse(allDayExercises[i].exerciseVideoUrl)).queryParameters['v']}/0.jpg' ,
               title: allDayExercises[i].exerciseName,
               time: allDayExercises[i].duration.toString(),
               difficult: 'Medium',
@@ -256,7 +256,7 @@ void _changeLanguage(Language language) async {
                       ],
                     ),
                     SizedBox(
-                      height: size.height*0.4,
+                      height: size.height*0.47,
                       child: GridView.count(
                         // Create a grid with 2 columns. If you change the scrollDirection to
                         // horizontal, this produces 2 rows.
@@ -432,7 +432,7 @@ class _CustomDialogBoxState extends State<CustomDialogBox> {
                   )
                 ],
               ),
-              Text("App developed and maintained by CSE IIT Ropar in collaboration with PGI Chandigarh",
+              Text("App developed by CSE IIT Ropar in collaboration with PGI Chandigarh",
                 textAlign: TextAlign.center,
                 style: TextStyle(fontFamily: 'Cairo',fontSize: 18,fontWeight: FontWeight.w400),),
 

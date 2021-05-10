@@ -38,7 +38,7 @@ class ResultScreenExercise extends StatelessWidget {
                     Center(
                       child: Text(
                        getTranslated(context, "exercise_recorded"),
-                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.w900,color: Colors.deepPurple
+                        style: TextStyle(fontFamily:'Cairo',fontSize: 20, fontWeight: FontWeight.w900,color: Colors.deepPurple
                         ),
                       ),
                     ),
@@ -47,14 +47,14 @@ class ResultScreenExercise extends StatelessWidget {
 
                         getTranslated(context, 'relative_can_cnfm'),
                         textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 20,color: Colors.green),
+                        style: TextStyle(fontFamily:'Cairo',fontSize: 20,color: Colors.green),
                       ),
                     ),
                     Center(
                       child: Text(
                         getTranslated(context, "consider_feedback"),
                         textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900,color: Colors.deepPurple
+                        style: TextStyle(fontFamily:'Cairo',fontSize: 18, color: Colors.deepPurple
                         ),
                       ),
                     ),
@@ -69,7 +69,7 @@ class ResultScreenExercise extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
                   RaisedButton(
-                      child:  Text(getTranslated(context, 'proceed'),style: TextStyle(fontSize: 20,color:Colors.white),),elevation: 10.0,
+                      child:  Text(getTranslated(context, 'proceed'),style: TextStyle(fontFamily:'Cairo',fontSize: 20,color:Colors.white),),elevation: 10.0,
                       color: Colors.green,
                       splashColor: Colors.lightBlueAccent,
                       onPressed: () {

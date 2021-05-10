@@ -70,7 +70,7 @@ class Portrait extends StatelessWidget {
                 width: MediaQuery.of(context).size.width,
                 height: 270,
                 child: Image.network(
-                  this.image,
+                  this.exercises[this.index].image,
                   fit: BoxFit.fitHeight,
                 ),
               ),

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:treatment_checkup_app/constants.dart';
 import 'package:treatment_checkup_app/models/exercise.dart';
@@ -6,7 +7,7 @@ import 'package:treatment_checkup_app/screens/Relative/friend_request_screen.dar
 import 'package:treatment_checkup_app/screens/Relative/relative_home.dart';
 import 'package:treatment_checkup_app/services/auth/UserTypeService.dart';
 
-
+String _defaultPic = "https://i.pinimg.com/originals/51/f6/fb/51f6fb256629fc755b8870c801092942.png";
 class FriendRequestCardRelative extends StatefulWidget {
 
   final Function press;
@@ -65,21 +66,52 @@ class _FriendRequestCardRelativeState extends State<FriendRequestCardRelative> {
                     Container(
                       height: 42,
                       width: 43,
-                      decoration: BoxDecoration(
-                        color: Colors.white ,
-                        shape: BoxShape.circle,
-                        border: Border.all(color: kBlueColor),
-                       image: widget.request.profile_pic!=""? DecorationImage(
-                          image: NetworkImage(widget.request.profile_pic),
-                          fit: BoxFit.fill,
-
-                        ):DecorationImage(
-                         image: AssetImage('assets/images/Dylan.jpg'),
-                         fit: BoxFit.fill,
-
-                       )
-
-                      ),
+                        decoration: BoxDecoration(
+                          color: Colors.white ,
+                          shape: BoxShape.circle,
+                          border: Border.all(color: kBlueColor),
+                          //  image: DecorationImage(
+                          //   image:
+                          //
+                          //
+                          //   NetworkImage(widget.request.profilePic),
+                          // //   AssetImage("assets/images/Dylan.jpg"),
+                          //    fit: BoxFit.fill,
+                          //
+                          //  ),
+                        ),
+                        child:CachedNetworkImage(
+                          imageUrl: widget.request.profile_pic.length > 10 ?widget.request.profile_pic : _defaultPic,
+                          imageBuilder: (context, imageProvider) => Container(
+                            height: 140,
+                            width: 140,
+                            decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: imageProvider,
+                                  fit: BoxFit.cover,
+                                ),
+                                shape: BoxShape.circle
+                            ),
+                          ),
+                          placeholder: (context, url) => CircularProgressIndicator(),
+                          errorWidget: (context, url, error) => Icon(Icons.error),
+                        )
+                      // decoration: BoxDecoration(
+                      //   color: Colors.white ,
+                      //   shape: BoxShape.circle,
+                      //   border: Border.all(color: kBlueColor),
+                      //
+                      //  image: widget.request.profile_pic!=""? DecorationImage(
+                      //     image: NetworkImage(widget.request.profile_pic),
+                      //     fit: BoxFit.fill,
+                      //
+                      //   ):DecorationImage(
+                      //    image: AssetImage('assets/images/Dylan.jpg'),
+                      //    fit: BoxFit.fill,
+                      //
+                      //  )
+                      //
+                      // ),
                       // child: Image(
                       //   image: AssetImage(widget.request.image),
                       //   fit: BoxFit.fill,

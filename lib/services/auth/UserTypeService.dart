@@ -662,6 +662,8 @@ return 1;
   }
   Future<int> PUpdateFeedback(String day, String id, String resp,{bool isLast = false}) async
   {
+    //day='21';
+    print("updating feedback for day: "+day+"id "+id+"resp "+resp+isLast.toString());
     await checkUserType();
     if(userType==-1) throw Error();
     await checkJWTToken();
@@ -867,27 +869,33 @@ class FRequestModel {
 class RExerciseRequest {
   String firstName;
   String lastName;
+  String profilePic;
   int todayDay;
   String exerciseName;
-  String patientId;
+  String exerciseVideoUrl;
+  String userId;
   int exerciseId;
   int markedByRelative;
 
   RExerciseRequest(
       {this.firstName,
         this.lastName,
+        this.profilePic,
         this.todayDay,
         this.exerciseName,
-        this.patientId,
+        this.exerciseVideoUrl,
+        this.userId,
         this.exerciseId,
         this.markedByRelative});
 
   RExerciseRequest.fromJson(Map<String, dynamic> json) {
     firstName = json['first_name'];
     lastName = json['last_name'];
+    profilePic = json['profile_pic'];
     todayDay = json['today_day'];
     exerciseName = json['exercise_name'];
-    patientId = json['patient_id'];
+    exerciseVideoUrl = json['exercise_video_url'];
+    userId = json['user_id'];
     exerciseId = json['exercise_id'];
     markedByRelative = json['marked_by_relative'];
   }
@@ -896,9 +904,11 @@ class RExerciseRequest {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['first_name'] = this.firstName;
     data['last_name'] = this.lastName;
+    data['profile_pic'] = this.profilePic;
     data['today_day'] = this.todayDay;
     data['exercise_name'] = this.exerciseName;
-    data['patient_id'] = this.patientId;
+    data['exercise_video_url'] = this.exerciseVideoUrl;
+    data['user_id'] = this.userId;
     data['exercise_id'] = this.exerciseId;
     data['marked_by_relative'] = this.markedByRelative;
     return data;

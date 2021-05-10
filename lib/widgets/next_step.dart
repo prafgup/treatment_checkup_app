@@ -23,10 +23,13 @@ class NextStep extends StatelessWidget {
             bottom: 20.0,
           ),
           decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage(
-                this.image,
-              ),
+            image:
+
+            DecorationImage(
+              image: NetworkImage(this.image),
+              // AssetImage(
+              //   this.image,
+              // ),
               fit: BoxFit.cover,
             ),
             borderRadius: BorderRadius.circular(15.0),

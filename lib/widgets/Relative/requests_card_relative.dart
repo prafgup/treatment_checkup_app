@@ -1,12 +1,14 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:treatment_checkup_app/constants.dart';
 import 'package:treatment_checkup_app/models/exercise.dart';
 import 'package:treatment_checkup_app/models/requests_relative.dart';
 import 'package:treatment_checkup_app/screens/Relative/relative_home.dart';
+import 'package:treatment_checkup_app/screens/welcomeBoarding/welcomeBoarding.dart';
 import 'package:treatment_checkup_app/services/auth/UserTypeService.dart';
-
-
+//List<Color> color_list=[Colors.red,Colors.brown,Colors.deepOrangeAccent,Colors.green,Colors.yellow,Colors.blue];
+String _defaultPic = "https://i.pinimg.com/originals/51/f6/fb/51f6fb256629fc755b8870c801092942.png";
 class RekuestsCardRelative extends StatefulWidget {
 
   final Function press;
@@ -62,17 +64,39 @@ class _RekuestsCardRelativeState extends State<RekuestsCardRelative> {
                     Container(
                       height: 42,
                       width: 43,
+                      // child:CircleAvatar(// backgroundColor: color_list[((widget.request.firstName[0]).codeUnitAt(0)%6)],
+                      //     child: Text(widget.request.firstName[0]))
                       decoration: BoxDecoration(
                         color: Colors.white ,
                         shape: BoxShape.circle,
                         border: Border.all(color: kBlueColor),
-                        image: DecorationImage(
-                          image: AssetImage("assets/images/Dylan.jpg"),
-                          fit: BoxFit.fill,
-
-                        ),
+                       //  image: DecorationImage(
+                       //   image:
+                       //
+                       //
+                       //   NetworkImage(widget.request.profilePic),
+                       // //   AssetImage("assets/images/Dylan.jpg"),
+                       //    fit: BoxFit.fill,
+                       //
+                       //  ),
                       ),
-                      // child: Image(
+                       child:CachedNetworkImage(
+                         imageUrl: widget.request.profilePic==''?widget.request.profilePic : _defaultPic,
+                         imageBuilder: (context, imageProvider) => Container(
+                           height: 140,
+                           width: 140,
+                           decoration: BoxDecoration(
+                               image: DecorationImage(
+                                 image: imageProvider,
+                                 fit: BoxFit.cover,
+                               ),
+                               shape: BoxShape.circle
+                           ),
+                         ),
+                         placeholder: (context, url) => CircularProgressIndicator(),
+                         errorWidget: (context, url, error) => Icon(Icons.error),
+                       )
+                       //Image(
                       //   image: AssetImage(widget.request.image),
                       //   fit: BoxFit.fill,
                       //
@@ -110,6 +134,7 @@ class _RekuestsCardRelativeState extends State<RekuestsCardRelative> {
                                          //   descriptions: "If you press Yes, exercise will be marked done and cannot be changed later!",
                                             text: "Proceed",
                                               exercises:widget.exercises
+
                                           );
                                         }
                                     );},
@@ -216,8 +241,9 @@ class _RekuestsCardRelativeState extends State<RekuestsCardRelative> {
 
 
 class CustomDialogBox2 extends StatefulWidget {
+
   final String title,  text;
-  final Image img;
+  final String img;
  final List<RExerciseRequest> exercises;
   const CustomDialogBox2({Key key, this.title,  this.text, this.img, this.exercises}) : super(key: key);
 
@@ -228,6 +254,7 @@ class CustomDialogBox2 extends StatefulWidget {
 class _CustomDialogBox2State extends State<CustomDialogBox2> {
   List<RExerciseRequest> selectedList = [];
   UserTypeService userService;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -236,7 +263,8 @@ class _CustomDialogBox2State extends State<CustomDialogBox2> {
   }
   @override
   Widget build(BuildContext context) {
-
+   print(widget.exercises[0].exerciseVideoUrl);
+   // print(selectedList);
     return Dialog(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20.0),
@@ -299,7 +327,29 @@ class _CustomDialogBox2State extends State<CustomDialogBox2> {
                     List<bool> _checked=List<bool>.filled(widget.exercises.length,false,growable:false);
                     return CheckboxListTile(
                       title: Text(widget.exercises[index].exerciseName),
-                        secondary:Image( image: AssetImage("assets/images/image004.jpg"),width: 50.0,height: 50.0,),
+                       secondary:
+                       //Image( image:
+
+                        CachedNetworkImage(
+                          imageUrl: widget.exercises[index].exerciseVideoUrl == null? 'https://jflowershealth.com/wp-content/uploads/2020/09/iStock-1172191646-1024x448.jpg' :'https://img.youtube.com/vi/${(Uri.tryParse(widget.exercises[index].exerciseVideoUrl)).queryParameters['v']}/0.jpg'
+                         , imageBuilder: (context, imageProvider) => Container(
+                            height: 50,
+                            width: 50,
+                            decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: imageProvider,
+                                  fit: BoxFit.fill,
+                                ),
+                                shape: BoxShape.rectangle,
+
+                            ),
+                          ),
+                          placeholder: (context, url) => CircularProgressIndicator(),
+                          errorWidget: (context, url, error) => Icon(Icons.error),
+                        ),
+
+                       //NetworkImage(widget.exercises[index].exerciseVideoUrl == ''? 'https://jflowershealth.com/wp-content/uploads/2020/09/iStock-1172191646-1024x448.jpg' :'https://img.youtube.com/vi/${(Uri.tryParse(widget.exercises[index].exerciseVideoUrl)).queryParameters['v']}/0.jpg')
+                        // ,width: 50.0,height: 50.0,),
                         activeColor: Colors.green,
                         checkColor: Colors.purple,
 
@@ -399,22 +449,39 @@ class _RouteToRequestScreenState extends State<RouteToRequestScreen> {
           // print(widget.exercises[i].patientId);
           // print(widget.exercises[i].todayDay);
           // print(widget.exercises[i].exerciseId);
-          status += await userService.RUpdateExerciseRequest(widget.exercises[i].patientId,widget.exercises[i].todayDay,widget.exercises[i].exerciseId,"1");}
+          status += await userService.RUpdateExerciseRequest(widget.exercises[i].userId,widget.exercises[i].todayDay,widget.exercises[i].exerciseId,"1");}
         else{
-          status += await userService.RUpdateExerciseRequest(widget.exercises[i].patientId,widget.exercises[i].todayDay,widget.exercises[i].exerciseId,"2");
+          status += await userService.RUpdateExerciseRequest(widget.exercises[i].userId,widget.exercises[i].todayDay,widget.exercises[i].exerciseId,"2");
         }}
-      if(status==widget.exercises.length)Navigator.pop(context);
+      if(status==widget.exercises.length)
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) {
+        return RequestsScreenR();
+      }),
+        // Navigator.pushAndRemoveUntil(context,
+        //   MaterialPageRoute(builder: (BuildContext context) => RequestsScreenR()),
+        //       (Route<dynamic> route) => route is WelcomeBoarding
+      );
 print(status);
     }
     else if (widget.title.contains("reject")){
       print("rejecting Erequest");
       int status=0;
-      print(widget.exercises[0].patientId);
+      print(widget.exercises[0].userId);
       for(int i=0;i<widget.exercises.length;i++){
 
-        status += await userService.RUpdateExerciseRequest(widget.exercises[i].patientId,widget.exercises[i].todayDay,widget.exercises[i].exerciseId,"2");
+        status += await userService.RUpdateExerciseRequest(widget.exercises[i].userId,widget.exercises[i].todayDay,widget.exercises[i].exerciseId,"2");
       }
-      if(status==widget.exercises.length)Navigator.pop(context);
+      if(status==widget.exercises.length) Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) {
+          return RequestsScreenR();
+        }),
+        // Navigator.pushAndRemoveUntil(context,
+        //   MaterialPageRoute(builder: (BuildContext context) => RequestsScreenR()),
+        //       (Route<dynamic> route) => route is WelcomeBoarding
+      );
 
     }
     // print("curr day sent is "+widget.currDay.toString());

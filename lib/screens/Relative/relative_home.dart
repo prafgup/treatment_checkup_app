@@ -45,7 +45,7 @@ class _RequestsScreenRState extends State<RequestsScreenR> {
   });
   List<RExerciseRequest> req_list = await userService.GetRelativeExerciseRequests();
   grp_list=groupBy(req_list, (RExerciseRequest req) {
-  return '${req.todayDay}+${req.patientId}';
+  return '${req.todayDay}+${req.userId}';
   }).values.toList();
 
   // print(grp_list);
@@ -124,23 +124,24 @@ class _RequestsScreenRState extends State<RequestsScreenR> {
                             }
                        // ignore: missing_return
                        if(projectSnap.hasData){     return
-                      GridView.builder(
-                          itemCount: projectSnap.data.length,
-                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 1,mainAxisSpacing: 10.0,childAspectRatio:4
-                          ),
-                          // Generate 100 widgets that display their index in the List.
-                          itemBuilder: (ctx, index) {
-                            return RekuestsCardRelative(exercises: projectSnap.data[index],request: projectSnap.data[index][0],press: () {
-                              // Navigator.push(
-                              //   context,
-                              //   MaterialPageRoute(builder: (context) {
-                              //     return RequestsScreenR();
-                              //   }),
-                              // );
+                     GridView.builder(
+                            itemCount: projectSnap.data.length,
+                            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 1,mainAxisSpacing: 10.0,childAspectRatio:4
+                            ),
+                            // Generate 100 widgets that display their index in the List.
+                            itemBuilder: (ctx, index) {
+                              return RekuestsCardRelative(exercises: projectSnap.data[index],request: projectSnap.data[index][0],press: () {
+                                // Navigator.push(
+                                //   context,
+                                //   MaterialPageRoute(builder: (context) {
+                                //     return RequestsScreenR();
+                                //   }),
+                                // );
 
-                            }, );
-                          });}
+                              }, );
+                            });
+                      }
                       return Container(
                           color: Colors.black.withOpacity(0.1),
                           height: MediaQuery.of(context).size.height*0.8,
